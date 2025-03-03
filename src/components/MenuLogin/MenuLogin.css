@@ -1,0 +1,119 @@
+/* Overlay для затемнения страницы */
+.overlay {
+  position: fixed;
+  top: 60px; /* Учитывает высоту хедера */
+  left: 0;
+  width: 100%;
+  height: calc(100vh - 60px); /* Высота оверлея без учета хедера */
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 500;
+  display: none;
+  transition: background-color 0.3s ease; /* Плавное изменение цвета фона */
+}
+  /* Когда overlay должен быть видимым */
+  .overlay.active {
+    display: block;
+  }
+  
+  /* Стиль для формы меню */
+  .menu-login {
+    position: fixed;
+    top: 100px; /* Увеличиваем отступ от хедера */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 320px; /* Уменьшаем ширину формы */
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+    z-index: 1000;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: top 0.3s ease; /* Плавное появление */
+  }
+  
+  .menu-login .close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    color: #333;
+    cursor: pointer;
+  }
+  
+  .menu-login .close-button:hover {
+    color: #007bff;
+  }
+  
+  .login-form h3 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .form-group {
+    margin-bottom: 15px;
+  }
+  
+  .form-group label {
+    display: block;
+    font-size: 14px;
+    margin-bottom: 5px;
+    text-align: center; /* Выравнивание лейблов по центру */
+  }
+  
+  .form-group input {
+    width: 90%; /* Уменьшаем ширину полей */
+    margin: 0 auto; /* Центрируем поля */
+    padding: 10px;
+    font-size: 14px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    display: block;
+  }
+  
+  button[type='submit'] {
+    width: 90%; /* Ширина кнопки */
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 4px;
+    margin: 0 auto;
+    display: block;
+  }
+  
+  button[type='submit']:hover {
+    background-color: #0056b3;
+  }
+
+/* Стиль для ссылки Зарегистрироваться */
+  .register-link {
+    display: block;
+    text-align: center;
+    color: #6c757d; /* Серый цвет */
+    cursor: pointer;
+    font-size: 14px;
+    margin-top: 10px;
+  }
+
+  .register-link:hover {
+    color: #007bff; /* Синий при наведении */
+    text-decoration: underline; /* Подчеркнуто при наведении */
+  }
+
+  
+  
+  /* Медиа-запрос для мобильных устройств */
+  @media (max-width: 768px) {
+    .menu-login {
+      width: 80%; /* Ширина формы для мобильных устройств */
+      top: 80px; /* Поднимаем форму немного выше на мобильных */
+    }
+  
+    .overlay.active {
+      background-color: rgba(0, 0, 0, 0.6); /* Немного меньше затемнение на мобильных */
+    }
+  }
+  

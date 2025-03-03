@@ -1,0 +1,88 @@
+
+.posts-page {
+  display: flex;
+  flex-direction: row; /* Устанавливаем горизонтальное расположение элементов */
+  width: 100%;
+  min-height: 100vh;
+  padding: 20px;
+  box-sizing: border-box;
+  gap: 20px; /* Отступ между фильтром и постами */
+  overflow-y: auto;
+}
+
+.filters-container {
+  width: 20%;
+  background: #f9f9f9;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 20px;
+  box-sizing: border-box;
+  margin-top: 30px;
+}
+
+.posts-container {
+  width: 100%; /* Сделаем контейнер постов шире */
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  overflow-x: hidden; 
+  padding: 15px;
+}
+
+.posts-grid {
+  display: flex;
+  flex-direction: column; /* Посты друг над другом */
+  gap: 20px; /* Отступ между постами */
+  width: 100%;
+}
+
+.pagination-container {
+  width: 100%;
+  display: flex;
+  justify-content: center; /* Центрируем пагинацию */
+  margin: 20px 0 20px; /* Отступ снизу для разделения с постами */
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+}
+
+.page-button {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  margin: 0 4px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s;
+  min-width: 35px; /* Устанавливаем минимальную ширину для кнопок */
+}
+
+.page-button.active,
+.page-button:hover {
+  background: #0056b3;
+}
+
+@media (max-width: 768px) {
+  .posts-page {
+    flex-direction: column; /* На мобильных устройствах все будет располагаться вертикально */
+  }
+
+  .filters-container {
+    width: 100%; /* Занимает всю ширину экрана на мобильных устройствах */
+    margin-bottom: 20px;
+  }
+
+  .pagination-container {
+    width: 100%; /* Выравнивание пагинации на мобильных устройствах */
+  }
+
+  .posts-container {
+    width: 100%;
+  }
+}

@@ -1,0 +1,34 @@
+/* Стиль для контейнера спиннера */
+.loading-spinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Заполняет всю доступную высоту экрана */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Полупрозрачный фон */
+    z-index: 9999; /* Чтобы спиннер был сверху всех элементов */
+  }
+  
+  /* Стиль для самого спиннера */
+  .spinner {
+    border: 8px solid #f3f3f3; /* Светлый цвет для фона */
+    border-top: 8px solid #007bff; /* Цвет вращающейся части */
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite; /* Анимация вращения */
+  }
+  
+  /* Анимация вращения */
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg); /* Начальный угол */
+    }
+    100% {
+      transform: rotate(360deg); /* Конечный угол */
+    }
+  }
+  

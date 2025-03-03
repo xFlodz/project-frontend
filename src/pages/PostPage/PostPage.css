@@ -1,0 +1,217 @@
+/* Основной контейнер страницы */
+.post-page {
+    width: 80%;
+    margin: 20px auto;
+    padding: 30px;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+}
+
+/* Заголовок */
+.post-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.main-image {
+    max-width: 100%;
+    height: auto;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.main-image:hover {
+    transform: scale(1.05); /* Увеличение при наведении */
+}
+
+.post-title {
+    font-size: 36px;
+    font-weight: 700;
+    color: #222;
+    margin-bottom: 20px;
+}
+
+/* Основное содержимое */
+.post-content {
+    font-size: 18px;
+    color: #444;
+    line-height: 1.6;
+    margin-bottom: 20px;
+    
+}
+
+/* Теги */
+.post-tags {
+    margin-top: 15px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.tag {
+    display: inline-block;
+    background-color: #007bff;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 15px;
+    font-size: 14px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Плавный эффект увеличения и тени */
+}
+
+.tag:hover {
+    transform: scale(1.1); /* Увеличение при наведении */
+    box-shadow: 0 0 10px rgba(0, 123, 255, 0.6); /* Легкая тень для визуального эффекта */
+}
+
+/* Даты */
+.post-dates {
+    display: flex;
+    justify-content: space-between;
+    font-size: 16px;
+    color: #777;
+    margin-top: 20px;
+}
+
+.date-left p,
+.date-right p {
+    margin: 0;
+}
+
+/* Структура поста */
+/* Структура поста */
+.post-structure {
+    margin-top: 20px;
+    text-align: center; /* Центрируем все элементы в контейнере */
+}
+
+.post-structure-item {
+    margin-bottom: 20px;
+}
+
+.post-text {
+    font-size: 18px;
+    line-height: 1.6;
+    margin-bottom: 20px;
+    text-align: left;
+    padding-left: 30px;
+    padding-right: 30px;
+}
+
+.post-image {
+    margin-bottom: 20px;
+    display: inline-block; /* Убедимся, что изображения внутри контейнера выровнены по центру */
+    text-align: center;
+}
+
+.structure-image {
+    max-width: 100%;
+    max-height: 500px; /* Ограничиваем максимальную высоту изображения */
+    height: auto; /* Сохраняем пропорции */
+    width: auto; /* Сохраняем пропорции */
+    border-radius: 8px;
+    margin: 10px 0;
+    display: block; /* Это гарантирует, что изображение будет отображаться как блочный элемент */
+    margin-left: auto;
+    margin-right: auto; /* Центрируем изображение */
+    transition: transform 0.3s ease;
+    cursor: pointer;
+}
+
+.structure-image:hover {
+    transform: scale(1.05); /* Увеличение при наведении */
+}
+
+.post-video {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center; /* Центрируем видео */
+    align-items: center;
+}
+
+.video-player {
+    width: 100%;
+    max-width: 623px; /* Ограничиваем ширину видео */
+    height: 400px; /* Задаем фиксированную высоту для видео */
+    object-fit: cover; /* Видео будет обрезаться с сохранением пропорций */
+}
+
+.image-description {
+    text-align: center;
+    margin-top: 10px;
+    font-size: 0.9em;
+    color: #555;
+}
+
+.post-page,
+.post-header,
+.post-content,
+.post-structure,
+.post-text,
+.post-image,
+.post-video {
+    opacity: 1; /* Убираем прозрачность */
+}
+
+.post-actions-container {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.edit-post-button, .delete-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: 0.3s;
+}
+
+.edit-post-button {
+    background-color: #007bff;
+    color: white;
+}
+
+.edit-post-button:hover {
+    background-color: #0056b3;
+}
+
+.delete-post-button {
+    background-color: #dc3545;
+    color: white;
+}
+
+.delete-post-button:hover {
+    background-color: #a71d2a;
+}
+
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .post-page {
+        width: 90%;
+        padding: 20px;
+    }
+
+    .post-title {
+        font-size: 28px;
+    }
+
+    .post-content {
+        font-size: 16px;
+    }
+
+    .post-dates {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .video-player {
+        height: 200px;
+    }
+}

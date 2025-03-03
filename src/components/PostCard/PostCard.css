@@ -1,0 +1,228 @@
+/* Стили для карточки */
+.post-card-item {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 0px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.8s ease;
+  cursor: pointer;
+  padding: 12px;
+  min-height: 120px;
+  position: relative;
+  margin-left: 10px;
+  margin-right: 20px;
+  overflow: hidden;
+}
+
+.post-card-item-expanded {
+  min-height: 250px;
+  background: #e8f0fe;
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.15);
+  transform: scale(1.03);
+}
+
+/* Обёртка для изображения */
+.post-card-image-wrapper {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 1s ease-in-out;
+  text-align: center;
+}
+
+/* Скрытое изображение */
+.post-card-image {
+  width: 70%;
+  height: auto;
+  border-radius: 8px;
+  margin-top: 10px;
+  object-fit: cover;
+  opacity: 0;
+  transform: translateY(-100px);
+  transition: opacity 1s ease-in-out, transform 1.4s ease-in-out;
+}
+
+.post-card-item-expanded .post-card-image-wrapper {
+  max-height: 800px;
+}
+
+.post-card-item-expanded .post-card-image {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.post-card-content {
+  text-align: left;
+}
+
+.post-card-title, .post-card-text {
+  color: #333;  /* Устанавливаем одинаковый цвет для всех текстов */
+  font-family: 'Arial', sans-serif;
+}
+
+.post-card-date {
+  color: #888;
+  font-size: 0.9rem;
+  margin-top: 5px;
+}
+
+.post-card-author {
+  color: #888;
+  font-size: 0.9rem;
+  margin-top: 10px;
+}
+
+.author-name {
+  font-weight: bold;
+  font-family: 'Arial', sans-serif;
+  color:#888;
+}
+
+.post-card-text {
+  color: #333;
+  font-size: 1rem;
+  line-height: 1.4;
+  margin-top: 10px;
+}
+
+.post-card-item-expanded .post-card-text {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Стили для тегов */
+.post-card-tags {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-start;
+}
+
+.tag {
+  display: inline-block;
+  background-color: #007bff;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 15px;
+  font-size: 12px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.tag:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 10px rgba(0, 123, 255, 0.6);
+}
+
+/* Медиазапросы для адаптивности */
+
+/* Экран до 1200px (ноутбуки и планшеты) */
+@media (max-width: 1200px) {
+  .post-card-item {
+    margin-left: 10px;
+    margin-right: 10px;
+    padding: 10px;
+    min-height: 150px;
+  }
+
+  .post-card-item-expanded {
+    min-height: 220px;
+  }
+
+  .post-card-image {
+    width: 80%;
+  }
+
+  .post-card-title {
+    font-size: 1.1rem;
+  }
+
+  .post-card-text {
+    font-size: 0.95rem;
+  }
+
+  .post-card-author {
+    font-size: 0.85rem;
+  }
+
+  .tag {
+    font-size: 14px;
+  }
+}
+
+/* Экран до 768px (планшеты в портретной ориентации и большие смартфоны) */
+@media (max-width: 768px) {
+  .post-card-item {
+    margin-left: 5px;
+    margin-right: 5px;
+    padding: 8px;
+    min-height: 180px;
+  }
+
+  .post-card-item-expanded {
+    min-height: 200px;
+  }
+
+  .post-card-image {
+    width: 90%;
+  }
+
+  .post-card-title {
+    font-size: 1rem;
+  }
+
+  .post-card-text {
+    font-size: 0.9rem;
+  }
+
+  .post-card-author {
+    font-size: 0.85rem;
+  }
+
+  .tag {
+    font-size: 13px;
+  }
+}
+
+/* Экран до 480px (мобильные телефоны) */
+@media (max-width: 480px) {
+  .post-card-item {
+    margin-left: 0;
+    margin-right: 0;
+    padding: 6px;
+    min-height: 200px;
+  }
+
+  .post-card-item-expanded {
+    min-height: 200px;
+  }
+
+  .post-card-image {
+    width: 100%;
+  }
+
+  .post-card-title {
+    font-size: 1.1rem;
+  }
+
+  .post-card-text {
+    font-size: 0.85rem;
+  }
+
+  .post-card-author {
+    font-size: 0.8rem;
+  }
+
+  .tag {
+    font-size: 11px;
+    margin-bottom: 6px;
+  }
+
+  .post-card-tags {
+    position: relative;
+    justify-content: center;
+    margin-top: 10px;
+    top: auto;
+    right: auto;
+  }
+}

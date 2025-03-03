@@ -1,0 +1,73 @@
+.header-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.9); /* Полупрозрачный белый фон */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 1001; /* Хедер выше оверлея */
+    padding: 20px 20px; /* Начальные отступы */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+    transition: background-color 0.3s ease, padding 0.3s ease, font-size 0.3s ease; /* Плавный переход */
+}
+
+.header-container.scrolled {
+    background-color: rgba(255, 255, 255, 0.7); /* Полупрозрачный белый фон при прокрутке */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.22); /* Усиленная тень при прокрутке */
+    padding: 10px 20px; /* Уменьшенные отступы при прокрутке */
+}
+
+.header-container.scrolled {
+    background-color: rgba(255, 255, 255, 0.7); /* Полупрозрачный белый фон при прокрутке */
+}
+
+.left-components,
+.right-components {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.middle-components {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.middle-components img {
+    width: 50px;
+    height: 50px;
+}
+
+
+
+/* Стили для мобильных устройств */
+@media (max-width: 425px) {
+    .header-container {
+        padding: 10px; /* Уменьшаем отступы */
+    }
+
+    .middle-components img {
+        width: 40px; /* Уменьшаем размер центрального изображения */
+        height: 40px;
+    }
+
+    .left-components img {
+        width: 40px; /* Уменьшаем размер левого логотипа */
+        height: 40px;
+    }
+
+    .right-components button {
+        padding: 6px 10px; /* Уменьшаем размер кнопок */
+        font-size: 14px; /* Уменьшаем размер текста */
+    }
+
+    .menu-button {
+        padding: 6px 10px; /* Уменьшаем размер кнопки "Меню" */
+        font-size: 14px;
+    }
+}

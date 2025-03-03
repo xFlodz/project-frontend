@@ -1,0 +1,30 @@
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  gap: 4px;
+}
+
+.page-button {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  margin: 0 4px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s, box-shadow 0.3s;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.page-button.active,
+.page-button:hover {
+  background: #0056b3;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Добавляем тень при наведении */
+}
+
+.pagination button {
+  min-width: 35px; /* Устанавливаем минимальную ширину для кнопок */
+}

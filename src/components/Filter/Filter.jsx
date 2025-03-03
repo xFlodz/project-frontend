@@ -1,0 +1,124 @@
+import React, { useState, useEffect } from "react";
+import "./Filter.css";
+import { getAllTags } from "../../services/apiTag";
+import { getAllPosts } from "../../services/apiPost";  // Добавим getAllPosts
+
+function Filter({ filters, setFilters }) {
+  const { dateFilterType, tagsFilter, startDate, endDate } = filters;
+  const [tags, setTags] = useState([]);  // Теги для фильтров
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const [isFilterVisible, setIsFilterVisible] = useState(false);
+
+  // Локальные состояния для фильтров
+  const [localFilters, setLocalFilters] = useState({
+    dateFilterType,
+    tagsFilter,
+    startDate,
+    endDate,
+  });
+
+  useEffect(() => {
+    const fetchTags = async () => {
+      try {
+        const data = await getAllTags();
+        setTags(data.map((tag) => tag.name));
+      } catch (error) {
+        console.error("Ошибка при загрузке тегов:", error);
+      }
+    };
+    fetchTags();
+
+    const handleResize = () => {
+      const mobileView = window.innerWidth <= 768;
+      setIsMobile(mobileView);
+      if (!mobileView) setIsFilterVisible(true); // На ПК фильтр всегда виден
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const toggleTag = (tag) => {
+    setLocalFilters((prevFilters) => ({
+      ...prevFilters,
+      tagsFilter: prevFilters.tagsFilter.includes(tag)
+        ? prevFilters.tagsFilter.filter((t) => t !== tag)
+        : [...prevFilters.tagsFilter, tag],
+    }));
+  };
+
+  const handleApplyFilters = async () => {
+    // Обновляем глобальные фильтры
+    setFilters(localFilters);
+
+    // Отправляем запрос с фильтрами
+    try {
+      const response = await getAllPosts({
+        dateFilterType: localFilters.dateFilterType,
+        tagsFilter: localFilters.tagsFilter,
+        startDate: localFilters.startDate,
+        endDate: localFilters.endDate,
+      });
+      console.log("Полученные посты:", response);
+    } catch (error) {
+      console.error("Ошибка при получении постов:", error);
+    }
+  };
+
+  return (
+    <div className="filter-container">
+      {isMobile && (
+        <button className="filter-toggle" onClick={() => setIsFilterVisible(!isFilterVisible)}>
+          {isFilterVisible ? "Скрыть фильтры" : "Показать фильтры"}
+        </button>
+      )}
+
+      <div className={`filters ${isFilterVisible || !isMobile ? "visible" : "hidden"}`}>
+        <h3>Фильтры</h3>
+
+        <label>Фильтр по дате:</label>
+        <select
+          value={localFilters.dateFilterType}
+          onChange={(e) => setLocalFilters({ ...localFilters, dateFilterType: e.target.value })}
+        >
+          <option value="creation">Дата создания</option>
+          <option value="historical">Историческая дата</option>
+        </select>
+
+        <label>Временной промежуток:</label>
+        <div className="date-range">
+          <input
+            type="date"
+            value={localFilters.startDate}
+            onChange={(e) => setLocalFilters({ ...localFilters, startDate: e.target.value })}
+          />
+          <span>—</span>
+          <input
+            type="date"
+            value={localFilters.endDate}
+            onChange={(e) => setLocalFilters({ ...localFilters, endDate: e.target.value })}
+          />
+        </div>
+
+        <label>Теги:</label>
+        <div className="tags-container tags-scrollable">
+          {tags.map((tag) => (
+            <label key={tag} className="tag-checkbox">
+              <input
+                type="checkbox"
+                checked={localFilters.tagsFilter.includes(tag)}
+                onChange={() => toggleTag(tag)}
+              />
+              {tag}
+            </label>
+          ))}
+        </div>
+
+        {/* Кнопка для применения фильтров и получения постов */}
+        <button onClick={handleApplyFilters}>Найти</button>
+      </div>
+    </div>
+  );
+}
+
+export default Filter;

@@ -1,0 +1,103 @@
+/* Стили для страницы */
+.tag-page {
+    max-width: 500px;
+    margin: 50px auto;
+    padding: 20px;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.input-group {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+input {
+    flex: 1;
+    padding: 10px;
+    font-size: 16px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    outline: none;
+    transition: border 0.3s ease;
+}
+
+input:focus {
+    border-color: #007bff;
+}
+
+button {
+    padding: 10px 15px;
+    font-size: 16px;
+    color: white;
+    background-color: #007bff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+.tag-list {
+    text-align: left;
+    margin-top: 20px;
+}
+
+h3 {
+    font-size: 20px;
+    color: #555;
+    margin-bottom: 10px;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+li {
+    background: #f8f9fa;
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 8px;
+    font-size: 16px;
+    color: #333;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.tag-name {
+    font-weight: bold;
+}
+
+.delete-tag-btn {
+    background: none;
+    border: none;
+    color: Red; /* Белый цвет текста */
+    font-size: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Красный фон при наведении */
+.delete-tag-btn:hover {
+    background-color: #cc0000; /* Красный фон при наведении */
+    color: white; /* Белый цвет текста при наведении */
+}
+
+/* Убираем контур при фокусе */
+.delete-tag-btn:focus {
+    outline: none;
+}

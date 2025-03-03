@@ -1,0 +1,63 @@
+.menu-register {
+    position: fixed;
+    top: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 320px;
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+    z-index: 1000;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  .menu-register h3 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .form-group {
+    margin-bottom: 15px;
+  }
+  
+  .form-group input {
+    width: 90%;
+    margin: 0 auto;
+    padding: 10px;
+    font-size: 14px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    display: block;
+  }
+  
+  button[type='submit'] {
+    width: 90%;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 4px;
+    margin: 0 auto;
+    display: block;
+  }
+  
+  button[type='submit']:hover {
+    background-color: #0056b3;
+  }
+  
+  .login-link {
+    display: block;
+    text-align: center;
+    color: #6c757d; /* Серый цвет */
+    cursor: pointer;
+    font-size: 14px;
+    margin-top: 10px;
+  }
+
+  .login-link:hover {
+    color: #007bff; /* Синий при наведении */
+    text-decoration: underline; /* Подчеркнуто при наведении */
+  }
+  

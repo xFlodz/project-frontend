@@ -1,0 +1,18 @@
+/* FileInput.css */
+
+.file-input-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+    text-align: center;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .file-input-button:hover {
+    background-color: #0056b3;
+  }
+  
