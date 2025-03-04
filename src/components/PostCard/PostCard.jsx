@@ -18,30 +18,32 @@ function PostCard({ post }) {
     >
       <div className="post-card-content">
         <h3 className="post-card-title">{post.header}</h3>
+
+        {/* Если пост не подтвержден, показываем предупреждение */}
+        {!post.is_approved && (
+          <p className="post-card-warning">Пост не подтвержден</p>
+        )}
+
         <p className="post-card-date">
           Дата создания: {createdAt.toLocaleDateString()}
         </p>
 
-        {/* Имя автора серым текстом */}
         <p className="post-card-author">
           Автор: <span className="author-name">{post.author}</span>
         </p>
 
-        {/* Обёртка для изображения, всегда в DOM */}
         <div className="post-card-image-wrapper">
           <img
             src={`http://localhost:5000/api/file/${post.main_image}`}
             alt={post.header}
-            className={`post-card-image ${isHovered ? "post-card-image-visible" : ""}`} // Добавляем класс для анимации
+            className={`post-card-image ${isHovered ? "post-card-image-visible" : ""}`}
           />
         </div>
 
-        {/* Текст поста */}
         <p className={`post-card-text ${isHovered ? "post-card-text-visible" : ""}`}>
           {postText.length > 100 ? postText.substring(0, 100) + "..." : postText}
         </p>
 
-        {/* Теги, расположенные справа */}
         <div className="post-card-tags">
           {post.tags && post.tags.length > 0 ? (
             post.tags.map((tag, index) => (

@@ -114,6 +114,18 @@
   box-shadow: 0 0 10px rgba(0, 123, 255, 0.6);
 }
 
+/* Уведомление о неподтвержденном посте */
+.post-card-warning {
+  color: #d9534f; /* Красноватый оттенок */
+  font-size: 0.9rem;
+  font-weight: bold;
+  background: #fbeaea;
+  padding: 4px 8px;
+  border-radius: 5px;
+  display: inline-block;
+  margin-top: 5px;
+}
+
 /* Медиазапросы для адаптивности */
 
 /* Экран до 1200px (ноутбуки и планшеты) */

@@ -69,6 +69,7 @@
 }
 
 .menu-items li a {
+    width: 100%;
     text-decoration: none;
     color: #333;  /* Цвет текста */
     font-size: 18px;

@@ -1,20 +1,17 @@
 import React, { useState, useEffect } from "react";
 import "./MenuDropdown.css";
 
-function MenuDropdown() {
+function MenuDropdown({ role }) { // Принимаем роль как пропс
   const [isOpen, setIsOpen] = useState(false);
 
-  // Функция для отключения прокрутки
   const disableScroll = () => {
     document.body.style.overflow = 'hidden';
   };
 
-  // Функция для включения прокрутки
   const enableScroll = () => {
     document.body.style.overflow = 'auto';
   };
 
-  // Управляем прокруткой и изменением размера хедера при открытии меню
   useEffect(() => {
     if (isOpen) {
       disableScroll();
@@ -25,7 +22,7 @@ function MenuDropdown() {
     }
 
     return () => {
-      enableScroll(); // Очистка при размонтировании компонента
+      enableScroll();
     };
   }, [isOpen]);
 
@@ -35,6 +32,46 @@ function MenuDropdown() {
 
   const closeMenu = () => {
     setIsOpen(false);
+  };
+
+  const renderMenuItems = () => {
+    console.log(role);
+    if (role === 'admin') {
+      return (
+        <>
+          <li><a href="/">Все посты</a></li>
+          <li><a href="/create_new_tag">Добавить теги</a></li>
+          <li><a href="/create_new_editor">Добавить редакторов</a></li>
+          <li><a href="/create_post">Добавить пост</a></li>
+          <li><a href="/my_posts">Мои посты</a></li>
+          <li><a href="/approve_posts">Одобрение постов</a></li>
+        </>
+      );
+    }
+
+    if (role === 'poster') {
+      return (
+        <>
+          <li><a href="/">Все посты</a></li>
+          <li><a href="/create_post">Добавить пост</a></li>
+          <li><a href="/my_posts">Мои посты</a></li>
+          <li><a href="/approve_posts">Одобрение постов</a></li>
+        </>
+      );
+    }
+
+    if (role === 'user') {
+      return (
+        <>
+          <li><a href="/">Все посты</a></li>
+          <li><a href="/create_post">Добавить пост</a></li>
+          <li><a href="/my_posts">Мои посты</a></li>
+        </>
+      );
+    }
+    return (
+      <li><a href="/">Все посты</a></li>
+    );
   };
 
   return (
@@ -48,9 +85,7 @@ function MenuDropdown() {
       <div className={`side-menu ${isOpen ? "open" : ""}`}>
         <h2>Меню</h2>
         <ul className="menu-items">
-          <li><a href="/">Главная</a></li>
-          <li><a href="/profile">Профиль</a></li>
-          <li><a href="/settings">Настройки</a></li>
+          {renderMenuItems()}
         </ul>
       </div>
     </div>

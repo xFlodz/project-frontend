@@ -31,10 +31,6 @@ export const getAllPosts = async ({ dateFilterType, tagsFilter, startDate, endDa
       tagsFilter,
       startDate,
       endDate,
-    }, {
-      headers: {
-        'Authorization': `Bearer ${localStorage.getItem('refresh_token')}`,
-      },
     });
     return response.data;
   } catch (error) {
@@ -81,6 +77,58 @@ export const deletePost = async (postAddress) => {
     });
   } catch (error) {
     console.error('Ошибка при удалении поста:', error.response?.data || error.message);
+    throw error.response?.data || error.message;
+  }
+};
+
+export const getAllUserPosts = async ({ dateFilterType, tagsFilter, startDate, endDate }) => {
+  try {
+    const response = await axiosInstance.post('/get_all_posts', { 
+      dateFilterType,
+      tagsFilter,
+      startDate,
+      endDate,
+    }, {
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('refresh_token')}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Ошибка при получении постов пользователя:', error.response?.data || error.message);
+    throw error.response?.data || error.message;
+  }
+};
+
+export const getAllNotApprovedPosts = async ({ dateFilterType, tagsFilter, startDate, endDate }) => {
+  try {
+    const response = await axiosInstance.post('/get_all_not_approved_posts', { 
+      dateFilterType,
+      tagsFilter,
+      startDate,
+      endDate,
+    }, {
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('refresh_token')}`,  // Добавьте токен в заголовок
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Ошибка при получении не одобренных постов:', error.response?.data || error.message);
+    throw error.response?.data || error.message;
+  }
+};
+
+export const approvePost = async (postAddress) => {
+  try {
+    const response = await axiosInstance.put(`/approve/${postAddress}`, {}, {
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('refresh_token')}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Ошибка при одобрении поста:', error.response?.data || error.message);
     throw error.response?.data || error.message;
   }
 };

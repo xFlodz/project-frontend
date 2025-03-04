@@ -30,6 +30,7 @@ export const loginUser = async (userData) => {
     if (response.data.access_token) {
       localStorage.setItem('access_token', response.data.access_token);
       localStorage.setItem('refresh_token', response.data.refresh_token);
+      console.log(response.data.role)
       localStorage.setItem('role', response.data.role);
     }
 
@@ -64,6 +65,7 @@ export const refreshAuthToken = async () => {
 export const logoutUser = async () => {
   localStorage.removeItem('access_token');
   localStorage.removeItem('refresh_token');
+  localStorage.removeItem('role');
 };
 
 // Функция для получения всех редакторов

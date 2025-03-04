@@ -11,6 +11,7 @@ function LogoutButton({ setIsMenuOpen, setIsLoggedIn }) {
       await logoutUser(); // Выход из системы
       setIsLoggedIn(false); // Обновляем состояние авторизации
       setIsMenuOpen(false); // Закрываем меню после выхода
+      window.location.reload();
     } catch (error) {
       console.error("Ошибка при выходе:", error.response?.data || error.message);
     } finally {

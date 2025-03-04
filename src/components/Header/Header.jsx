@@ -9,8 +9,9 @@ import { loginUser } from "../../services/apiUser";
 
 function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isMenuOpen, setIsMenuOpen] = useState(false); // Состояние для отслеживания открытого меню
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // Состояние для проверки авторизации
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [role, setRole] = useState(localStorage.getItem('role')); // Состояние для роли
 
   const handleScroll = () => {
     if (window.scrollY > 50) {
@@ -20,11 +21,10 @@ function Header() {
     }
   };
 
-  // Проверяем токен в localStorage при монтировании компонента
   useEffect(() => {
     const token = localStorage.getItem("access_token");
     if (token) {
-      setIsLoggedIn(true); // Если токен есть, считаем, что пользователь авторизован
+      setIsLoggedIn(true);
     }
     window.addEventListener("scroll", handleScroll);
     return () => {
@@ -35,8 +35,9 @@ function Header() {
   // Функция для входа пользователя
   const handleLogin = async (userData) => {
     try {
-      await loginUser(userData); // Выполняем вход
-      setIsLoggedIn(true); // Обновляем состояние после успешного входа
+      await loginUser(userData);
+      setIsLoggedIn(true);
+      setRole(localStorage.getItem('role')); // Обновляем роль после входа
     } catch (error) {
       console.error('Ошибка при входе:', error.response?.data || error.message);
     }
@@ -60,7 +61,7 @@ function Header() {
         ) : (
           <MenuLogin handleLogin={handleLogin} setIsMenuOpen={setIsMenuOpen} />
         )}
-        <MenuDropdown />
+        <MenuDropdown role={role} /> {/* Передаем роль в MenuDropdown */}
       </div>
     </div>
   );

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { getPostByAddress, deletePost } from "../../services/apiPost";
+import { getPostByAddress, deletePost, approvePost } from "../../services/apiPost";
 import ImageModal from "../../components/ImageModal/ImageModal";
 import ConfirmModal from "../../components/ConfirmModal/ConfirmModal";
 import Notification from "../../components/Notification/Notification";
@@ -66,6 +66,18 @@ const PostPage = () => {
 
     const handleEditClick = () => {
         navigate(`/post/edit/${address}`);
+    };
+
+    const handleApproveClick = async () => {
+        try {
+            // Логика для одобрения поста
+            // Например, API-запрос для изменения is_approved на true
+            await approvePost(post.address);  // Это предположительный API-метод
+            setPost(prevPost => ({ ...prevPost, is_approved: true }));
+            setNotification({ message: "Пост успешно одобрен.", type: "success" });
+        } catch (err) {
+            setNotification({ message: "Ошибка при одобрении поста.", type: "error" });
+        }
     };
 
     if (loading) return <div className="loading">Загрузка...</div>;
@@ -143,6 +155,9 @@ const PostPage = () => {
             {userRole === "poster" && (
                 <div className="post-actions-container">
                     <button className="edit-post-button" onClick={handleEditClick}>Изменить</button>
+                    {post.is_approved === false && (
+                        <button className="approve-post-button" onClick={handleApproveClick}>Одобрить</button>
+                    )}
                     <button className="delete-post-button" onClick={handleDeleteClick}>Удалить</button>
                 </div>
             )}

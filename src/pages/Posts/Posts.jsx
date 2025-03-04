@@ -24,6 +24,7 @@ function Posts() {
         const data = await getAllPosts(filters);
         setPostsData(data);  // Сохраняем посты в состояние
         setLoading(false);    // Останавливаем индикатор загрузки
+        console.log(data)
       } catch (error) {
         console.error("Ошибка при получении постов:", error);
         setLoading(false); // В случае ошибки также прекращаем загрузку
