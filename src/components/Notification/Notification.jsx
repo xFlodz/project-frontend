@@ -37,7 +37,6 @@ const Notification = ({ message, type, onClose }) => {
             className={`notification ${type} ${show ? "show" : ""} ${hide ? "hide" : ""}`}
         >
             <span>{message}</span>
-            <button className="close-btn" onClick={handleClose}>✖</button>
         </div>
     );
 };

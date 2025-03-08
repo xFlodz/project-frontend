@@ -1,0 +1,131 @@
+/* Основной контейнер таймлайна */
+.timeline-container {
+    width: 90%;
+    height: 80vh;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    border: 2px solid #4A90E2;
+    background: white;
+    margin: 20px auto;
+    position: relative;
+  }
+  
+  /* Заголовок таймлайна */
+  .tl-title {
+    background: linear-gradient(135deg, #4A90E2, #357ABD);
+    color: white;
+    padding: 15px;
+    border-radius: 10px 10px 0 0;
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Карточки событий */
+  .tl-slide {
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    background: white;
+    margin: 10px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .tl-slide:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Заголовок события */
+  .tl-headline {
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10px;
+  }
+  
+  /* Текст события */
+  .tl-text {
+    font-size: 1rem;
+    color: #555;
+    line-height: 1.5;
+  }
+  
+  /* Медиа (изображения) */
+  .tl-media {
+    margin-top: 15px;
+    overflow: hidden;
+  }
+  
+  .tl-media img {
+    width: 100%;
+    height: auto;
+    border-radius: 0px;
+  }
+  
+  /* Навигация */
+  .tl-menubar-button {
+    background: #4A90E2 !important;
+    color: white !important;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.3s ease;
+  }
+  
+  .tl-menubar-button:hover {
+    background: #357ABD !important;
+  }
+  
+  /* Ось времени */
+  .tl-timeaxis {
+    border-top: 2px solid #4A90E2;
+    background: rgba(74, 144, 226, 0.1);
+    padding: 10px 0;
+  }
+  
+  /* Точки на оси времени */
+  .tl-timemarker {
+    color: #4A90E2;
+    font-weight: bold;
+    font-size: 1.1rem;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Стили для текста автора */
+.tl-media .tl-caption {
+    margin-top: 10px;
+    padding: 5px 10px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 5px;
+    font-size: 0.9rem;
+    color: #333;
+    text-align: center;
+    border: 1px solid #ddd; /* Добавляем рамку */
+  }
+  
+  /* Убираем закругление краев для текста автора */
+  .tl-media .tl-caption {
+    border-radius: 0;
+  }
+
+  
+  
+  /* Анимация загрузки */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  .timeline-container {
+    animation: fadeIn 0.5s ease-in-out;
+  }

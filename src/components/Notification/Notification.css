@@ -54,15 +54,19 @@
     background-color: #28a745;
 }
 
+
 .notification.error {
     background-color: #dc3545;
 }
 
-.close-btn {
+.close-btn-notification {
     background: none;
+    background-color: none;
     border: none;
     color: white;
     font-size: 18px;
     cursor: pointer;
     margin-left: 15px;
 }
+
+

@@ -73,7 +73,7 @@ export const getAllEditors = async () => {
   try {
     const response = await axiosInstance.get('/get_editors', {
       headers: {
-        'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
+        'Authorization': `Bearer ${localStorage.getItem('refresh_token')}`,
       },
     });
 
@@ -89,7 +89,7 @@ export const createEditor = async (editorEmail) => {
   try {
     const response = await axiosInstance.post('/add_editor', { email: editorEmail }, {
       headers: {
-        'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
+        'Authorization': `Bearer ${localStorage.getItem('refresh_token')}`,
       },
     });
 
@@ -100,11 +100,11 @@ export const createEditor = async (editorEmail) => {
   }
 };
 
-export const deleteEditor = async (editorId) => {
+export const deleteEditor = async (editorEmail) => {
   try {
-    const response = await axiosInstance.post('/delete_editor', { editor_id: editorId }, {
+    const response = await axiosInstance.post('/delete_editor', { email: editorEmail }, {
       headers: {
-        'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
+        'Authorization': `Bearer ${localStorage.getItem('refresh_token')}`,
       },
     });
 

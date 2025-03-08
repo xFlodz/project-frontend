@@ -40,6 +40,7 @@ function MenuDropdown({ role }) { // Принимаем роль как проп
       return (
         <>
           <li><a href="/">Все посты</a></li>
+          <li><a href="/timeline">Таймлайн</a></li>
           <li><a href="/create_new_tag">Добавить теги</a></li>
           <li><a href="/create_new_editor">Добавить редакторов</a></li>
           <li><a href="/create_post">Добавить пост</a></li>
@@ -53,6 +54,7 @@ function MenuDropdown({ role }) { // Принимаем роль как проп
       return (
         <>
           <li><a href="/">Все посты</a></li>
+          <li><a href="/timeline">Таймлайн</a></li>
           <li><a href="/create_post">Добавить пост</a></li>
           <li><a href="/my_posts">Мои посты</a></li>
           <li><a href="/approve_posts">Одобрение постов</a></li>
@@ -64,13 +66,17 @@ function MenuDropdown({ role }) { // Принимаем роль как проп
       return (
         <>
           <li><a href="/">Все посты</a></li>
+          <li><a href="/timeline">Таймлайн</a></li>
           <li><a href="/create_post">Добавить пост</a></li>
           <li><a href="/my_posts">Мои посты</a></li>
         </>
       );
     }
     return (
+      <>
       <li><a href="/">Все посты</a></li>
+      <li><a href="/timeline">Таймлайн</a></li>
+      </>
     );
   };
 

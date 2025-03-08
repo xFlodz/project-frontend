@@ -1,61 +1,57 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { getAllTags, createTag, deleteTag } from "../../services/apiTag";
-import "./TagCreate.css"; // Новый CSS для страницы тегов
+import Notification from "../../components/Notification/Notification"; // Импортируем компонент Notification
+import "./TagCreate.css";
 
 const TagCreate = () => {
-    const [tagName, setTagName] = useState(""); // Состояние для хранения введенного имени тега
-    const [tags, setTags] = useState([]); // Состояние для списка тегов
+    const [tagName, setTagName] = useState("");
+    const [tags, setTags] = useState([]);
+    const [notification, setNotification] = useState({ message: "", type: "" }); // Состояние для уведомлений
     const navigate = useNavigate();
 
-    // Проверяем роль пользователя при загрузке страницы
     useEffect(() => {
         const role = localStorage.getItem("role");
-        if (role !== "admin") { // Если роль не "admin", перенаправляем на главную страницу
-            navigate("/"); 
+        if (role !== "admin") {
+            navigate("/");
         } else {
-            // Если роль "admin", загружаем список тегов
             fetchTags();
         }
     }, [navigate]);
 
-    // Функция для загрузки списка тегов с сервера
     const fetchTags = async () => {
         try {
-            const tagsList = await getAllTags(); // Получаем список тегов через API
-            setTags(tagsList); // Обновляем состояние тегов
+            const tagsList = await getAllTags();
+            setTags(tagsList);
         } catch (error) {
-            console.error("Не удалось загрузить теги:", error); // Ошибка при загрузке данных
+            console.error("Не удалось загрузить теги:", error);
         }
     };
 
-    // Функция для добавления нового тега
     const handleAddTag = async () => {
-        if (tagName.trim()) { // Проверяем, что имя тега введено
+        if (tagName.trim()) {
             try {
-                const newTag = await createTag({ name: tagName.trim() }); // Добавляем новый тег через API
-
-                // После успешного добавления обновляем список тегов
+                const newTag = await createTag({ name: tagName.trim() });
                 setTags(prevTags => [...prevTags, newTag]);
-
-                // Очищаем поле ввода
                 setTagName("");
+                setNotification({ message: "Тег успешно создан.", type: "success" }); // Уведомление об успехе
             } catch (error) {
-                console.error("Не удалось добавить тег:", error); // Ошибка при добавлении тега
-                alert("Не удалось добавить тег.");
+                console.error("Не удалось добавить тег:", error);
+                setNotification({ message: "Не удалось добавить тег.", type: "error" }); // Уведомление об ошибке
             }
         } else {
-            alert("Введите имя тега."); // Сообщение об ошибке, если имя тега пустое
+            setNotification({ message: "Введите имя тега.", type: "error" }); // Уведомление об ошибке
         }
     };
 
-    // Функция для удаления тега
     const handleDeleteTag = async (id) => {
         try {
-            await deleteTag(id); // Удаляем тег через API
-            setTags(prevTags => prevTags.filter(tag => tag.id !== id)); // Обновляем список тегов после удаления
+            await deleteTag(id);
+            setTags(prevTags => prevTags.filter(tag => tag.id !== id));
+            setNotification({ message: "Тег успешно удален.", type: "success" }); // Уведомление об успехе
         } catch (error) {
-            console.error("Не удалось удалить тег:", error); // Ошибка при удалении тега
+            console.error("Не удалось удалить тег:", error);
+            setNotification({ message: "Не удалось удалить тег.", type: "error" }); // Уведомление об ошибке
         }
     };
 
@@ -75,17 +71,23 @@ const TagCreate = () => {
             <div className="tag-list">
                 <h3>Список тегов:</h3>
                 <ul>
-                    {/* Отображаем теги с кнопками удаления */}
                     {tags.map((tag) => (
                         <li key={tag.id}>
                             <span className="tag-name">{tag.name}</span>
                             <button onClick={() => handleDeleteTag(tag.id)} className="delete-tag-btn">
-                                × {/* Символ "×" для удаления */}
+                                ×
                             </button>
                         </li> 
                     ))}
                 </ul>
             </div>
+
+            {/* Компонент Notification */}
+            <Notification 
+                message={notification.message} 
+                type={notification.type} 
+                onClose={() => setNotification({ message: "", type: "" })} 
+            />
         </div>
     );
 };

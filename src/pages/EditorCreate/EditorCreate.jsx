@@ -1,67 +1,62 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { getAllEditors, createEditor, deleteEditor } from "../../services/apiUser";
+import Notification from "../../components/Notification/Notification"; // Импортируем компонент Notification
 import "./EditorCreate.css";
 
 const EditorCreate = () => {
-    const [editorEmail, setEditorEmail] = useState(""); // Состояние для хранения введенного email
-    const [editors, setEditors] = useState([]); // Состояние для списка редакторов
+    const [editorEmail, setEditorEmail] = useState("");
+    const [editors, setEditors] = useState([]);
+    const [notification, setNotification] = useState({ message: "", type: "" }); // Состояние для уведомлений
     const navigate = useNavigate();
 
-    // Проверяем роль пользователя при загрузке страницы
     useEffect(() => {
         const role = localStorage.getItem("role");
-        if (role !== "admin") { // Если роль не "admin", перенаправляем на главную страницу
-            navigate("/"); 
+        if (role !== "admin") {
+            navigate("/");
         } else {
-            // Если роль "admin", загружаем список редакторов
             fetchEditors();
         }
     }, [navigate]);
 
-    // Функция для загрузки списка редакторов с сервера
     const fetchEditors = async () => {
         try {
-            const editorsList = await getAllEditors(); // Получаем список редакторов через API
-            setEditors(editorsList); // Обновляем состояние редакторов
+            const editorsList = await getAllEditors();
+            setEditors(editorsList);
         } catch (error) {
-            console.error("Не удалось загрузить редакторов:", error); // Ошибка при загрузке данных
+            console.error("Не удалось загрузить редакторов:", error);
         }
     };
 
-    // Функция для добавления нового редактора
     const handleAddEditor = async () => {
-        if (editorEmail.trim() && validateEmail(editorEmail)) { // Проверяем, что email введен правильно
+        if (editorEmail.trim() && validateEmail(editorEmail)) {
             try {
-                await createEditor(editorEmail.trim()); // Добавляем нового редактора через API
-
-                // После успешного добавления обновляем список редакторов
+                await createEditor(editorEmail.trim());
                 fetchEditors();
-
-                // Очищаем поле ввода
                 setEditorEmail("");
+                setNotification({ message: "Редактор успешно добавлен.", type: "success" }); // Уведомление об успехе
             } catch (error) {
-                console.error("Не удалось добавить редактора:", error); // Ошибка при добавлении редактора
-                alert("Не удалось добавить редактора.");
+                console.error("Не удалось добавить редактора:", error);
+                setNotification({ message: "Не удалось добавить редактора.", type: "error" }); // Уведомление об ошибке
             }
         } else {
-            alert("Введите корректный email."); // Сообщение об ошибке, если email некорректный
+            setNotification({ message: "Введите корректный email.", type: "error" }); // Уведомление об ошибке
         }
     };
 
-    // Функция для удаления редактора
     const handleDeleteEditor = async (id) => {
         try {
-            await deleteEditor(id); // Удаляем редактора через API
-            fetchEditors(); // Обновляем список редакторов после удаления
+            await deleteEditor(id);
+            fetchEditors();
+            setNotification({ message: "Редактор успешно удален.", type: "success" }); // Уведомление об успехе
         } catch (error) {
-            console.error("Не удалось удалить редактора:", error); // Ошибка при удалении редактора
+            console.error("Не удалось удалить редактора:", error);
+            setNotification({ message: "Не удалось удалить редактора.", type: "error" }); // Уведомление об ошибке
         }
     };
 
-    // Функция для проверки корректности email
     const validateEmail = (email) => {
-        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email); // Простая регулярка для проверки email
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
     };
 
     return (
@@ -80,19 +75,25 @@ const EditorCreate = () => {
             <div className="editor-list">
                 <h3>Список редакторов:</h3>
                 <ul>
-                    {/* Отображаем редакторов с кликабельными ссылками и кнопками удаления */}
                     {editors.map((editor) => (
                         <li key={editor.id}>
                             <a href={`/user/${editor.id}`} className="editor-link">
                                 {editor.name} {editor.surname} - {editor.email}
                             </a>
-                            <button onClick={() => handleDeleteEditor(editor.id)} className="delete-editor-btn">
-                                × {/* Символ "×" для удаления */}
+                            <button onClick={() => handleDeleteEditor(editor.email)} className="delete-editor-btn">
+                                ×
                             </button>
                         </li> 
                     ))}
                 </ul>
             </div>
+
+            {/* Компонент Notification */}
+            <Notification 
+                message={notification.message} 
+                type={notification.type} 
+                onClose={() => setNotification({ message: "", type: "" })} 
+            />
         </div>
     );
 };

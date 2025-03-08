@@ -10,6 +10,7 @@ import TagCreate from "./pages/TagCreate/TagCreate";
 import PostEdit from "./pages/PostEdit/PostEdit";
 import UserPostsPage from "./pages/UserPostsPage/UserPostsPage";
 import ApprovePostPage from "./pages/ApprovePostPage/ApprovePostPage";
+import TimelinePage from "./pages/TimelinePage/TimelinePage";
 import './App.css';
 
 function App() {
@@ -51,6 +52,7 @@ function App() {
                 <Route path="/post/edit/:address" element={<PostEdit />} />
                 <Route path="/my_posts" element={<UserPostsPage />} />
                 <Route path="/approve_posts" element={<ApprovePostPage />} />
+                <Route path="/timeline" element={<TimelinePage />} />
             </Routes>
         </div>
     );
