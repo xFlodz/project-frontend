@@ -42,7 +42,7 @@
     }
     
     .menu-login .close-button:hover {
-      color: #007bff;
+      color: rgb(0,0,114);
     }
     
     .login-form h3 {
@@ -74,7 +74,7 @@
     button[type='submit'] {
       width: 90%; /* Ширина кнопки */
       padding: 10px;
-      background-color: #007bff;
+      background-color: rgb(0, 26, 114);
       color: white;
       border: none;
       cursor: pointer;
@@ -99,7 +99,7 @@
     }
   
     .register-link:hover {
-      color: #007bff; /* Синий при наведении */
+      color: rgb(0, 0, 114); /* Синий при наведении */
       text-decoration: underline; /* Подчеркнуто при наведении */
     }
   

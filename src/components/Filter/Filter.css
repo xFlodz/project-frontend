@@ -19,7 +19,7 @@
 
 .filter-toggle {
   display: none;
-  background: #007bff;
+  background: rgb(0, 0, 114);
   color: white;
   padding: 10px;
   border-radius: 8px;
@@ -60,7 +60,7 @@
 
 .filters select:focus,
 .filters input:focus {
-  border-color: #007bff;
+  border-color: rgb(0, 0, 114);
   outline: none;
 }
 
@@ -96,7 +96,7 @@
 }
 
 .filters button {
-  background: #007bff;
+  background: rgb(0, 0, 114);
   color: white;
   padding: 12px;
   border-radius: 8px;

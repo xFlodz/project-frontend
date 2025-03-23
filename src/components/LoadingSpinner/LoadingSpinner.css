@@ -15,7 +15,7 @@
   /* Стиль для самого спиннера */
   .spinner {
     border: 8px solid #f3f3f3; /* Светлый цвет для фона */
-    border-top: 8px solid #007bff; /* Цвет вращающейся части */
+    border-top: 8px solid rgb(0, 0, 114); /* Цвет вращающейся части */
     border-radius: 50%;
     width: 50px;
     height: 50px;

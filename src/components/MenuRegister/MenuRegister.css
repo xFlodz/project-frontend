@@ -33,7 +33,6 @@
   button[type='submit'] {
     width: 90%;
     padding: 10px;
-    background-color: #007bff;
     color: white;
     border: none;
     cursor: pointer;
@@ -57,7 +56,7 @@
   }
 
   .login-link:hover {
-    color: #007bff; /* Синий при наведении */
+    color: rgb(0, 0, 114); /* Синий при наведении */
     text-decoration: underline; /* Подчеркнуто при наведении */
   }
   

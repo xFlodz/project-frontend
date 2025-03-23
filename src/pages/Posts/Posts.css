@@ -51,11 +51,12 @@
 }
 
 .page-button {
-  background: #007bff;
+  background: rgb(0, 0, 114);
   color: white;
   border: none;
   padding: 8px 12px;
-  margin: 0 4px;
+  margin: 0 2px;
+  margin-top: 36px;
   border-radius: 4px;
   cursor: pointer;
   font-size: 14px;

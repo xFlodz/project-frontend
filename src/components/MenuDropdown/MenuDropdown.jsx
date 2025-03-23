@@ -1,42 +1,33 @@
 import React, { useState, useEffect } from "react";
 import "./MenuDropdown.css";
 
-function MenuDropdown({ role }) { // Принимаем роль как пропс
+function MenuDropdown({ role, setIsMenuOpen }) {
   const [isOpen, setIsOpen] = useState(false);
-
-  const disableScroll = () => {
-    document.body.style.overflow = 'hidden';
-  };
-
-  const enableScroll = () => {
-    document.body.style.overflow = 'auto';
-  };
 
   useEffect(() => {
     if (isOpen) {
-      disableScroll();
-      document.querySelector('.header-container').classList.add('scrolled');
+      document.body.style.overflow = "hidden";
     } else {
-      enableScroll();
-      document.querySelector('.header-container').classList.remove('scrolled');
+      document.body.style.overflow = "auto";
     }
 
     return () => {
-      enableScroll();
+      document.body.style.overflow = "auto";
     };
   }, [isOpen]);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
+    setIsMenuOpen(!isOpen); // Обновляем состояние isMenuOpen в Header
   };
 
   const closeMenu = () => {
     setIsOpen(false);
+    setIsMenuOpen(false); // Обновляем состояние isMenuOpen в Header
   };
 
   const renderMenuItems = () => {
-    console.log(role);
-    if (role === 'admin') {
+    if (role === "admin") {
       return (
         <>
           <li><a href="/">Все посты</a></li>
@@ -49,8 +40,7 @@ function MenuDropdown({ role }) { // Принимаем роль как проп
         </>
       );
     }
-
-    if (role === 'poster') {
+    if (role === "poster") {
       return (
         <>
           <li><a href="/">Все посты</a></li>
@@ -61,8 +51,7 @@ function MenuDropdown({ role }) { // Принимаем роль как проп
         </>
       );
     }
-
-    if (role === 'user') {
+    if (role === "user") {
       return (
         <>
           <li><a href="/">Все посты</a></li>
@@ -74,11 +63,13 @@ function MenuDropdown({ role }) { // Принимаем роль как проп
     }
     return (
       <>
-      <li><a href="/">Все посты</a></li>
-      <li><a href="/timeline">Таймлайн</a></li>
+        <li><a href="/">Все посты</a></li>
+        <li><a href="/timeline">Таймлайн</a></li>
       </>
     );
   };
+
+  const headerHeight = 120; // Фиксированная высота хедера
 
   return (
     <div>
@@ -86,13 +77,23 @@ function MenuDropdown({ role }) { // Принимаем роль как проп
         Меню
       </button>
 
-      <div className={`overlay ${isOpen ? "open" : ""}`} onClick={closeMenu}></div>
+      {isOpen && (
+        <div
+          className="menu-dropdown-overlay"
+          onClick={closeMenu}
+          style={{ top: `${headerHeight}px`, height: `calc(100vh - ${headerHeight}px)` }}
+        ></div>
+      )}
 
-      <div className={`side-menu ${isOpen ? "open" : ""}`}>
+      <div
+        className={`side-menu ${isOpen ? "open" : ""}`}
+        style={{
+          top: `${headerHeight}px`,
+          height: `calc(100vh - ${headerHeight}px)`,
+        }}
+      >
         <h2>Меню</h2>
-        <ul className="menu-items">
-          {renderMenuItems()}
-        </ul>
+        <ul className="menu-items">{renderMenuItems()}</ul>
       </div>
     </div>
   );

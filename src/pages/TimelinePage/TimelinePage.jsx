@@ -22,7 +22,10 @@ function TimelinePage() {
     const fetchPosts = async () => {
       try {
         const data = await getAllPosts({
-          filters
+          dateFilterType: 'creation',
+          tagsFilter: [],
+          startDate: '',
+          endDate: ''
         });
         setPosts(data);
         setLoading(false);

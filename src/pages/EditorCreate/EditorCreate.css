@@ -32,14 +32,14 @@ input {
 }
 
 input:focus {
-    border-color: #007bff;
+    border-color: rgb(0, 0, 114);
 }
 
 button {
     padding: 10px 15px;
     font-size: 16px;
     color: white;
-    background-color: #007bff;
+    background-color: rgb(0, 0, 114);
     border: none;
     border-radius: 8px;
     cursor: pointer;
@@ -80,7 +80,7 @@ li {
 
 .editor-link {
     text-decoration: none;
-    color: #007bff;
+    color: rgb(0, 0, 114);
     font-weight: bold;
 }
 

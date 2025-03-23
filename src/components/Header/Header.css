@@ -3,21 +3,22 @@
     top: 0;
     left: 0;
     width: 100%;
-    background-color: rgba(255, 255, 255, 0.9); /* Полупрозрачный белый фон */
+    background-color: rgba(255, 255, 255, 0.9);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    z-index: 1001; /* Хедер выше оверлея */
+    z-index: 1001;
     padding: 20px 20px; /* Начальные отступы */
     display: flex;
     justify-content: space-between;
     align-items: center;
     box-sizing: border-box;
     margin-bottom: 10px;
-    transition: background-color 0.3s ease, padding 0.3s ease, font-size 0.3s ease; /* Плавный переход */
+    max-height: 120px;
+    transition: background-color 0.3s ease, padding 0.3s ease, font-size 0.3s ease;
 }
 
 .header-container.scrolled {
-    background-color: rgba(255, 255, 255, 0.7); /* Полупрозрачный белый фон при прокрутке */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.22); /* Усиленная тень при прокрутке */
+    background-color: rgba(255, 255, 255, 0.7);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.22);
     padding: 10px 20px; /* Уменьшенные отступы при прокрутке */
 }
 
@@ -32,15 +33,20 @@
     gap: 10px;
 }
 
+.left-components img{
+  height: 75px; /* Фиксированная высота для обоих логотипов */
+  width: auto; /* Сохраняем пропорции */
+}
+
+.middle-components img {
+  height: 75px;
+  width: auto; /* Сохраняем пропорции */
+}
+
 .middle-components {
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
-}
-
-.middle-components img {
-    width: 50px;
-    height: 50px;
 }
 
 

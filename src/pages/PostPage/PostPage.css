@@ -54,7 +54,7 @@
 
 .tag {
     display: inline-block;
-    background-color: #007bff;
+    background-color: rgb(0, 0, 114);
     color: white;
     padding: 6px 12px;
     border-radius: 15px;
@@ -173,7 +173,7 @@
 }
 
 .edit-post-button {
-    background-color: #007bff;
+    background-color: rgb(0, 0, 114);
     color: white;
 }
 

@@ -1,0 +1,50 @@
+.add-content-button {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .dropdown-content {
+    position: absolute;
+    background-color: #ffffff; /* Белый фон */
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid #ccc; /* Добавляем границу */
+  }
+  
+  .icon-button {
+    width: 100%;
+    padding: 12px;
+    text-align: left;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: #333; /* Темный цвет текста */
+  }
+  
+  .icon-button:hover {
+    background-color: #f1f1f1; /* Светлый фон при наведении */
+  }
+  
+  /* Стили для кнопки "Добавить контент" */
+  .add-button {
+    margin-top: 12px;
+    padding: 8px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    background-color: #28a745; /* Зеленый цвет */
+    color: white; /* Белый текст */
+    border: none;
+  }
+  
+  .add-button:hover {
+    background-color: #218838; /* Темно-зеленый при наведении */
+  }

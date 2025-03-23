@@ -3,7 +3,9 @@ import ReactDatePicker from "react-datepicker";
 import { useNavigate } from "react-router-dom";
 import "react-datepicker/dist/react-datepicker.css";
 import FileInput from "../../components/FileInput/FileInput";
-import ModalTags from "../../components/ModalTags/ModalTags"; // Импортируем компонент модального окна
+import ModalTags from "../../components/ModalTags/ModalTags";
+import AddContentButton from "../../components/AddContentButton/AddContentButton"; // Импортируем новый компонент
+import { FaTrash } from "react-icons/fa"; // Импортируем иконку мусорного ведра
 import "./PostsCreate.css";
 import { createPost } from "../../services/apiPost";
 
@@ -245,9 +247,9 @@ function CreatePost() {
           />
           {errors.header && <p className="error-message">{errors.header}</p>}
         </div>
-
+  
         {/* Основное изображение */}
-        <div className="form-group">
+        <div className="form-group-image">
           <label htmlFor="main-image">Основное изображение</label>
           <FileInput
             id="main-image"
@@ -262,7 +264,7 @@ function CreatePost() {
           )}
           {errors.mainImage && <p className="error-message">{errors.mainImage}</p>}
         </div>
-
+  
         {/* Контент поста */}
         <div className="form-group">
           <label>Контент поста</label>
@@ -277,7 +279,7 @@ function CreatePost() {
                     className={errors.content ? "error" : ""}
                   />
                   <button type="button" onClick={() => removeContent(index)} className="delete-button">
-                    Удалить
+                    <FaTrash />
                   </button>
                 </div>
               ) : item.type === "image" ? (
@@ -302,7 +304,7 @@ function CreatePost() {
                     <p>Изображение не загружено</p>
                   )}
                   <button type="button" onClick={() => removeContent(index)} className="delete-button">
-                    Удалить
+                    <FaTrash />
                   </button>
                 </div>
               ) : item.type === "video" ? (
@@ -327,7 +329,7 @@ function CreatePost() {
                     </div>
                   )}
                   <button type="button" onClick={() => removeContent(index)} className="delete-button">
-                    Удалить
+                    <FaTrash />
                   </button>
                 </div>
               ) : null}
@@ -335,37 +337,9 @@ function CreatePost() {
           ))}
           {errors.content && <p className="error-message">{errors.content}</p>}
           {errors.contentImages && <p className="error-message">{errors.contentImages}</p>}
-          <div className="buttons-container">
-            <button type="button" onClick={addText} className="add-button">
-              Добавить текст
-            </button>
-            <button type="button" onClick={addImage} className="add-button">
-              Добавить изображение
-            </button>
-            <button type="button" onClick={addVideo} className="add-button">
-              Добавить видео
-            </button>
-          </div>
+          <AddContentButton onAddText={addText} onAddImage={addImage} onAddVideo={addVideo} />
         </div>
-
-        {/* Теги */}
-        <div className="form-group">
-          <label>Теги</label>
-          <div className="tags-container">
-            {tags.map((tag, index) => (
-              <div key={index} className="tag">
-                {typeof tag === 'object' ? tag.name : tag}
-                <button type="button" onClick={() => removeTag(index)} className="delete-tag-button">
-                  ×
-                </button>
-              </div>
-            ))}
-          </div>
-          <button type="button" onClick={() => setIsModalOpen(true)} className="add-button">
-            Добавить теги
-          </button>
-        </div>
-
+  
         {/* Диапазон дат */}
         <div className="form-group">
           <label>Диапазон дат</label>
@@ -394,13 +368,30 @@ function CreatePost() {
             />
           </div>
         </div>
-
+  
+        {/* Теги */}
+        <div className="form-group">
+          <div className="tags-container">
+            {tags.map((tag, index) => (
+              <div key={index} className="tag">
+                {typeof tag === 'object' ? tag.name : tag}
+                <button type="button" onClick={() => removeTag(index)} className="delete-tag-button">
+                  ×
+                </button>
+              </div>
+            ))}
+          </div>
+          <button type="button" onClick={() => setIsModalOpen(true)} className="add-button">
+            Добавить теги
+          </button>
+        </div>
+  
         {/* Кнопка отправки */}
         <button type="submit" className="submit-button">
           Создать пост
         </button>
       </form>
-
+  
       {/* Модальное окно для выбора тегов */}
       <ModalTags
         isOpen={isModalOpen}

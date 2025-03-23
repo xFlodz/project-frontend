@@ -7,6 +7,9 @@ import ModalTags from "../../components/ModalTags/ModalTags";
 import { getPostByAddress, updatePost } from "../../services/apiPost"; // Импортируем функции API
 import "./PostEdit.css"
 
+import AddContentButton from "../../components/AddContentButton/AddContentButton";
+import { FaTrash } from "react-icons/fa";
+
 function PostEdit() {
     const { address } = useParams();
     const [header, setHeader] = useState("");
@@ -341,8 +344,8 @@ function PostEdit() {
                     className={errors.content ? "error" : ""}
                     />
                     <button type="button" onClick={() => removeContent(index)} className="delete-button">
-                    Удалить
-                    </button>
+                      <FaTrash />
+                    </button> 
                 </div>
               ) : item.type === "image" ? (
                 <div className="image-item">
@@ -365,9 +368,9 @@ function PostEdit() {
                   ) : (
                     <p>Изображение не загружено</p>
                   )}
-                  <button type="button" onClick={() => removeContent(index)} className="delete-button">
-                    Удалить
-                  </button>
+                <button type="button" onClick={() => removeContent(index)} className="delete-button">
+                  <FaTrash />
+                </button>
                 </div>
               ) : item.type === "video" ? (
                 <div className="video-item">
@@ -390,48 +393,16 @@ function PostEdit() {
                       />
                     </div>
                   )}
-                  <button type="button" onClick={() => removeContent(index)} className="delete-button">
-                    Удалить
-                  </button>
+                <button type="button" onClick={() => removeContent(index)} className="delete-button">
+                  <FaTrash />
+                </button>
                 </div>
               ) : null}
             </div>
           ))}
           {errors.content && <p className="error-message">{errors.content}</p>}
           {errors.contentImages && <p className="error-message">{errors.contentImages}</p>}
-          <div className="buttons-container">
-            <button type="button" onClick={addText} className="add-button">
-              Добавить текст
-            </button>
-            <button type="button" onClick={addImage} className="add-button">
-              Добавить изображение
-            </button>
-            <button type="button" onClick={addVideo} className="add-button">
-              Добавить видео
-            </button>
-          </div>
-        </div>
-
-        {/* Теги */}
-        <div className="form-group">
-          <label>Теги</label>
-          <div className="tags-container">
-            {tags.map((tag, index) => (
-                <div key={index} className="tag">
-                {tag.name}
-                <button
-                    type="button"
-                    onClick={() => removeTag(index)}
-                    className="delete-tag-button"
-                >
-                ×
-                </button>
-                </div>
-                ))}
-            </div>
-          <button type="button" onClick={() => setIsModalOpen(true)} className="add-button">
-            Добавить теги
-          </button>
+          <AddContentButton onAddText={addText} onAddImage={addImage} onAddVideo={addVideo} />
         </div>
 
         {/* Диапазон дат */}
@@ -461,6 +432,26 @@ function PostEdit() {
               required
             />
           </div>
+        </div>
+
+        <div className="form-group">
+          <div className="tags-container">
+            {tags.map((tag, index) => (
+              <div key={index} className="tag">
+                {tag.name}
+                <button
+                  type="button"
+                  onClick={() => removeTag(index)}
+                  className="delete-tag-button"
+                >
+                  ×
+                </button>
+              </div>
+            ))}
+          </div>
+          <button type="button" onClick={() => setIsModalOpen(true)} className="add-button">
+            Добавить теги
+          </button>
         </div>
 
         {/* Кнопка отправки */}

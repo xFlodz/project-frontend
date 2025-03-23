@@ -25,26 +25,35 @@ function MenuLogin({ setIsMenuOpen, handleLogin }) {
 
   // useEffect, чтобы управлять прокруткой
   useEffect(() => {
+    const overlay = document.querySelector('.overlay');
+    const menuLogin = document.querySelector('.menu-login');
+  
     if (isMenuOpen) {
       disableScroll();
+  
+      const headerHeight = 120; // Фиксированная высота хедера
+  
+      overlay.style.top = `${headerHeight}px`;
+      overlay.style.height = `calc(100vh - ${headerHeight}px)`;
+  
+      menuLogin.style.top = `${headerHeight + 20}px`; // Добавляем отступ
     } else {
       enableScroll();
     }
-
+  
     return () => {
-      enableScroll(); // Очистка при размонтировании компонента
+      enableScroll();
     };
   }, [isMenuOpen]);
 
   const toggleMenu = () => {
     setIsMenuOpenState(!isMenuOpen);
-    setIsMenuOpen(!isMenuOpen);
+    setIsMenuOpen(!isMenuOpen); // Передаем состояние в Header
   };
 
   const closeMenu = () => {
     setIsMenuOpenState(false);
-    setIsMenuOpen(false);
-    setIsRegistering(false);
+    setIsMenuOpen(false); // Передаем состояние в Header
   };
 
   const handleLoginSubmit = async (e) => {
