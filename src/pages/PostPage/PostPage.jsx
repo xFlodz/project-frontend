@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { getPostByAddress, deletePost, approvePost } from "../../services/apiPost";
+import { getPostByAddress, deletePost, approvePost, downloadQrCode } from "../../services/apiPost";
 import ImageModal from "../../components/ImageModal/ImageModal";
 import ConfirmModal from "../../components/ConfirmModal/ConfirmModal";
 import Notification from "../../components/Notification/Notification";
+import parse from "html-react-parser";
 import "./PostPage.css";
 
 const BASE_URL = "http://localhost:5000/api/file/";
@@ -70,8 +71,6 @@ const PostPage = () => {
 
     const handleApproveClick = async () => {
         try {
-            // Логика для одобрения поста
-            // Например, API-запрос для изменения is_approved на true
             await approvePost(post.address);  // Это предположительный API-метод
             setPost(prevPost => ({ ...prevPost, is_approved: true }));
             setNotification({ message: "Пост успешно одобрен.", type: "success" });
@@ -80,6 +79,14 @@ const PostPage = () => {
         }
     };
 
+    const handleDownloadQRCode = async () => {
+        try {
+          await downloadQrCode(post.address); 
+        } catch (err) {
+          setNotification({ message: "Ошибка при загрузке QR кода", type: "error" });
+        }
+      };
+
     if (loading) return <div className="loading">Загрузка...</div>;
     if (error) return <div className="error">{error}</div>;
     if (!post) return <div className="not-found">Пост не найден.</div>;
@@ -87,9 +94,9 @@ const PostPage = () => {
     return (
         <div className="post-page">
             <div className="post-header">
-                <img 
-                    src={`${BASE_URL}${post.main_image}`} 
-                    alt={post.header || "Изображение"} 
+                <img
+                    src={`${BASE_URL}${post.main_image}`}
+                    alt={post.header || "Изображение"}
                     className="main-image"
                     onClick={handleMainImageClick}
                 />
@@ -101,13 +108,17 @@ const PostPage = () => {
                     <div className="post-structure">
                         {post.structure.map((item, index) => {
                             if (item.type === "text") {
-                                return <div key={index} className="post-text">{item.text}</div>;
+                                return (
+                                    <div key={index} className="post-text">
+                                        {parse(item.text)}
+                                    </div>
+                                );
                             } else if (item.type === "image") {
                                 return (
                                     <div key={index} className="post-image">
-                                        <img 
-                                            src={`${BASE_URL}${item.src}`} 
-                                            alt={item.description || `Изображение ${index + 1}`} 
+                                        <img
+                                            src={`${BASE_URL}${item.src}`}
+                                            alt={item.description || `Изображение ${index + 1}`}
                                             className="structure-image"
                                             onClick={() => handleImageClick(`${BASE_URL}${item.src}`, item.description)}
                                         />
@@ -159,26 +170,29 @@ const PostPage = () => {
                         <button className="approve-post-button" onClick={handleApproveClick}>Одобрить</button>
                     )}
                     <button className="delete-post-button" onClick={handleDeleteClick}>Удалить</button>
+                    <button className="qr-code-button" onClick={handleDownloadQRCode}>
+                        Скачать QR-код
+                    </button>
                 </div>
             )}
 
-            <ConfirmModal 
-                isOpen={isConfirmOpen} 
-                message="Вы уверены, что хотите удалить этот пост?" 
-                onConfirm={confirmDelete} 
-                onCancel={() => setIsConfirmOpen(false)} 
+            <ConfirmModal
+                isOpen={isConfirmOpen}
+                message="Вы уверены, что хотите удалить этот пост?"
+                onConfirm={confirmDelete}
+                onCancel={() => setIsConfirmOpen(false)}
             />
 
-            <Notification 
-                message={notification.message} 
-                type={notification.type} 
-                onClose={() => setNotification({ message: "", type: "" })} 
+            <Notification
+                message={notification.message}
+                type={notification.type}
+                onClose={() => setNotification({ message: "", type: "" })}
             />
 
             {modalImage && (
-                <ImageModal 
-                    imageSrc={modalImage} 
-                    description={modalDescription} 
+                <ImageModal
+                    imageSrc={modalImage}
+                    description={modalDescription}
                     onClose={handleModalClose}
                 />
             )}

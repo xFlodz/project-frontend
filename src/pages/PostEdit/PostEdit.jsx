@@ -4,58 +4,53 @@ import ReactDatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import FileInput from "../../components/FileInput/FileInput";
 import ModalTags from "../../components/ModalTags/ModalTags";
-import { getPostByAddress, updatePost } from "../../services/apiPost"; // Импортируем функции API
-import "./PostEdit.css"
-
+import { getPostByAddress, updatePost } from "../../services/apiPost";
+import TextEditor from "../../components/TextEditor/TextEditor";
+import "./PostEdit.css";
 import AddContentButton from "../../components/AddContentButton/AddContentButton";
 import { FaTrash } from "react-icons/fa";
 
 function PostEdit() {
-    const { address } = useParams();
-    const [header, setHeader] = useState("");
-    const [mainImage, setMainImage] = useState(null);
-    const [content, setContent] = useState([]);
-    const [tags, setTags] = useState([]);
-    const [leftDate, setLeftDate] = useState(null);
-    const [rightDate, setRightDate] = useState(null);
-    const [errors, setErrors] = useState({});
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-  
-    const BASE_URL = "http://localhost:5000/api/file/"; // Базовый URL для изображений
+  const { address } = useParams();
+  const [header, setHeader] = useState("");
+  const [mainImage, setMainImage] = useState(null);
+  const [content, setContent] = useState([]);
+  const [tags, setTags] = useState([]);
+  const [leftDate, setLeftDate] = useState(null);
+  const [rightDate, setRightDate] = useState(null);
+  const [errors, setErrors] = useState({});
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Загрузка данных поста
+  const BASE_URL = "http://localhost:5000/api/file/";
+
   useEffect(() => {
     const fetchPost = async () => {
       try {
         const data = await getPostByAddress(address);
         console.log("Данные с сервера:", data);
-  
-        // Преобразуем даты
+
         const startDate = parseDate(data.date_range?.start_date);
         const endDate = parseDate(data.date_range?.end_date);
-  
-        // Преобразуем основное изображение в base64
+
         const mainImageBase64 = await urlToBase64(`${BASE_URL}${data.main_image}`);
-  
-        // Преобразуем изображения в структуре в base64
+
         const updatedContent = await Promise.all(
           data.structure.map(async (item) => {
             if (item.type === "image" && item.src) {
               const srcBase64 = await urlToBase64(`${BASE_URL}${item.src}`);
-              return { ...item, src: srcBase64 };
+              return { ...item, src: srcBase64};
             }
             return item;
           })
         );
 
         const formattedTags = data.tags.map(tag => ({
-            id: tag.tag_id,
-            name: tag.tag_name,
-          }));
-  
-        // Заполняем форму данными
+          id: tag.tag_id,
+          name: tag.tag_name,
+        }));
+
         setHeader(data.header);
         setMainImage(mainImageBase64);
         setContent(updatedContent);
@@ -68,7 +63,7 @@ function PostEdit() {
         setLoading(false);
       }
     };
-  
+
     fetchPost();
   }, [address]);
 
@@ -88,7 +83,7 @@ function PostEdit() {
     }
   };
 
-  // Обработчики из PostCreate (без изменений)
+  // Обработчики событий (аналогичные PostCreate)
   const handleMainImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -180,9 +175,9 @@ function PostEdit() {
 
   const handleTextChange = (index, value) => {
     const updatedContent = [...content];
-    updatedContent[index].text = value; // Используйте item.text
+    updatedContent[index].text = value;
     setContent(updatedContent);
-    if (value.trim()) {
+    if (value.replace(/<[^>]*>/g, '').trim()) {
       setErrors((prevErrors) => ({
         ...prevErrors,
         content: "",
@@ -206,7 +201,7 @@ function PostEdit() {
 
   const handleTagSelect = (selectedTags) => {
     if (Array.isArray(selectedTags)) {
-      setTags(selectedTags); // Заменяем текущие теги на выбранные
+      setTags(selectedTags);
     } else {
       console.error("Selected tags is not an array:", selectedTags);
     }
@@ -224,7 +219,6 @@ function PostEdit() {
     return new Date(`${year}-${month}-${day}`);
   };
 
-  // Отправка обновленных данных
   const handleSubmit = async (e) => {
     e.preventDefault();
     let validationErrors = {};
@@ -254,7 +248,7 @@ function PostEdit() {
       return;
     }
   
-    const tagIds = tags.map(tag => tag.id); // Используйте tag.tag_id
+    const tagIds = tags.map(tag => tag.id);
   
     const postData = {
       header,
@@ -279,7 +273,6 @@ function PostEdit() {
     try {
       const response = await updatePost(address, postData);
       console.log("Ответ от сервера:", response);
-      // Можно добавить уведомление об успешном обновлении
     } catch (error) {
       console.error("Ошибка при обновлении поста:", error);
     }
@@ -312,16 +305,18 @@ function PostEdit() {
           />
           {errors.header && <p className="error-message">{errors.header}</p>}
         </div>
-
+  
         {/* Основное изображение */}
-        <div className="form-group">
+        <div className="form-group-image">
           <label htmlFor="main-image">Основное изображение</label>
-          <FileInput
-            id="main-image"
-            accept="image/*"
-            onChange={handleMainImageChange}
-            buttonText="Выберите основное изображение"
-          />
+          <div className="file-input">
+            <FileInput
+              id="main-image"
+              accept="image/*"
+              onChange={handleMainImageChange}
+              buttonText="Выберите основное изображение"
+            />
+          </div>
           {mainImage ? (
             <img src={mainImage} alt="Основное изображение" className="main-image" />
           ) : (
@@ -329,32 +324,35 @@ function PostEdit() {
           )}
           {errors.mainImage && <p className="error-message">{errors.mainImage}</p>}
         </div>
-
+  
         {/* Контент поста */}
         <div className="form-group">
           <label>Контент поста</label>
           {content.map((item, index) => (
             <div key={index} className="content-item">
-                {item.type === "text" ? (
-                <div className="text-item">
-                    <textarea
-                    value={item.text} // Используйте item.text
-                    onChange={(e) => handleTextChange(index, e.target.value)}
-                    placeholder="Введите текст..."
-                    className={errors.content ? "error" : ""}
+              {item.type === "text" ? (
+                <div className="text-item-wrapper">
+                  <div className="text-item">
+                    <TextEditor
+                      value={item.text}
+                      onChange={(value) => handleTextChange(index, value)}
+                      className={errors.content ? "error" : ""}
                     />
-                    <button type="button" onClick={() => removeContent(index)} className="delete-button">
-                      <FaTrash />
-                    </button> 
+                  </div>
+                  <button type="button" onClick={() => removeContent(index)} className="delete-button">
+                    <FaTrash />
+                  </button>
                 </div>
               ) : item.type === "image" ? (
                 <div className="image-item">
-                  <FileInput
-                    id={`content-image-${index}`}
-                    accept="image/*"
-                    onChange={(e) => handleContentImageChange(index, e)}
-                    buttonText={`Выберите изображение`}
-                  />
+                  <div className="file-input">
+                    <FileInput
+                      id={`content-image-${index}`}
+                      accept="image/*"
+                      onChange={(e) => handleContentImageChange(index, e)}
+                      buttonText={`Выберите изображение`}
+                    />
+                  </div>
                   {item.src ? (
                     <div>
                       <img src={item.src} alt={`Изображение ${index + 1}`} />
@@ -368,34 +366,40 @@ function PostEdit() {
                   ) : (
                     <p>Изображение не загружено</p>
                   )}
-                <button type="button" onClick={() => removeContent(index)} className="delete-button">
-                  <FaTrash />
-                </button>
+                  <button type="button" onClick={() => removeContent(index)} className="delete-button">
+                    <FaTrash />
+                  </button>
                 </div>
               ) : item.type === "video" ? (
                 <div className="video-item">
-                  <input
-                    type="text"
-                    value={item.src}
-                    onChange={(e) => handleVideoChange(index, e)}
-                    placeholder="Введите ссылку на видео (например, YouTube)"
-                  />
-                  {item.src && (
-                    <div className="video-preview">
-                      <iframe
-                        width="560"
-                        height="315"
-                        src={item.src}
-                        title="Видео"
-                        frameBorder="0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowFullScreen
-                      />
-                    </div>
-                  )}
-                <button type="button" onClick={() => removeContent(index)} className="delete-button">
-                  <FaTrash />
-                </button>
+                  <div className="video-item-content">
+                    <input
+                      type="text"
+                      value={item.src}
+                      onChange={(e) => handleVideoChange(index, e)}
+                      placeholder="Введите ссылку на видео (например, YouTube)"
+                    />
+                    {item.src && (
+                      <div className="video-preview">
+                        <iframe
+                          width="560"
+                          height="315"
+                          src={item.src}
+                          title="Видео"
+                          frameBorder="0"
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                          allowFullScreen
+                        />
+                      </div>
+                    )}
+                  </div>
+                  <button 
+                    type="button" 
+                    onClick={() => removeContent(index)} 
+                    className="delete-button"
+                  >
+                    <FaTrash />
+                  </button>
                 </div>
               ) : null}
             </div>
@@ -404,7 +408,7 @@ function PostEdit() {
           {errors.contentImages && <p className="error-message">{errors.contentImages}</p>}
           <AddContentButton onAddText={addText} onAddImage={addImage} onAddVideo={addVideo} />
         </div>
-
+  
         {/* Диапазон дат */}
         <div className="form-group">
           <label>Диапазон дат</label>
@@ -433,17 +437,14 @@ function PostEdit() {
             />
           </div>
         </div>
-
+  
+        {/* Теги */}
         <div className="form-group">
           <div className="tags-container">
             {tags.map((tag, index) => (
               <div key={index} className="tag">
-                {tag.name}
-                <button
-                  type="button"
-                  onClick={() => removeTag(index)}
-                  className="delete-tag-button"
-                >
+                {typeof tag === 'object' ? tag.name : tag}
+                <button type="button" onClick={() => removeTag(index)} className="delete-tag-button">
                   ×
                 </button>
               </div>
@@ -453,20 +454,20 @@ function PostEdit() {
             Добавить теги
           </button>
         </div>
-
+  
         {/* Кнопка отправки */}
         <button type="submit" className="submit-button">
           Сохранить изменения
         </button>
       </form>
-
+  
       {/* Модальное окно для выбора тегов */}
-    <ModalTags
+      <ModalTags
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onSelectTags={handleTagSelect}
         selectedTags={tags}
-    />
+      />
     </div>
   );
 }

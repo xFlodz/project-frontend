@@ -1,0 +1,70 @@
+/* Контейнер редактора */
+.text-editor-container {
+    width: 100%;
+    margin-bottom: 15px;
+  }
+  
+  /* Панель инструментов */
+  .ql-toolbar {
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    border: 1px solid #d1d5db !important;
+    background-color: #f9fafb;
+  }
+  
+  /* Контейнер редактора */
+  .ql-container {
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    border: 1px solid #d1d5db !important;
+    font-family: inherit;
+  }
+  
+  /* Область редактирования */
+  .ql-editor {
+    min-height: 150px;
+    font-size: 16px;
+    line-height: 1.5;
+    color: #374151;
+    padding: 12px 15px;
+  }
+  
+  /* Активное состояние кнопок */
+  .ql-active {
+    color: #2563eb;
+  }
+  
+  /* Иконки кнопок */
+  .ql-bold svg, .ql-italic svg {
+    width: 18px;
+    height: 18px;
+  }
+  
+  /* Кнопки панели инструментов */
+  .ql-toolbar button {
+    width: 32px;
+    height: 32px;
+    margin: 2px;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+  }
+  
+  .ql-toolbar button:hover {
+    background-color: #e5e7eb;
+  }
+  
+  /* Кастомные стили для форматированного текста */
+  .ql-editor strong {
+    font-weight: bold;
+  }
+  
+  .ql-editor em {
+    font-style: italic;
+  }
+  
+  /* Фокус состояния */
+  .ql-editor:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+    outline: none;
+  }

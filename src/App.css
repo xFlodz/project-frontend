@@ -8,6 +8,13 @@
   overflow: hidden;
 }
 
+.form-group label {
+  color: #555;
+}
+
+.form-group {
+  color: #fff;
+}
 
 
 @media (max-width: 768px) {

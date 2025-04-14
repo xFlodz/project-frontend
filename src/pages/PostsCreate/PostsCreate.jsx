@@ -6,6 +6,7 @@ import FileInput from "../../components/FileInput/FileInput";
 import ModalTags from "../../components/ModalTags/ModalTags";
 import AddContentButton from "../../components/AddContentButton/AddContentButton"; // Импортируем новый компонент
 import { FaTrash } from "react-icons/fa"; // Импортируем иконку мусорного ведра
+import TextEditor from "../../components/TextEditor/TextEditor";
 import "./PostsCreate.css";
 import { createPost } from "../../services/apiPost";
 
@@ -128,7 +129,7 @@ function CreatePost() {
     const updatedContent = [...content];
     updatedContent[index].value = value;
     setContent(updatedContent);
-    if (value.trim()) {
+    if (value.replace(/<[^>]*>/g, '').trim()) { // Проверяем текст без HTML-тегов
       setErrors((prevErrors) => ({
         ...prevErrors,
         content: "",
@@ -251,12 +252,14 @@ function CreatePost() {
         {/* Основное изображение */}
         <div className="form-group-image">
           <label htmlFor="main-image">Основное изображение</label>
-          <FileInput
-            id="main-image"
-            accept="image/*"
-            onChange={handleMainImageChange}
-            buttonText="Выберите основное изображение"
-          />
+          <div className="file-input">
+            <FileInput
+              id="main-image"
+              accept="image/*"
+              onChange={handleMainImageChange}
+              buttonText="Выберите основное изображение"
+            />
+          </div>
           {mainImage ? (
             <img src={mainImage} alt="Основное изображение" className="main-image" />
           ) : (
@@ -271,25 +274,28 @@ function CreatePost() {
           {content.map((item, index) => (
             <div key={index} className="content-item">
               {item.type === "text" ? (
-                <div className="text-item">
-                  <textarea
-                    value={item.value}
-                    onChange={(e) => handleTextChange(index, e.target.value)}
-                    placeholder="Введите текст..."
-                    className={errors.content ? "error" : ""}
-                  />
+                <div className="text-item-wrapper">
+                  <div className="text-item">
+                    <TextEditor
+                      value={item.value}
+                      onChange={(value) => handleTextChange(index, value)}
+                      className={errors.content ? "error" : ""}
+                    />
+                  </div>
                   <button type="button" onClick={() => removeContent(index)} className="delete-button">
                     <FaTrash />
                   </button>
                 </div>
               ) : item.type === "image" ? (
                 <div className="image-item">
-                  <FileInput
-                    id={`content-image-${index}`}
-                    accept="image/*"
-                    onChange={(e) => handleContentImageChange(index, e)}
-                    buttonText={`Выберите изображение`}
-                  />
+                  <div className="file-input">
+                    <FileInput
+                      id={`content-image-${index}`}
+                      accept="image/*"
+                      onChange={(e) => handleContentImageChange(index, e)}
+                      buttonText={`Выберите изображение`}
+                    />
+                  </div>
                   {item.src ? (
                     <div>
                       <img src={item.src} alt={`Изображение ${index + 1}`} />
@@ -309,26 +315,32 @@ function CreatePost() {
                 </div>
               ) : item.type === "video" ? (
                 <div className="video-item">
-                  <input
-                    type="text"
-                    value={item.src}
-                    onChange={(e) => handleVideoChange(index, e)}
-                    placeholder="Введите ссылку на видео (например, YouTube)"
-                  />
-                  {item.src && (
-                    <div className="video-preview">
-                      <iframe
-                        width="560"
-                        height="315"
-                        src={item.src}
-                        title="Видео"
-                        frameBorder="0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowFullScreen
-                      />
-                    </div>
-                  )}
-                  <button type="button" onClick={() => removeContent(index)} className="delete-button">
+                  <div className="video-item-content">
+                    <input
+                      type="text"
+                      value={item.src}
+                      onChange={(e) => handleVideoChange(index, e)}
+                      placeholder="Введите ссылку на видео (например, YouTube)"
+                    />
+                    {item.src && (
+                      <div className="video-preview">
+                        <iframe
+                          width="560"
+                          height="315"
+                          src={item.src}
+                          title="Видео"
+                          frameBorder="0"
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                          allowFullScreen
+                        />
+                      </div>
+                    )}
+                  </div>
+                  <button 
+                    type="button" 
+                    onClick={() => removeContent(index)} 
+                    className="delete-button"
+                  >
                     <FaTrash />
                   </button>
                 </div>

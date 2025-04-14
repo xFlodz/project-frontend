@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import parse from "html-react-parser";
 import "./PostCard.css";
 
 function PostCard({ post }) {
@@ -41,7 +42,7 @@ function PostCard({ post }) {
         </div>
 
         <p className={`post-card-text ${isHovered ? "post-card-text-visible" : ""}`}>
-          {postText.length > 100 ? postText.substring(0, 100) + "..." : postText}
+          {parse(postText.length > 100 ? postText.substring(0, 100) + "..." : postText)}
         </p>
 
         <div className="post-card-tags">

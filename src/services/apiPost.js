@@ -132,3 +132,28 @@ export const approvePost = async (postAddress) => {
     throw error.response?.data || error.message;
   }
 };
+
+export const downloadQrCode = async (postAddress) => {
+  try {
+    const response = await axiosInstance.get(`/get_qr_code/${postAddress}`, {
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('refresh_token')}`,
+      },
+      responseType: 'blob', // Ожидаем бинарные данные (файл Word)
+    });
+
+    // Создаем URL для блоба и инициируем скачивание
+    const url = window.URL.createObjectURL(new Blob([response.data]));
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', `qr_code_${postAddress}.docx`); // Указываем имя файла с расширением .docx
+    document.body.appendChild(link);
+    link.click();
+
+    // Убираем ссылку после скачивания
+    document.body.removeChild(link);
+  } catch (error) {
+    console.error('Ошибка при загрузке QR кода:', error.response?.data || error.message);
+    throw error.response?.data || error.message;
+  }
+};
