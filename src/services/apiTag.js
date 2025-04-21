@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:5002/api/tag';  // Убедитесь, что у вас правильный URL Flask API для тегов
+const API_URL = 'http://tag-api:5002/api/tag';  // Убедитесь, что у вас правильный URL Flask API для тегов
 
 // Создаем экземпляр axios для удобства настройки
 const axiosInstance = axios.create({
