@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:5001/api/user';  // Убедитесь, что у вас правильный URL Flask API
+const API_URL = 'http://user-api:5001/api/user';  // Убедитесь, что у вас правильный URL Flask API
 
 // Создаем экземпляр axios для удобства настройки
 const axiosInstance = axios.create({
