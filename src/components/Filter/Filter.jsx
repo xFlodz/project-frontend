@@ -21,7 +21,7 @@ function Filter({ filters, setFilters }) {
     const fetchTags = async () => {
       try {
         const data = await getAllTags();
-        setTags(data.map((tag) => tag.name));
+        setTags(data);
       } catch (error) {
         console.error("Ошибка при загрузке тегов:", error);
       }
@@ -38,12 +38,12 @@ function Filter({ filters, setFilters }) {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const toggleTag = (tag) => {
+  const toggleTag = (tagId) => {
     setLocalFilters((prevFilters) => ({
       ...prevFilters,
-      tagsFilter: prevFilters.tagsFilter.includes(tag)
-        ? prevFilters.tagsFilter.filter((t) => t !== tag)
-        : [...prevFilters.tagsFilter, tag],
+      tagsFilter: prevFilters.tagsFilter.includes(tagId)
+        ? prevFilters.tagsFilter.filter((id) => id !== tagId)
+        : [...prevFilters.tagsFilter, tagId],
     }));
   };
 
@@ -103,13 +103,13 @@ function Filter({ filters, setFilters }) {
         <label>Теги:</label>
         <div className="tags-container tags-scrollable">
           {tags.map((tag) => (
-            <label key={tag} className="tag-checkbox">
+            <label key={tag.id} className="tag-checkbox">
               <input
                 type="checkbox"
-                checked={localFilters.tagsFilter.includes(tag)}
-                onChange={() => toggleTag(tag)}
+                checked={localFilters.tagsFilter.includes(tag.id)}
+                onChange={() => toggleTag(tag.id)}
               />
-              {tag}
+              {tag.name}
             </label>
           ))}
         </div>
