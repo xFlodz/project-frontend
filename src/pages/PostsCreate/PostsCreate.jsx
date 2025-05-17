@@ -21,6 +21,7 @@ function CreatePost() {
   const [rightDate, setRightDate] = useState(null);
   const [errors, setErrors] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false); // Состояние для управления модальным окном
+  const [lead, setLead] = useState("");
 
   // Обработчик изменения основного изображения
   const handleMainImageChange = (e) => {
@@ -177,6 +178,10 @@ function CreatePost() {
     if (!header.trim()) {
       validationErrors.header = "Заголовок обязателен.";
     }
+
+    if (!lead.trim()) {
+      validationErrors.lead = "Лид обязателен.";
+    }
   
     const hasText = content.some((item) => item.type === "text" && item.value.trim() !== "");
     if (!hasText) {
@@ -210,6 +215,7 @@ function CreatePost() {
       right_date: rightDate ? rightDate.toLocaleDateString() : "",
       content,
       tags: tagIds, // Отправляем только идентификаторы тегов
+      lead
     };
   
     console.log("Данные для отправки:", postData);
@@ -235,6 +241,8 @@ function CreatePost() {
             type="text"
             id="header"
             value={header}
+            placeholder="Введите заголовок поста"
+            maxLength={150}
             onChange={(e) => {
               setHeader(e.target.value);
               if (e.target.value.trim()) {
@@ -248,6 +256,28 @@ function CreatePost() {
           />
           {errors.header && <p className="error-message">{errors.header}</p>}
         </div>
+        
+        <div className="form-group">
+            <label htmlFor="lead">Лид</label>
+            <input
+              type="text"
+              id="lead"
+              value={lead}
+              placeholder="Введите краткое описание к посту"
+              maxLength={250}
+              onChange={(e) => {
+                setLead(e.target.value);
+                if (e.target.value.trim()) {
+                  setErrors((prevErrors) => ({
+                    ...prevErrors,
+                    lead: "",
+                  }));
+                }
+              }}
+              className={errors.lead ? "error" : ""}
+            />
+            {errors.lead && <p className="error-message">{errors.lead}</p>}
+          </div>
   
         {/* Основное изображение */}
         <div className="form-group-image">

@@ -101,6 +101,12 @@ const PostPage = () => {
                     onClick={handleMainImageClick}
                 />
                 <h1 className="post-title">{post.header || "Без заголовка"}</h1>
+
+                {post.lead && (
+                    <p className="post-lead">
+                        {parse(post.lead)}
+                    </p>
+            )}
             </div>
 
             <div className="post-content">

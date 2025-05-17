@@ -1,28 +1,23 @@
 import { useState, useEffect } from "react";
 import { getAllPosts } from "../../services/apiPost";
 import Timeline from "../../components/Timeline/Timeline";
-import ImageModal from "../../components/ImageModal/ImageModal";
 import "./TimelinePage.css";
 
 function TimelinePage() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [filters, setFilters] = useState({
-    dateFilterType: 'creation',
+  const [filters] = useState({
+    dateFilterType: 'historical',
     tagsFilter: [],
     startDate: '',
     endDate: ''
   });
 
-  // Состояние для управления модальным окном
-  const [modalImageSrc, setModalImageSrc] = useState(null);
-  const [modalDescription, setModalDescription] = useState("");
-
   useEffect(() => {
     const fetchPosts = async () => {
       try {
         const data = await getAllPosts({
-          dateFilterType: 'creation',
+          dateFilterType: 'historical',
           tagsFilter: [],
           startDate: '',
           endDate: ''
@@ -38,90 +33,59 @@ function TimelinePage() {
     fetchPosts();
   }, [filters]);
 
-  // Функция для открытия модального окна
-  const handleImageClick = (imageSrc, description) => {
-    setModalImageSrc(imageSrc);
-    setModalDescription(description);
-  };
-
-  // Функция для закрытия модального окна
-  const closeModal = () => {
-    setModalImageSrc(null);
-    setModalDescription("");
-  };
-
-  // Функция для преобразования даты из формата dd.MM.yyyy в объект { year, month, day }
   const parseDate = (dateString) => {
     if (!dateString) return null;
+    
     const [day, month, year] = dateString.split(".");
+    
+    const formattedDay = day.padStart(2, '0');
+    const formattedMonth = month.padStart(2, '0');
+    
     return {
       year: parseInt(year, 10),
-      month: parseInt(month, 10),
-      day: parseInt(day, 10)
+      month: parseInt(month, 10), 
+      day: parseInt(day, 10),    
+      formatted: `${formattedDay}.${formattedMonth}.${year}` 
     };
   };
 
   const formatTimelineData = (posts) => {
-    return {
-      title: {
-        media: {
-          url: "",
-          caption: "",
-          credit: ""
-        },
+    return posts.map(post => {
+      const startDate = parseDate(post.date_range?.start_date);
+      if (!startDate) return null;
+
+      const postText = post.lead
+
+      return {
+        id: post.id,
+        address: post.address,
+        start_date: startDate,
+        end_date: parseDate(post.date_range?.end_date) || null,
         text: {
-          headline: "Историческая лента",
-          text: "События и факты."
-        }
-      },
-      events: posts.map(post => {
-        // Преобразуем даты из формата dd.MM.yyyy в объект { year, month, day }
-        const startDate = parseDate(post.date_range?.start_date);
-        const endDate = parseDate(post.date_range?.end_date);
-
-        // Если startDate невалиден, пропускаем событие
-        if (!startDate) return null;
-
-        // Извлекаем текст из массива и объединяем в одну строку
-        const postText = post.text && post.text.length > 0 
-          ? post.text.map(item => item.text).join(" ") 
-          : "Нет текста...";
-
-        return {
-          start_date: startDate,
-          end_date: endDate || null, // end_date может быть null
-          text: {
-            headline: post.header || "Без заголовка",
-            text: postText.substring(0, 200) + "..." // Берем первые 200 символов
-          },
-          media: {
-            url: post.main_image ? `http://localhost:5000/api/file/${post.main_image}` : "",
-            caption: post.author || "Автор неизвестен",
-            credit: ""
-          }
-        };
-      }).filter(event => event !== null) // Убираем события с невалидными датами
-    };
+          headline: post.header || "Без заголовка",
+          text: postText.substring(0, 200) + "..."
+        },
+        media: {
+          url: post.main_image ? `http://localhost:5000/api/file/${post.main_image}` : "",
+          caption: post.author || "Автор неизвестен"
+        },
+        // Добавляем отформатированные даты для отображения
+        formattedStartDate: startDate.formatted,
+        formattedEndDate: post.date_range?.end_date ? parseDate(post.date_range.end_date).formatted : null
+      };
+    }).filter(Boolean);
   };
 
   if (loading) {
-    return <div>Загрузка...</div>;
+    return <div className="loading-message">Загрузка...</div>;
   }
 
   return (
     <div className="timeline-page">
+      <h1>Историческая лента</h1>
       <Timeline 
-        data={formatTimelineData(posts)} 
-        onImageClick={handleImageClick} // Передаем обработчик клика
+        data={{ events: formatTimelineData(posts) }} 
       />
-      {/* Модальное окно для изображений */}
-      {modalImageSrc && (
-        <ImageModal
-          imageSrc={modalImageSrc}
-          description={modalDescription}
-          onClose={closeModal}
-        />
-      )}
     </div>
   );
 }

@@ -9,8 +9,9 @@ import TextEditor from "../../components/TextEditor/TextEditor";
 import "./PostEdit.css";
 import AddContentButton from "../../components/AddContentButton/AddContentButton";
 import { FaTrash } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
-function PostEdit() {
+function PostEdit({setNotification}) {
   const { address } = useParams();
   const [header, setHeader] = useState("");
   const [mainImage, setMainImage] = useState(null);
@@ -22,6 +23,8 @@ function PostEdit() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [lead, setLead] = useState("");
+  const navigate = useNavigate();
 
   const BASE_URL = "http://localhost:5000/api/file/";
 
@@ -57,6 +60,7 @@ function PostEdit() {
         setTags(formattedTags);
         setLeftDate(startDate);
         setRightDate(endDate);
+        setLead(data.lead);
       } catch (err) {
         setError("Ошибка загрузки поста.");
       } finally {
@@ -226,6 +230,10 @@ function PostEdit() {
     if (!header.trim()) {
       validationErrors.header = "Заголовок обязателен.";
     }
+
+    if (!lead.trim()) {
+      validationErrors.lead = "Лид обязателен.";
+    }
   
     const hasText = content.some((item) => item.type === "text" && item.text.trim() !== "");
     if (!hasText) {
@@ -245,6 +253,9 @@ function PostEdit() {
   
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
+      
+      setNotification({ message: "Исправьте все ошибки", type: "error" });
+      setNotification(null)
       return;
     }
   
@@ -252,6 +263,7 @@ function PostEdit() {
   
     const postData = {
       header,
+      lead,
       main_image: mainImage,
       left_date: leftDate ? leftDate.toLocaleDateString("ru-RU") : "",
       right_date: rightDate ? rightDate.toLocaleDateString("ru-RU") : "",
@@ -273,6 +285,8 @@ function PostEdit() {
     try {
       const response = await updatePost(address, postData);
       console.log("Ответ от сервера:", response);
+      setNotification({ message: "Пост успешно обновлен", type: "success" });
+      navigate("/");
     } catch (error) {
       console.error("Ошибка при обновлении поста:", error);
     }
@@ -292,6 +306,8 @@ function PostEdit() {
             type="text"
             id="header"
             value={header}
+            placeholder="Введите заголовок поста"
+            maxLength={150}
             onChange={(e) => {
               setHeader(e.target.value);
               if (e.target.value.trim()) {
@@ -304,6 +320,27 @@ function PostEdit() {
             className={errors.header ? "error" : ""}
           />
           {errors.header && <p className="error-message">{errors.header}</p>}
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="lead">Лид</label>
+          <textarea
+            id="lead"
+            value={lead}
+            placeholder="Введите краткое описание к посту"
+            maxLength={250}
+            onChange={(e) => {
+              setLead(e.target.value);
+              if (e.target.value.trim()) {
+                setErrors((prevErrors) => ({
+                  ...prevErrors,
+                  lead: "",
+                }));
+              }
+            }}
+            className={errors.lead ? "error" : ""}
+          />
+          {errors.header && <p className="error-message">{errors.lead}</p>}
         </div>
   
         {/* Основное изображение */}

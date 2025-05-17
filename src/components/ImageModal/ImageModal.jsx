@@ -1,7 +1,15 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./ImageModal.css";
 
 const ImageModal = ({ imageSrc, description, onClose }) => {
+
+    useEffect(() => {
+        document.body.style.overflow = "hidden";
+        return () => {
+            document.body.style.overflow = "auto";
+        };
+    }, []);
+
     const handleOverlayClick = (e) => {
         // Проверяем, был ли клик на оверлей (не на содержимом модального окна)
         if (e.target.classList.contains("modal-overlay")) {
@@ -11,7 +19,7 @@ const ImageModal = ({ imageSrc, description, onClose }) => {
 
     return (
         <div className="modal-overlay" onClick={handleOverlayClick}>
-            <div className="modal-content">
+            <div className="modal-content-photo">
                 <div className="modal-image-container">
                     <img src={imageSrc} alt="Modal Image" className="modal-image" />
                     {description && <div className="modal-description">{description}</div>}

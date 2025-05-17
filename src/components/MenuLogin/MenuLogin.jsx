@@ -3,79 +3,68 @@ import MenuRegister from '../MenuRegister/MenuRegister';
 import { useNavigate } from "react-router-dom";
 import './MenuLogin.css';
 
-function MenuLogin({ setIsMenuOpen, handleLogin }) {
+function MenuLogin({ setIsMenuOpen, handleLogin, setNotification }) {
   const [isMenuOpen, setIsMenuOpenState] = useState(false);
   const [isRegistering, setIsRegistering] = useState(false);
-
   const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-
   const navigate = useNavigate();
 
-  // Функция для отключения прокрутки
-  const disableScroll = () => {
-    document.body.style.overflow = 'hidden';
-  };
-
-  // Функция для включения прокрутки
-  const enableScroll = () => {
-    document.body.style.overflow = 'auto';
-  };
-
-  // useEffect, чтобы управлять прокруткой
+  // Управление скроллом
   useEffect(() => {
     const overlay = document.querySelector('.overlay');
     const menuLogin = document.querySelector('.menu-login');
-  
+
     if (isMenuOpen) {
-      disableScroll();
-  
-      const headerHeight = 120; // Фиксированная высота хедера
-  
+      document.body.style.overflow = 'hidden';
+
+      const headerHeight = 115;
       overlay.style.top = `${headerHeight}px`;
       overlay.style.height = `calc(100vh - ${headerHeight}px)`;
-  
-      menuLogin.style.top = `${headerHeight + 20}px`; // Добавляем отступ
+      menuLogin.style.top = `${headerHeight + 60}px`;
     } else {
-      enableScroll();
+      document.body.style.overflow = 'auto';
     }
-  
+
     return () => {
-      enableScroll();
+      document.body.style.overflow = 'auto';
     };
   }, [isMenuOpen]);
 
   const toggleMenu = () => {
     setIsMenuOpenState(!isMenuOpen);
-    setIsMenuOpen(!isMenuOpen); // Передаем состояние в Header
+    setIsMenuOpen(!isMenuOpen);
   };
 
   const closeMenu = () => {
     setIsMenuOpenState(false);
-    setIsMenuOpen(false); // Передаем состояние в Header
+    setIsMenuOpen(false);
+    setLogin('');
+    setPassword('');
+    setError('');
+    setIsRegistering(false); // Если нужно при закрытии сбрасывать и регистрацию тоже
   };
 
   const handleLoginSubmit = async (e) => {
-    e.preventDefault(); // Останавливаем стандартное поведение формы
-    setError(''); // Очищаем старую ошибку перед новым запросом
+    e.preventDefault();
+    setError('');
 
-    const userData = { login, password };
+    const result = await handleLogin({ login, password });
 
-    try {
-      await handleLogin(userData); // Передаем данные для входа в родительский компонент
-      setIsMenuOpen(false); // Закрываем меню после успешного входа
-      navigate("/", { state: { notification: { message: "Вы успешно вошли.", type: "success" } } });
-    } catch (err) {
-      setError('Ошибка при входе. Проверьте данные и попробуйте снова.');
+    if (result.success) {
+      setIsMenuOpen(false);
+      setNotification({ message: "Вы успешно вошли.", type: "success" });
+      navigate("/");  // редирект
+    } else {
+      setError(result.message || "Ошибка при входе.");
     }
   };
 
+
   return (
     <div>
-      <button className="menu-button" onClick={toggleMenu}>
-        Войти
-      </button>
+      <button className="menu-button" onClick={toggleMenu}>Войти</button>
 
       <div className={`overlay ${isMenuOpen ? 'active' : ''}`} onClick={closeMenu}></div>
 
@@ -84,7 +73,11 @@ function MenuLogin({ setIsMenuOpen, handleLogin }) {
           <button className="close-button" onClick={closeMenu}>×</button>
 
           {isRegistering ? (
-            <MenuRegister setIsRegistering={setIsRegistering} setIsMenuOpen={setIsMenuOpen} handleLogin={handleLogin} />
+            <MenuRegister
+              setIsRegistering={setIsRegistering}
+              setIsMenuOpen={setIsMenuOpen}
+              handleLogin={handleLogin}
+            />
           ) : (
             <>
               <h3>Вход</h3>

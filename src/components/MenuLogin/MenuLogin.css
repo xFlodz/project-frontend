@@ -15,7 +15,7 @@
 
 .menu-login {
   position: fixed;
-  top: 100px; /* Фиксированная высота хедера + отступ */
+  top: 130px; /* Фиксированная высота хедера + отступ */
   left: 50%;
   transform: translateX(-50%);
   width: 320px;
@@ -44,7 +44,7 @@
 }
 
 .menu-login .close-button:hover {
-  color: rgb(0, 0, 114);
+  color: rgb(0, 26, 114);
 }
 
 .login-form h3 {
@@ -81,13 +81,18 @@ button[type='submit'] {
   border: none;
   cursor: pointer;
   font-size: 16px;
-  border-radius: 4px;
   margin: 0 auto;
   display: block;
 }
 
 button[type='submit']:hover {
   background-color: #0056b3;
+}
+
+button[type='submit']:focus,
+button[type='submit']:active {
+  outline: none;
+  box-shadow: none;
 }
 
 /* Стиль для ссылки Зарегистрироваться */

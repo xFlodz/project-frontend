@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./MenuDropdown.css";
 
-function MenuDropdown({ role, setIsMenuOpen }) {
+function MenuDropdown({ role, id, setIsMenuOpen }) {
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
@@ -37,6 +37,7 @@ function MenuDropdown({ role, setIsMenuOpen }) {
           <li><a href="/create_post">Добавить пост</a></li>
           <li><a href="/my_posts">Мои посты</a></li>
           <li><a href="/approve_posts">Одобрение постов</a></li>
+          <li><a href={`/user/${id}`}>Мой профиль</a></li>
         </>
       );
     }
@@ -48,6 +49,7 @@ function MenuDropdown({ role, setIsMenuOpen }) {
           <li><a href="/create_post">Добавить пост</a></li>
           <li><a href="/my_posts">Мои посты</a></li>
           <li><a href="/approve_posts">Одобрение постов</a></li>
+          <li><a href={`/user/${id}`}>Мой профиль</a></li>
         </>
       );
     }
@@ -58,6 +60,7 @@ function MenuDropdown({ role, setIsMenuOpen }) {
           <li><a href="/timeline">Таймлайн</a></li>
           <li><a href="/create_post">Добавить пост</a></li>
           <li><a href="/my_posts">Мои посты</a></li>
+          <li><a href={`/user/${id}`}>Мой профиль</a></li>
         </>
       );
     }
@@ -69,7 +72,7 @@ function MenuDropdown({ role, setIsMenuOpen }) {
     );
   };
 
-  const headerHeight = 120; // Фиксированная высота хедера
+  const headerHeight = 115; // Фиксированная высота хедера
 
   return (
     <div>

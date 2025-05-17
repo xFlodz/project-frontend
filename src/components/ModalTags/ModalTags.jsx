@@ -7,7 +7,6 @@ function ModalTags({ isOpen, onClose, onSelectTags, selectedTags }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [localSelectedTags, setLocalSelectedTags] = useState(selectedTags); // Локальное состояние для выбранных тегов
-  const [suggestedTags, setSuggestedTags] = useState([]); // Состояние для предложенных тегов
 
   useEffect(() => {
     if (!isOpen) return;
@@ -30,16 +29,6 @@ function ModalTags({ isOpen, onClose, onSelectTags, selectedTags }) {
   useEffect(() => {
     setLocalSelectedTags(selectedTags);
   }, [selectedTags]);
-
-  // Функция для симуляции предложения тегов (нейросеть будет здесь)
-  useEffect(() => {
-    const fetchSuggestedTags = async () => {
-      const tags = ["React", "JavaScript", "Web Development"];
-      setSuggestedTags(tags);
-    };
-
-    fetchSuggestedTags();
-  }, []);
 
   const handleCheckboxChange = (tag) => {
     setLocalSelectedTags((prevSelectedTags) => {
@@ -84,13 +73,6 @@ function ModalTags({ isOpen, onClose, onSelectTags, selectedTags }) {
               />
             </label>
           ))}
-        </div>
-
-        <div className="modal-suggested-tags">
-          <h3>Предложенные теги</h3>
-            {suggestedTags.map((tag, index) => (
-              <button key={index} className="suggested-tag">{tag}</button>
-            ))}
         </div>
 
         <button className="modal-confirm-button" onClick={handleConfirmSelection}>

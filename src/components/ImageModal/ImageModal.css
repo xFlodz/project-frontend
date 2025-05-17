@@ -12,7 +12,7 @@
     overflow: hidden; /* Чтобы не было полос прокрутки */
 }
 
-.modal-content {
+.modal-content-photo {
     position: relative;
     width: 75vw; /* 75% ширины экрана */
     height: 75vh; /* 75% высоты экрана */
@@ -27,6 +27,7 @@
 
 .modal-image-container {
     position: relative;
+    top: 25px;
     width: 100%;
     height: 100%;
     display: flex;

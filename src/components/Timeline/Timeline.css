@@ -1,131 +1,205 @@
-/* Основной контейнер таймлайна */
+/* Основные стили */
 .timeline-container {
-    width: 90%;
-    height: 80vh;
-    border-radius: 15px;
-    overflow: hidden;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-    border: 2px solid #4A90E2;
-    background: white;
-    margin: 20px auto;
-    position: relative;
-  }
-  
-  /* Заголовок таймлайна */
-  .tl-title {
-    background: linear-gradient(135deg, #4A90E2, #357ABD);
-    color: white;
-    padding: 15px;
-    border-radius: 10px 10px 0 0;
-    font-size: 1.5rem;
-    font-weight: bold;
-    text-align: center;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
-  
-  /* Карточки событий */
-  .tl-slide {
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    background: white;
-    margin: 10px;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-  }
-  
-  .tl-slide:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-  }
-  
-  /* Заголовок события */
-  .tl-headline {
-    font-size: 1.4rem;
-    font-weight: bold;
-    color: #333;
-    margin-bottom: 10px;
-  }
-  
-  /* Текст события */
-  .tl-text {
-    font-size: 1rem;
-    color: #555;
-    line-height: 1.5;
-  }
-  
-  /* Медиа (изображения) */
-  .tl-media {
-    margin-top: 15px;
-    overflow: hidden;
-  }
-  
-  .tl-media img {
-    width: 100%;
-    height: auto;
-    border-radius: 0px;
-  }
-  
-  /* Навигация */
-  .tl-menubar-button {
-    background: #4A90E2 !important;
-    color: white !important;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background 0.3s ease;
-  }
-  
-  .tl-menubar-button:hover {
-    background: #357ABD !important;
-  }
-  
-  /* Ось времени */
-  .tl-timeaxis {
-    border-top: 2px solid #4A90E2;
-    background: rgba(74, 144, 226, 0.1);
-    padding: 10px 0;
-  }
-  
-  /* Точки на оси времени */
-  .tl-timemarker {
-    color: #4A90E2;
-    font-weight: bold;
-    font-size: 1.1rem;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
-  }
+  position: relative;
+  max-width: 1500px;
+  margin: 0 auto;
+  padding: 20px;
+}
 
-  /* Стили для текста автора */
-.tl-media .tl-caption {
-    margin-top: 10px;
-    padding: 5px 10px;
-    background: rgba(255, 255, 255, 0.9);
-    border-radius: 5px;
-    font-size: 0.9rem;
-    color: #333;
-    text-align: center;
-    border: 1px solid #ddd; /* Добавляем рамку */
-  }
-  
-  /* Убираем закругление краев для текста автора */
-  .tl-media .tl-caption {
-    border-radius: 0;
-  }
+/* Вертикальная линия */
+.timeline-line {
+  position: absolute;
+  width: 4px;
+  background-color: #4a6fa5;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
+}
 
-  
-  
-  /* Анимация загрузки */
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
+/* Контейнер событий */
+.timeline-events {
+  position: relative;
+  width: 100%;
+}
+
+/* Общие стили события */
+.timeline-event {
+  position: relative;
+  margin-bottom: 40px;
+  min-height: 120px;
+}
+
+/* Левые события */
+.timeline-event-left {
+  width: calc(50% - 20px); /* 50% минус отступ */
+  margin-right: 20px; /* Отступ от линии */
+}
+
+/* Правые события */
+.timeline-event-right {
+  width: calc(50% - 20px); /* 50% минус отступ */
+  margin-left: calc(50% + 20px); /* Сдвиг за линию + отступ */
+}
+
+/* Контент поста */
+.timeline-event-content {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 0px 4px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+  position: relative;
+  z-index: 2;
+  min-height: 120px;
+  width: 100%;
+  transition: all 1s ease;
+  cursor: pointer;
+  margin-right: 0px;
+  padding-left: 0px;
+  display: block;
+}
+
+/* Маркер на линии */
+.timeline-marker {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  background: white;
+  border: 3px solid #4a6fa5;
+  border-radius: 50%;
+  z-index: 3;
+  top: 15px;
+}
+
+/* Для левых карточек маркер справа от контента */
+.timeline-event-left .timeline-marker {
+  right: -31.5px; /* Отступ от края контента */
+}
+
+/* Для правых карточек маркер слева от контента */
+.timeline-event-right .timeline-marker {
+  left: -30.5px; /* Отступ от края контента */
+}
+
+/* Год - позиционируем с учетом маркера */
+.timeline-year {
+  position: absolute;
+  color: #4a6fa5;
+  font-weight: bold;
+  font-size: 14px;
+  white-space: nowrap;
+  z-index: 1;
+  padding: 2px 8px;
+  background: white;
+  border-radius: 15px;
+  top: 14px;
+}
+
+/* Для левых карточек год справа от маркера */
+.timeline-event-left .timeline-year {
+  right: -75px; /* Увеличенный отступ */
+}
+
+/* Для правых карточек год слева от маркера */
+.timeline-event-right .timeline-year {
+  left: -75px; /* Увеличенный отступ */
+}
+
+/* Остальные стили */
+.timeline-event-title {
+  color: #333;
+  font-size: 1.2rem;
+  margin: 5px 0;
+  padding-left: 12px;
+}
+
+.timeline-event-date {
+  color: #4a6fa5;
+  font-weight: bold;
+  font-size: 0.9rem;
+  padding-left: 12px;
+}
+
+.timeline-event-left .timeline-event-content{
+  width: 97%;
+}
+
+.timeline-event-text {
+  color: #555;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  margin-top: 10px;
+  padding-left: 12px;
+  transition: all 0.3s ease;
+  max-height: 500px;
+  opacity: 1;
+  overflow: visible;
+}
+.timeline-event-image-wrapper {
+  max-height: 0;
+  padding-left: 12px;
+  overflow: hidden;
+  transition: max-height 1s ease-in-out;
+  text-align: center;
+  margin: 10px 0;
+}
+
+.timeline-event-image {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  object-fit: cover;
+  opacity: 0;
+  transform: translateY(-100px);
+  transition: opacity 1s ease-in-out, transform 1s ease-in-out;
+  cursor: pointer;
+}
+
+/* Состояния при наведении ТОЛЬКО на контент */
+.timeline-event-content:hover {
+  min-height: 250px;
+  background: #e8f0fe;
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.15);
+  transform: scale(1.03);
+}
+
+.timeline-event-content:hover .timeline-event-text {
+  opacity: 1;
+  max-height: 500px;
+}
+
+.timeline-event-content:hover .timeline-event-image-wrapper {
+  max-height: 500px;
+}
+
+.timeline-event-content:hover .timeline-event-image {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .timeline-line {
+    left: 40px;
   }
   
-  .timeline-container {
-    animation: fadeIn 0.5s ease-in-out;
+  .timeline-event-left,
+  .timeline-event-right {
+    width: calc(100% - 60px);
+    margin: 0 0 30px 60px;
   }
+  
+  .timeline-event-left .timeline-marker,
+  .timeline-event-right .timeline-marker {
+    left: -51px;
+    right: auto;
+  }
+  
+  .timeline-event-left .timeline-year,
+  .timeline-event-right .timeline-year {
+    left: -95px;
+    right: auto;
+    top: 14px;
+  }
+}

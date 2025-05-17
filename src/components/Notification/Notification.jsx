@@ -8,34 +8,40 @@ const Notification = ({ message, type, onClose }) => {
     // Появление уведомления
     useEffect(() => {
         if (message) {
-            setShow(true); // Показываем уведомление
+            setShow(true);  // Показываем уведомление
             setHide(false); // Сбрасываем анимацию скрытия
         }
     }, [message]);
 
-    // Скрытие уведомления через 3 секунды с плавной анимацией
+    // Запуск анимации скрытия через 3 секунды
     useEffect(() => {
         if (message) {
             const timer = setTimeout(() => {
                 setHide(true); // Запускаем анимацию исчезновения
-            }, 3000); // Убираем уведомление через 3 секунды
-            return () => clearTimeout(timer); // Очистить таймер, если уведомление исчезло раньше
+            }, 3000);
+
+            return () => clearTimeout(timer);
         }
     }, [message]);
 
-    const handleClose = () => {
-        setHide(true); // Принудительно скрываем уведомление при нажатии на кнопку
-        setTimeout(() => {
-            onClose(); // Вызываем onClose после завершения анимации
-        }, 300); // Задержка для анимации исчезновения
-    };
+    // После анимации скрытия вызываем onClose, чтобы очистить уведомление
+    useEffect(() => {
+        if (hide) {
+            const animationDuration = 500; // время анимации скрытия в мс (подстрой под свой CSS)
+            const timer = setTimeout(() => {
+                setShow(false);
+                setHide(false);
+                if (onClose) onClose(); // вызываем колбек закрытия
+            }, animationDuration);
 
-    if (!message) return null;
+            return () => clearTimeout(timer);
+        }
+    }, [hide, onClose]);
+
+    if (!message || !show) return null;
 
     return (
-        <div
-            className={`notification ${type} ${show ? "show" : ""} ${hide ? "hide" : ""}`}
-        >
+        <div className={`notification ${type} ${show ? "show" : ""} ${hide ? "hide" : ""}`}>
             <span>{message}</span>
         </div>
     );

@@ -1,44 +1,35 @@
-/* Основной контейнер страницы */
 .timeline-page {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 100px;
+  padding: 10px 20px;
+  min-height: 100vh;
+  width: 100%;
+}
+
+.timeline-page h1 {
+  font-size: 1.8rem;
+  color: #333;
+  margin: 10px 0 20px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.loading-message {
+  font-size: 1.2rem;
+  color: #555;
+  text-align: center;
+  margin-top: 20px;
+}
+
+@media (max-width: 768px) {
+  .timeline-page {
+    padding: 8px 12px;
   }
   
-  /* Заголовок страницы */
   .timeline-page h1 {
-    font-size: 2.5rem;
-    color: #333;
-    margin-bottom: 20px;
-    text-align: center;
-    font-weight: bold;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
-  }
-  
-  /* Сообщение о загрузке */
-  .timeline-page .loading-message {
     font-size: 1.5rem;
-    color: #555;
-    text-align: center;
-    margin-top: 20px;
+    margin: 8px 0 16px;
   }
-  
-  
-  .timeline-page .filters button:hover {
-    background: #357ABD;
-  }
-  
-  /* Адаптивность */
-  @media (max-width: 768px) {
-    .timeline-page h1 {
-      font-size: 2rem;
-    }
-  
-    .timeline-page .filters {
-      flex-direction: column;
-      align-items: center;
-    }
-  }
+}

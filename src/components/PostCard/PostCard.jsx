@@ -7,8 +7,8 @@ function PostCard({ post }) {
   const [isHovered, setIsHovered] = useState(false);
   const createdAt = new Date(post.created_at);
 
-  // Извлекаем текст из массива и объединяем в одну строку
-  const postText = post.text && post.text.length > 0 ? post.text.map(item => item.text).join(" ") : "Нет текста...";
+  // Используем post.lead вместо post.text
+  const postText = post.lead
 
   return (
     <Link
@@ -18,9 +18,19 @@ function PostCard({ post }) {
       onMouseLeave={() => setIsHovered(false)}
     >
       <div className="post-card-content">
-        <h3 className="post-card-title">{post.header}</h3>
+        <div className="post-card-header-tags">
+          <h3 className="post-card-title">{post.header}</h3>
+          <div className="post-card-tags">
+            {post.tags && post.tags.length > 0 ? (
+              post.tags.map((tag, index) => (
+                <span key={index} className="tag">#{tag.tag_name}</span>
+              ))
+            ) : (
+              <span className="tag">#БезТегов</span>
+            )}
+          </div>
+        </div>
 
-        {/* Если пост не подтвержден, показываем предупреждение */}
         {!post.is_approved && (
           <p className="post-card-warning">Пост не подтвержден</p>
         )}
@@ -44,16 +54,6 @@ function PostCard({ post }) {
         <p className={`post-card-text ${isHovered ? "post-card-text-visible" : ""}`}>
           {parse(postText.length > 100 ? postText.substring(0, 100) + "..." : postText)}
         </p>
-
-        <div className="post-card-tags">
-          {post.tags && post.tags.length > 0 ? (
-            post.tags.map((tag, index) => (
-              <span key={index} className="tag">#{tag.tag_name}</span>
-            ))
-          ) : (
-            <span className="tag">#БезТегов</span>
-          )}
-        </div>
       </div>
     </Link>
   );

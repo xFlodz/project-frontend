@@ -7,11 +7,13 @@ import MenuDropdown from "../MenuDropdown/MenuDropdown";
 import MenuLogin from "../MenuLogin/MenuLogin";
 import LogoutButton from "../LogoutButton/LogoutButton";
 import { loginUser } from "../../services/apiUser";
+import Notification from "../Notification/Notification";
 
 function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false); // Состояние для открытия меню
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [notification, setNotification] = useState({ message: "", type: "" }); // Состояние для уведомлений
 
   useEffect(() => {
     const token = localStorage.getItem("access_token");
@@ -29,34 +31,46 @@ function Header() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [isMenuOpen]); // Зависимость от isMenuOpen
 
-  const handleLogin = async (userData) => {
-    try {
-      await loginUser(userData);
+const handleLogin = async (userData) => {
+  try {
+    const response = await loginUser(userData);
+
+    if (response.access_token) {
       setIsLoggedIn(true);
-    } catch (error) {
-      console.error('Ошибка при входе:', error.response?.data || error.message);
+      return { success: true };
+    } else {
+      return { success: false, message: "Неверный логин или пароль" };
     }
-  };
+  } catch (error) {
+    return { success: false, message: error.message || "Ошибка входа" };
+  }
+};
 
   return (
     <div className={`header-container ${isScrolled && !isMenuOpen ? "scrolled" : ""}`}>
       <div className="left-components">
-        <Link to="/">
-          <img src={miigaik245} alt="React Logo" />
-        </Link>
       </div>
       <div className="middle-components">
-        <Link to="/">
+        <a href="/">
           <img src={miigaikLogo} alt="React Logo" />
-        </Link>
+        </a>
       </div>
       <div className="right-components">
         {isLoggedIn ? (
           <LogoutButton setIsMenuOpen={setIsMenuOpen} setIsLoggedIn={setIsLoggedIn} />
         ) : (
-          <MenuLogin handleLogin={handleLogin} setIsMenuOpen={setIsMenuOpen} />
+          <MenuLogin
+            setIsMenuOpen={setIsMenuOpen}
+            handleLogin={handleLogin}
+            setNotification={setNotification}
+          />
         )}
-        <MenuDropdown role={localStorage.getItem('role')} setIsMenuOpen={setIsMenuOpen} />
+        <MenuDropdown role={localStorage.getItem('role')} id={localStorage.getItem('id')} setIsMenuOpen={setIsMenuOpen} />
+        <Notification
+          message={notification.message}
+          type={notification.type}
+          onClose={() => setNotification({ message: '', type: '' })}
+        />
       </div>
     </div>
   );
