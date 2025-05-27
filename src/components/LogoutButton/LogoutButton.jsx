@@ -6,16 +6,16 @@ function LogoutButton({ setIsMenuOpen, setIsLoggedIn }) {
   const [loading, setLoading] = useState(false);
 
   const handleLogout = async () => {
-    setLoading(true); // Пока выполняется выход, показываем загрузку
+    setLoading(true);
     try {
-      await logoutUser(); // Выход из системы
-      setIsLoggedIn(false); // Обновляем состояние авторизации
-      setIsMenuOpen(false); // Закрываем меню после выхода
+      await logoutUser();
+      setIsLoggedIn(false);
+      setIsMenuOpen(false);
       window.location.reload();
     } catch (error) {
       console.error("Ошибка при выходе:", error.response?.data || error.message);
     } finally {
-      setLoading(false); // Снимаем состояние загрузки
+      setLoading(false);
     }
   };
 

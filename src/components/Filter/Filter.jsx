@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from "react";
 import "./Filter.css";
 import { getAllTags } from "../../services/apiTag";
-import { getAllPosts } from "../../services/apiPost";  // Добавим getAllPosts
+import { getAllPosts } from "../../services/apiPost";
 
 function Filter({ filters, setFilters }) {
   const { dateFilterType, tagsFilter, startDate, endDate } = filters;
-  const [tags, setTags] = useState([]);  // Теги для фильтров
+  const [tags, setTags] = useState([]);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const [isFilterVisible, setIsFilterVisible] = useState(false);
 
-  // Локальные состояния для фильтров
   const [localFilters, setLocalFilters] = useState({
     dateFilterType,
     tagsFilter,
@@ -31,7 +30,7 @@ function Filter({ filters, setFilters }) {
     const handleResize = () => {
       const mobileView = window.innerWidth <= 768;
       setIsMobile(mobileView);
-      if (!mobileView) setIsFilterVisible(true); // На ПК фильтр всегда виден
+      if (!mobileView) setIsFilterVisible(true);
     };
 
     window.addEventListener("resize", handleResize);
@@ -48,10 +47,8 @@ function Filter({ filters, setFilters }) {
   };
 
   const handleApplyFilters = async () => {
-    // Обновляем глобальные фильтры
     setFilters(localFilters);
 
-    // Отправляем запрос с фильтрами
     try {
       const response = await getAllPosts({
         dateFilterType: localFilters.dateFilterType,
@@ -113,8 +110,6 @@ function Filter({ filters, setFilters }) {
             </label>
           ))}
         </div>
-
-        {/* Кнопка для применения фильтров и получения постов */}
         <button onClick={handleApplyFilters}>Найти</button>
       </div>
     </div>

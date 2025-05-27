@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { getPostByAddress, deletePost, approvePost, downloadQrCode } from "../../services/apiPost";
 import ImageModal from "../../components/ImageModal/ImageModal";
 import ConfirmModal from "../../components/ConfirmModal/ConfirmModal";
 import Notification from "../../components/Notification/Notification";
+import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner"
 import parse from "html-react-parser";
 import "./PostPage.css";
 
@@ -71,7 +72,7 @@ const PostPage = () => {
 
     const handleApproveClick = async () => {
         try {
-            await approvePost(post.address);  // Это предположительный API-метод
+            await approvePost(post.address);
             setPost(prevPost => ({ ...prevPost, is_approved: true }));
             setNotification({ message: "Пост успешно одобрен.", type: "success" });
         } catch (err) {
@@ -87,7 +88,7 @@ const PostPage = () => {
         }
       };
 
-    if (loading) return <div className="loading">Загрузка...</div>;
+    if (loading) return <LoadingSpinner />;;
     if (error) return <div className="error">{error}</div>;
     if (!post) return <div className="not-found">Пост не найден.</div>;
 

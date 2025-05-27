@@ -3,6 +3,7 @@ import { getAllUserPosts } from "../../services/apiPost";
 import PostCard from "../../components/PostCard/PostCard";
 import Filter from "../../components/Filter/Filter";
 import Pagination from "../../components/Pagination/Pagination";
+import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner"
 import "./UserPostsPage.css";
 
 function UserPostsPage() {
@@ -38,7 +39,7 @@ function UserPostsPage() {
   );
 
   if (loading) {
-    return <div>Загрузка...</div>;
+    return <LoadingSpinner />;
   }
 
   return (

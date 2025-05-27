@@ -4,43 +4,45 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.7); /* Прозрачный фон с затемнением */
+    background-color: rgba(0, 0, 0, 0.7);
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 9999;
-    overflow: hidden; /* Чтобы не было полос прокрутки */
+    padding: 20px;
 }
 
 .modal-content-photo {
     position: relative;
-    width: 75vw; /* 75% ширины экрана */
-    height: 75vh; /* 75% высоты экрана */
+    max-width: 90vw;
+    max-height: 90vh;
+    width: auto;
+    height: auto;
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 20px; /* Добавляем отступы, чтобы крестик не обрезался */
-    overflow: visible; /* Разрешаем крестику выходить за границы */
-    background-color: transparent; /* Делаем фон прозрачным */
+    background-color: transparent;
     border-radius: 15px;
 }
 
 .modal-image-container {
     position: relative;
-    top: 25px;
     width: 100%;
     height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-    overflow: hidden; /* Ограничиваем контейнер изображением */
+    overflow: hidden;
     border-radius: 15px;
+    margin-top: 15px;
 }
 
 .modal-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover; /* Изображение будет растягиваться, но сохранять пропорции */
+    max-width: 100%;
+    max-height: 80vh;
+    object-fit: contain;
+    width: auto;
+    height: auto;
 }
 
 .modal-description {
@@ -48,7 +50,7 @@
     bottom: 0;
     left: 0;
     width: 100%;
-    background-color: rgba(0, 0, 0, 0.7); /* Темный полупрозрачный фон */
+    background-color: rgba(0, 0, 0, 0.7);
     color: white;
     padding: 5px 10px;
     text-align: center;
@@ -61,17 +63,17 @@
 
 .close-button {
     position: absolute;
-    top: 5px; /* Увеличиваем отступ, чтобы крестик выходил за границы */
-    right: 5px; /* Увеличиваем отступ, чтобы крестик выходил за границы */
+    top: 5px;
+    right: 5px;
     background-color: rgba(255, 255, 255, 0.5);
     border-radius: 50%;
-    width: 40px; /* Увеличиваем размер крестика */
-    height: 40px; /* Увеличиваем размер крестика */
+    width: 40px;
+    height: 40px;
     display: flex;
     justify-content: center;
     align-items: center;
     cursor: pointer;
-    z-index: 1001; /* Убедимся, что кнопка находится поверх изображения */
+    z-index: 1001;
     transition: background-color 0.3s ease;
 }
 
@@ -80,7 +82,41 @@
 }
 
 .close-button svg {
-    width: 20px; /* Увеличиваем размер иконки */
-    height: 20px; /* Увеличиваем размер иконки */
-    fill: #333;
+    width: 20px;
+    height: 20px;
+    fill: #333c56;
+}
+
+@media (max-width: 768px) {
+  .modal-content-photo {
+    max-width: 100%;
+    max-height: 100%;
+    margin: 0;
+    padding: 0;
+    margin-right: 40px;
+    border-radius: 10px;
+    flex-direction: column;
+  }
+
+  .modal-image {
+    max-width: 95vw;
+    max-height: 70vh;
+  }
+
+  .modal-description {
+    font-size: 0.85em;
+    max-height: 30%;
+  }
+
+  .close-button {
+    top: 10px;
+    right: 10px;
+    width: 35px;
+    height: 35px;
+  }
+
+  .close-button svg {
+    width: 18px;
+    height: 18px;
+  }
 }

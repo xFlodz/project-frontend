@@ -26,7 +26,7 @@
 }
 
 .confirm-button {
-    background-color: #d9534f;
+    background-color: rgb(212, 0, 12);
     color: white;
     padding: 8px 15px;
     border: none;
@@ -35,7 +35,7 @@
 }
 
 .cancel-button {
-    background-color: #6c757d;
+    background-color: rgb(137, 150, 160);
     color: white;
     padding: 8px 15px;
     border: none;

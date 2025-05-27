@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { getAllTags } from "../../services/apiTag";
-import "./ModalTags.css"; // Подключим стили для модального окна
+import "./ModalTags.css";
 
 function ModalTags({ isOpen, onClose, onSelectTags, selectedTags }) {
   const [availableTags, setAvailableTags] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [localSelectedTags, setLocalSelectedTags] = useState(selectedTags); // Локальное состояние для выбранных тегов
+  const [localSelectedTags, setLocalSelectedTags] = useState(selectedTags);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -16,7 +16,7 @@ function ModalTags({ isOpen, onClose, onSelectTags, selectedTags }) {
         const tags = await getAllTags();
         setAvailableTags(tags);
       } catch (err) {
-        setError('Не удалось загрузить теги');
+        setError("Не удалось загрузить теги");
         console.error(err);
       } finally {
         setLoading(false);
@@ -29,6 +29,18 @@ function ModalTags({ isOpen, onClose, onSelectTags, selectedTags }) {
   useEffect(() => {
     setLocalSelectedTags(selectedTags);
   }, [selectedTags]);
+
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isOpen]);
 
   const handleCheckboxChange = (tag) => {
     setLocalSelectedTags((prevSelectedTags) => {
@@ -47,7 +59,7 @@ function ModalTags({ isOpen, onClose, onSelectTags, selectedTags }) {
 
   const handleOverlayClick = (e) => {
     if (e.target === e.currentTarget) {
-      onClose(); // Закрыть при клике на оверлей
+      onClose();
     }
   };
 
@@ -56,7 +68,9 @@ function ModalTags({ isOpen, onClose, onSelectTags, selectedTags }) {
   return (
     <div className="modal-tags-overlay" onClick={handleOverlayClick}>
       <div className="modal-tags-content">
-        <button className="modal-tags-close-button" onClick={onClose}>×</button>
+        <button className="modal-tags-close-button" onClick={onClose}>
+          ×
+        </button>
         <h2>Выберите теги</h2>
 
         {loading && <p>Загружаем теги...</p>}

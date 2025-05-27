@@ -18,12 +18,12 @@ function MenuDropdown({ role, id, setIsMenuOpen }) {
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
-    setIsMenuOpen(!isOpen); // Обновляем состояние isMenuOpen в Header
+    setIsMenuOpen(!isOpen);
   };
 
   const closeMenu = () => {
     setIsOpen(false);
-    setIsMenuOpen(false); // Обновляем состояние isMenuOpen в Header
+    setIsMenuOpen(false);
   };
 
   const renderMenuItems = () => {
@@ -72,7 +72,7 @@ function MenuDropdown({ role, id, setIsMenuOpen }) {
     );
   };
 
-  const headerHeight = 115; // Фиксированная высота хедера
+  const headerHeight = 115;
 
   return (
     <div>

@@ -40,7 +40,7 @@ function AddContentButton({ onAddText, onAddImage, onAddVideo }) {
 
   return (
     <div className="add-content-button" ref={dropdownRef}>
-      <button type="button" onClick={toggleDropdown} className="add-button">
+      <button type="button" onClick={toggleDropdown} className="add-button-content">
         Добавить контент
       </button>
       {isOpen && (

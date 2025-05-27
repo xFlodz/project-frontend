@@ -7,7 +7,7 @@
 }
 
 .page-button {
-  background: rgb(0, 0, 114);
+  background: rgb(0, 26, 114);
   color: white;
   border: none;
   padding: 8px 14px;
@@ -22,9 +22,9 @@
 .page-button.active,
 .page-button:hover {
   background: #0056b3;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Добавляем тень при наведении */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .pagination button {
-  min-width: 35px; /* Устанавливаем минимальную ширину для кнопок */
+  min-width: 35px;
 }

@@ -11,8 +11,8 @@ function ModalChangePassword({ onClose, onSave }) {
   const [showNewPass, setShowNewPass] = useState(false);
   const [showConfirmPass, setShowConfirmPass] = useState(false);
   const [errors, setErrors] = useState({});
-  const [apiError, setApiError] = useState("");    // Ошибка от сервера
-  const [loading, setLoading] = useState(false);   // Индикатор загрузки
+  const [apiError, setApiError] = useState(""); 
+  const [loading, setLoading] = useState(false);
 
   const validate = () => {
     const errs = {};
@@ -29,9 +29,8 @@ function ModalChangePassword({ onClose, onSave }) {
       setLoading(true);
       try {
         const response = await changePassword({ old_password: oldPassword, new_password: newPassword });
-        // Можно вызвать onSave, чтобы уведомить родителя о успешном обновлении
         if (onSave) onSave(response);
-        onClose(); // Закрываем модалку при успешной смене пароля
+        onClose();
       } catch (error) {
         setApiError(error.message || "Ошибка при смене пароля");
       } finally {

@@ -1,10 +1,7 @@
-/* CreatePost.css */
-
-/* Основные стили */
 .create-post-page {
     width: 70%;
     margin: 0 auto;
-    margin-top: 100px;
+    margin-top: 120px;
     padding: 30px;
     background-color: #f9f9f9;
     border-radius: 12px;
@@ -58,14 +55,14 @@ h1 {
 
 .form-group input:focus,
 .form-group textarea:focus {
-    border-color: rgb(0, 0, 114);
+    border-color: rgb(0, 26, 114);
     outline: none;
 }
 
 .file-input-wrapper {
     display: inline-block;
     padding: 12px 25px;
-    background-color: rgb(0, 0, 114);
+    background-color: rgb(0, 26, 114);
     color: white;
     border-radius: 8px;
     cursor: pointer;
@@ -91,7 +88,6 @@ h1 {
     margin-bottom: 25px;
 }
 
-/* Стили для текстового редактора */
 .text-item-wrapper {
     position: relative;
     margin-bottom: 30px;
@@ -119,14 +115,13 @@ h1 {
     padding: 12px 15px;
 }
 
-/* Общие стили для всех кнопок удаления */
 .delete-button {
     background: rgba(255, 255, 255, 0.9);
     border: none;
     border-radius: 4px;
     padding: 5px 8px;
     cursor: pointer;
-    color: #dc3545;
+    color: rgb(214, 0, 28);
     transition: all 0.2s;
     display: inline-flex;
     align-items: center;
@@ -135,13 +130,11 @@ h1 {
 }
 
 .delete-button:hover {
-    background: #dc3545;
+    background: rgb(214, 0, 28);
     color: white;
 }
 
-/* Специфичные стили для кнопок удаления */
 .text-item-wrapper .delete-button {
-    /* Для текста - слева внизу */
     position: static;
     margin-left: 0;
 }
@@ -149,11 +142,9 @@ h1 {
 .text-item-wrapper .delete-button,
 .image-item .delete-button,
 .video-item .delete-button {
-    /* Для изображений и видео - слева внизу */
     margin-left: 0;
 }
 
-/* Стили для видео */
 .video-item {
     display: flex;
     flex-direction: column;
@@ -167,8 +158,8 @@ h1 {
 }
 
 .video-item .delete-button {
-    align-self: flex-start; /* Выравниваем кнопку по левому краю */
-    margin: 10px 0 0 0; /* Отступ только сверху */
+    align-self: flex-start;
+    margin: 10px 0 0 0;
 }
 
 .video-preview {
@@ -185,12 +176,11 @@ h1 {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-/* Общие стили для кнопок удаления */
 .text-item-wrapper .delete-button,
 .image-item .delete-button,
 .video-item .delete-button {
     margin-top: 10px;
-    background: #dc3545;
+    background: rgb(214, 0, 28);
     color: white;
     border: none;
     border-radius: 4px;
@@ -204,12 +194,11 @@ h1 {
 .text-item-wrapper .delete-button,
 .image-item .delete-button:hover,
 .video-item .delete-button:hover {
-    background: #c82333;
+    background: rgb(214, 0, 28);
 }
 
-/* Кнопки */
 button.add-button {
-    background-color: #28a745;
+    background-color: #008779;
     color: white;
     border: none;
     margin-top: 12px;
@@ -221,13 +210,14 @@ button.add-button {
 }
 
 button.add-button:hover {
-    background-color: #218838;
+    background-color: #00c3cb;
 }
 
 button.submit-button {
     background-color: rgb(0, 26, 114);
     color: white;
     max-width: 10%;
+    min-width: 40%;
     padding: 12px;
     font-size: 16px;
     font-weight: 600;
@@ -240,21 +230,20 @@ button.submit-button:hover {
     background-color: #0056b3;
 }
 
-/* Ошибки */
 .error {
-    border: 2px solid #dc3545 !important;
+    border: 2px solid rgb(214, 0, 28) !important;
     background-color: rgba(220, 53, 69, 0.1);
     box-shadow: 0 0 5px rgba(220, 53, 69, 0.5);
 }
 
 .error-message {
-    color: #dc3545;
+    color: rgb(214, 0, 28);
     font-size: 0.9rem;
     margin-top: 0.5rem;
     font-weight: 600;
     padding: 4px 0 4px 10px;
     background-color: #f8d7da;
-    border-left: 4px solid #dc3545;
+    border-left: 4px solid rgb(214, 0, 28);
     animation: shake 0.3s ease;
 }
 
@@ -269,6 +258,19 @@ button.submit-button:hover {
   margin-right: auto;
 }
 
+.loading-message {
+  color: #555;
+  font-style: italic;
+  margin-bottom: 10px;
+}
+
+.hint-message {
+  text-align: center;
+  color: #555;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
 
 @keyframes shake {
     0%, 100% { transform: translateX(0); }
@@ -276,7 +278,6 @@ button.submit-button:hover {
     50% { transform: translateX(-5px); }
 }
 
-/* Теги */
 .tags-container {
     margin-top: 10px;
     display: flex;
@@ -303,10 +304,9 @@ button.submit-button:hover {
 }
 
 .delete-tag-button:hover {
-    color: #dc3545;
+    color: rgb(214, 0, 28);
 }
 
-/* Даты */
 .date-picker-container {
     display: flex;
     gap: 10px;
@@ -317,7 +317,6 @@ button.submit-button:hover {
     width: 48%;
 }
 
-/* Медиазапросы для мобильных устройств */
 @media (max-width: 768px) {
     .create-post-page {
         width: 90%;

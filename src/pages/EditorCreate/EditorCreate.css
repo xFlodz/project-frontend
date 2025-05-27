@@ -1,8 +1,8 @@
-/* Стили для страницы */
 .editor-page {
     max-width: 500px;
     margin: 50px auto;
     padding: 20px;
+    margin-top: 120px;
     background: #ffffff;
     border-radius: 12px;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
@@ -12,7 +12,7 @@
 h2 {
     font-size: 24px;
     margin-bottom: 20px;
-    color: #333;
+    color: #333c56;
 }
 
 .input-group {
@@ -32,14 +32,14 @@ input {
 }
 
 input:focus {
-    border-color: rgb(0, 0, 114);
+    border-color: rgb(0, 26, 114);
 }
 
 button {
     padding: 10px 15px;
     font-size: 16px;
     color: white;
-    background-color: rgb(0, 0, 114);
+    background-color: rgb(0, 26, 114);
     border: none;
     border-radius: 8px;
     cursor: pointer;
@@ -57,7 +57,7 @@ button:hover {
 
 h3 {
     font-size: 20px;
-    color: #555;
+    color: #333c56;
     margin-bottom: 10px;
 }
 
@@ -72,7 +72,7 @@ li {
     margin: 5px 0;
     border-radius: 8px;
     font-size: 16px;
-    color: #333;
+    color: #333c56;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -80,7 +80,7 @@ li {
 
 .editor-link {
     text-decoration: none;
-    color: rgb(0, 0, 114);
+    color: rgb(0, 26, 114);
     font-weight: bold;
 }
 
@@ -88,23 +88,20 @@ li {
     text-decoration: underline;
 }
 
-/* Стили для кнопки удаления */
 .delete-editor-btn {
     background: none;
     border: none;
-    color: Red; /* Белый цвет текста */
+    color: rgb(214, 0, 28);
     font-size: 20px;
     cursor: pointer;
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Синий фон при наведении */
 .delete-editor-btn:hover {
-    background-color: #cc0000; /* Красный фон при наведении */
-    color: white; /* Белый цвет текста при наведении */
+    background-color: rgb(214, 0, 28);
+    color: white;
 }
 
-/* Убираем контур при фокусе */
 .delete-editor-btn:focus {
     outline: none;
 }

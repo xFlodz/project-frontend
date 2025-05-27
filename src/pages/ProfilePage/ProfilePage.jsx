@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getUserById, updateProfile } from "../../services/apiUser";
 import ModalChangePassword from "../../components/ModalChangePassword/ModalChangePassword";
+import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
 import "./ProfilePage.css";
 
 function ProfilePage() {
@@ -47,13 +48,10 @@ function ProfilePage() {
 
   const handleSave = async () => {
     try {
-      // Вызываем API для обновления профиля
       await updateProfile(editableData);
-      setUserData(editableData);  // Обновляем отображаемые данные
-      //alert("Данные профиля успешно обновлены");
+      setUserData(editableData);
     } catch (error) {
       console.error("Ошибка при сохранении профиля:", error);
-      //alert("Ошибка при сохранении профиля");
     }
   };
 
@@ -62,7 +60,7 @@ function ProfilePage() {
     setShowModal(false);
   };
 
-  if (loading) return <div className="profile-container">Загрузка...</div>;
+  if (loading) return <LoadingSpinner />;
   if (!userData) return <div className="profile-container">Пользователь не найден</div>;
 
   return (
@@ -108,7 +106,7 @@ function ProfilePage() {
         )}
 
         {isOwner && (
-          <>
+          <div className="button-group">
             <button className="profile-button" onClick={handleSave}>
               Сохранить
             </button>
@@ -118,7 +116,7 @@ function ProfilePage() {
             >
               Изменить пароль
             </button>
-          </>
+          </div>
         )}
       </div>
 

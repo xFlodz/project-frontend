@@ -13,38 +13,34 @@
   margin-bottom: 10px;
   max-height: 160px;
   transition: background-color 0.3s ease, padding 0.3s ease, font-size 0.3s ease;
-  justify-content: space-between; /* Оставляем */
+  justify-content: space-between;
 }
 
-/* Сделаем левый и правый блок фиксированной ширины (если надо) */
 .left-components,
 .right-components {
   width: 170px;
   display: flex;
   align-items: center;
   gap: 10px;
-  flex-shrink: 0; /* Чтобы не сжимались */
-  min-width: 100px; /* Можно подкорректировать под контент */
+  flex-shrink: 0;
+  min-width: 100px; 
 }
 
-/* Средний блок — центрируем с помощью flex */
 .middle-components {
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-grow: 1;          /* Занимает всё доступное пространство */
-  margin: 0 20px;        /* Отступы слева и справа для отступа от боковых блоков */
+  flex-grow: 1;
+  margin: 0 20px;
   box-sizing: border-box;
 }
 
-/* Картинка */
 .middle-components img {
   height: 100px;
   width: auto;
   max-height: 100%;
 }
 
-/* При скролле */
 .header-container.scrolled {
   background-color: rgba(255, 255, 255, 0.7);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.22);
@@ -52,7 +48,6 @@
 }
 
 
-/* Мобильные стили */
 @media (max-width: 425px) {
   .header-container {
     padding: 10px;

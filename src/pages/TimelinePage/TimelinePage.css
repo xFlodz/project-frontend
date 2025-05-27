@@ -10,7 +10,7 @@
 
 .timeline-page h1 {
   font-size: 1.8rem;
-  color: #333;
+  color: #333c56;
   margin: 10px 0 20px;
   text-align: center;
   font-weight: bold;
@@ -22,6 +22,35 @@
   text-align: center;
   margin-top: 20px;
 }
+
+.date-range-filter {
+  margin-bottom: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+}
+
+.date-range-filter button {
+  background-color: rgb(0, 26, 114);
+  border: 1px solid #ccc;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-weight: 600;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.date-range-filter button:hover {
+  background-color: #ddd;
+}
+
+.date-range-filter button.active {
+  background-color: #0056b3;
+  color: white;
+  border-color: #0056b3;
+}
+
 
 @media (max-width: 768px) {
   .timeline-page {

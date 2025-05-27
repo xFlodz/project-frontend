@@ -19,7 +19,7 @@
 
 .filter-toggle {
   display: none;
-  background: rgb(0, 0, 114);
+  background: rgb(0, 26, 114);
   color: white;
   padding: 10px;
   border-radius: 8px;
@@ -38,13 +38,13 @@
   font-size: 1.25rem;
   margin-bottom: 12px;
   font-weight: bold;
-  color: #333;
+  color: #333c56;
 }
 
 .filters label {
   font-size: 1rem;
   margin-bottom: 8px;
-  color: #333;
+  color: #333c56;
 }
 
 .filters select,
@@ -60,7 +60,7 @@
 
 .filters select:focus,
 .filters input:focus {
-  border-color: rgb(0, 0, 114);
+  border-color: rgb(0, 26, 114);
   outline: none;
 }
 
@@ -72,11 +72,11 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  flex-wrap: wrap; /* Позволяем полям переноситься */
+  flex-wrap: wrap;
 }
 
 .filters .date-range input {
-  min-width: 0; /* Предотвращаем чрезмерное растяжение */
+  min-width: 0; 
   flex: 1;
 }
 
@@ -93,10 +93,11 @@
   align-items: center;
   gap: 5px;
   cursor: pointer;
+  margin-right: 30px;
 }
 
 .filters button {
-  background: rgb(0, 0, 114);
+  background: rgb(0, 26, 114);
   color: white;
   padding: 12px;
   border-radius: 8px;
@@ -112,36 +113,67 @@
 
 .tags-scrollable {
   display: flex;
-  flex-wrap: nowrap; /* Отключаем перенос тегов на новую строку */
-  overflow-x: auto; /* Добавляем горизонтальную прокрутку */
+  flex-wrap: nowrap;
+  overflow-x: hidden;
   gap: 10px;
-  padding-bottom: 8px; /* Добавляем отступ снизу для ползунка */
-  max-width: 100%; /* Ограничиваем ширину контейнера */
-  width: 100%; /* Занимаем всю доступную ширину */
+  padding-bottom: 8px;
+  max-width: 100%;
+  width: 100%;
 }
 
-/* Стили для ползунка (опционально) */
 .tags-scrollable::-webkit-scrollbar {
-  height: 8px; /* Высота ползунка */
+  height: 8px;
 }
 
 .tags-scrollable::-webkit-scrollbar-track {
-  background: #f1f1f1; /* Цвет фона ползунка */
+  background: #f1f1f1;
   border-radius: 4px;
 }
 
 .tags-scrollable::-webkit-scrollbar-thumb {
-  background: #888; /* Цвет ползунка */
+  background: #888;
   border-radius: 4px;
 }
 
 .tags-scrollable::-webkit-scrollbar-thumb:hover {
-  background: #555; /* Цвет ползунка при наведении */
+  background: #555;
 }
 
 @media (max-width: 768px) {
   .filters {
     padding: 16px;
+    display: none;
+    flex-direction: column;
+    gap: 16px;
+    position: static;
+    top: auto;
+    max-width: 100%;
+    width: 85%;
+    box-shadow: none;
+    border-radius: 8px;
+    background: #fff;
+    border: 1px solid #ddd;
+    margin-bottom: 20px;
+    padding-right: 30px;
+  }
+
+  .filter-container{
+    width: 100%;
+  }
+
+  .filters.visible {
+    display: flex;
+    padding-left: 20px;
+    margin-left: 28px;
+    padding-right: 20px;
+  }
+
+  .filters.hidden {
+    display: none;
+  }
+
+  .filter-toggle {
+    display: block;
   }
 
   .filters select,
@@ -150,20 +182,13 @@
     font-size: 0.95rem;
   }
 
-  .filter-toggle {
-    display: block;
-  }
-  
-  .filters {
-    display: none;
-    transition: max-height 0.3s ease-out;
-  }
-
-  .filters.visible {
-    display: flex;
-  }
-
-  .filters.hidden {
-    display: none;
+  .tags-scrollable {
+    overflow-x: auto;
   }
 }
+
+
+@supports (scrollbar-gutter: stable) {
+  .tags-scrollable {
+    padding-right: 20px;
+  }}

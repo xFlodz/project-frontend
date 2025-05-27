@@ -1,12 +1,12 @@
 import React from 'react';
-import './LoadingSpinner.css'; // Подключаем стили
+import './LoadingSpinner.css';
 
-function LoadingSpinner() {
-  return (
-    <div className="loading-spinner">
+const LoadingSpinner = () => (
+  <div className="loading-spinner">
+    <div className="spinner-wrapper">
       <div className="spinner"></div>
     </div>
-  );
-}
+  </div>
+);
 
 export default LoadingSpinner;

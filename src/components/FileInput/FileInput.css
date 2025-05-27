@@ -1,9 +1,7 @@
-/* FileInput.css */
-
-.file-input-button {
+  .file-input-button {
     display: inline-block;
     padding: 10px 20px;
-    background-color: rgb(0,0,114);
+    background-color: rgb(0,26,114);
     color: white;
     border-radius: 8px;
     cursor: pointer;
@@ -17,6 +15,6 @@
   }
   
 
-.file-input-container label{
-  color: #ffff;
-}
+  .file-input-container label{
+    color: #ffff;
+  }

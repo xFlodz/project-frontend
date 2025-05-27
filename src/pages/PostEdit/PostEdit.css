@@ -1,8 +1,5 @@
-/* PostEdit.css */
-
-/* Основные стили */
 .post-edit-page {
-    width: 70%; /* Уменьшаем ширину контейнера для лучшего отображения */
+    width: 70%;
     margin: 0 auto;
     padding: 30px;
     background-color: #f9f9f9;
@@ -28,7 +25,7 @@ h1 {
     margin-bottom: 10px;
     font-weight: bold;
     font-size: 16px;
-    color: #555;
+    color: #333c56;
 }
 
 .form-group input,
@@ -44,7 +41,7 @@ h1 {
 
 .form-group input:focus,
 .form-group textarea:focus {
-    border-color: rgb(0, 0, 114);
+    border-color: rgb(0, 26, 114);
     outline: none;
 }
 
@@ -56,7 +53,7 @@ h1 {
 .file-input-wrapper {
     display: inline-block;
     padding: 12px 25px;
-    background-color: rgb(0, 0, 114);
+    background-color: rgb(0, 26, 114);
     color: white;
     border-radius: 8px;
     cursor: pointer;
@@ -117,7 +114,6 @@ h1 {
     border-radius: 8px;
 }
 
-/* Кнопки */
 button.add-button,
 button.delete-button {
     margin-top: 12px;
@@ -129,30 +125,31 @@ button.delete-button {
 }
 
 button.add-button {
-    background-color: #28a745;
+    background-color: #008779;
     color: white;
     border: none;
 }
 
 button.add-button:hover {
-    background-color: #218838;
+    background-color: #00c3cb;
 }
 
 button.delete-button {
-    background-color: #dc3545;
+    background-color: rgb(214, 0, 28);
     color: white;
     border: none;
 }
 
 button.delete-button:hover {
-    background-color: #c82333;
+    background-color: rgb(214, 0, 28);
 }
 
 button.submit-button {
-    background-color: rgb(0, 0, 114);
+    background-color: rgb(0, 26, 114);
     color: white;
     width: 100%;
     padding: 12px;
+    min-width: 40%;
     font-size: 16px;
     font-weight: 600;
     border: none;
@@ -163,19 +160,18 @@ button.submit-button:hover {
     background-color: #0056b3;
 }
 
-/* Ошибки */
 .error {
-    border: 2px solid #dc3545 !important; /* Увеличиваем толщину границы */
-    background-color: rgba(220, 53, 69, 0.1); /* Легкий красный фон для выделения */
-    box-shadow: 0 0 5px rgba(220, 53, 69, 0.5); /* Тень для выделения поля */
+    border: 2px solid #dc3545 !important;
+    background-color: rgba(220, 53, 69, 0.1);
+    box-shadow: 0 0 5px rgba(220, 53, 69, 0.5);
 }
 
 .error-message {
-    color: #dc3545; /* Ярко-красный цвет текста для ошибок */
-    font-size: 1rem; /* Увеличиваем размер шрифта для лучшей читаемости */
+    color: rgb(214, 0, 28);
+    font-size: 1rem;
     margin-top: 0.5rem;
-    font-weight: 600; /* Жирный шрифт для ошибок */
-    animation: shake 0.3s ease; /* Анимация тряски */
+    font-weight: 600;
+    animation: shake 0.3s ease;
 }
 
 @keyframes shake {
@@ -196,28 +192,25 @@ button.submit-button:hover {
     }
 }
 
-/* Изменяем отображение ошибок для тегов, контента и других элементов */
 .error-message {
-    padding-left: 10px; /* Добавляем отступ для лучшего отображения */
-    background-color: #f8d7da; /* Фон для текста ошибки */
-    border-left: 4px solid #dc3545; /* Левый бордер для подчеркивания */
-    margin-top: 5px; /* Отступ сверху */
-    font-size: 0.9rem; /* Уменьшаем размер шрифта для текста ошибок */
+    padding-left: 10px;
+    background-color: #f8d7da;
+    border-left: 4px solid rgb(214, 0, 28);
+    margin-top: 5px;
+    font-size: 0.9rem;
     padding-top: 4px;
 }
 
-/* Ошибка для кнопок */
 button.error {
-    background-color: #dc3545; /* Красный фон для кнопки с ошибкой */
+    background-color: rgb(214, 0, 28);
     color: white;
-    border: 1px solid #dc3545;
+    border: 1px solid rgb(214, 0, 28);
 }
 
 button.error:hover {
-    background-color: #c82333; /* Более темный красный при наведении */
+    background-color: rgb(214, 0, 28);
 }
 
-/* Теги */
 .tags-container input {
     width: 100%;
     padding: 12px;
@@ -228,14 +221,13 @@ button.error:hover {
 }
 
 .tags-container input:focus {
-    border-color: rgb(0, 0, 114);
+    border-color: rgb(0, 26, 114);
 }
 
 .tags-container {
     margin-top: 10px;
 }
 
-/* Даты */
 .date-picker-container {
     display: flex;
     gap: 10px;
@@ -281,10 +273,9 @@ button.error:hover {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-/* Медиазапросы для мобильных устройств */
 @media (max-width: 768px) {
     .post-edit-page {
-        width: 90%; /* Увеличиваем ширину до 90% для мобильных устройств */
+        width: 90%;
         padding: 20px;
     }
 
@@ -318,12 +309,12 @@ button.error:hover {
     }
 
     .main-image {
-        max-width: 100%; /* Увеличиваем изображение для мобильных */
+        max-width: 100%;
     }
 
     button.add-button,
     button.delete-button {
-        width: 100%; /* Кнопки занимают всю ширину на мобильных */
+        width: 100%;
     }
 
     .tags-container input {

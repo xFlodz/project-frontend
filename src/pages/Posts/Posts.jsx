@@ -3,13 +3,14 @@ import { getAllPosts } from "../../services/apiPost";
 import PostCard from "../../components/PostCard/PostCard";
 import Filter from "../../components/Filter/Filter";
 import Pagination from "../../components/Pagination/Pagination";
+import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner"
 import "./Posts.css";
 
 function Posts() {
   const postsPerPage = 8;
   const [currentPage, setCurrentPage] = useState(1);
-  const [postsData, setPostsData] = useState([]);  // Состояние для хранения постов
-  const [loading, setLoading] = useState(true);  // Состояние для отслеживания загрузки данных
+  const [postsData, setPostsData] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState({
     dateFilterType: 'creation',
     tagsFilter: [],
@@ -17,28 +18,27 @@ function Posts() {
     endDate: ''
   });
 
-  // Функция для загрузки постов с учетом фильтров
   useEffect(() => {
     const fetchPosts = async () => {
       try {
         const data = await getAllPosts(filters);
-        setPostsData(data);  // Сохраняем посты в состояние
-        setLoading(false);    // Останавливаем индикатор загрузки
+        setPostsData(data);
+        setLoading(false);
         console.log(data)
       } catch (error) {
         console.error("Ошибка при получении постов:", error);
-        setLoading(false); // В случае ошибки также прекращаем загрузку
+        setLoading(false);
       }
     };
 
-    fetchPosts();  // Вызываем функцию при монтировании компонента
+    fetchPosts();
   }, [filters]);
 
   const totalPages = Math.ceil(postsData.length / postsPerPage);
   const currentPosts = postsData.slice((currentPage - 1) * postsPerPage, currentPage * postsPerPage);
 
   if (loading) {
-    return <div>Загрузка...</div>;  // Показываем загрузку, пока данные не загружены
+    return <LoadingSpinner />;
   }
 
   return (

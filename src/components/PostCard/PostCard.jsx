@@ -7,7 +7,6 @@ function PostCard({ post }) {
   const [isHovered, setIsHovered] = useState(false);
   const createdAt = new Date(post.created_at);
 
-  // Используем post.lead вместо post.text
   const postText = post.lead
 
   return (

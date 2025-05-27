@@ -1,8 +1,7 @@
-/* Начальные стили для уведомления */
 .notification {
     position: fixed;
-    top: 20px;
-    right: -400px; /* Начальная позиция уведомления за пределами экрана */
+    top: 100px;
+    right: -400px;
     padding: 15px;
     border-radius: 5px;
     font-size: 16px;
@@ -15,12 +14,11 @@
     color: white;
     font-weight: bold;
     z-index: 1002;
-    opacity: 0; /* Начальная прозрачность */
+    opacity: 0;
 }
 
-/* Класс для показа уведомления с анимацией */
 .notification.show {
-    animation: slideIn 0.3s forwards; /* Анимация появления */
+    animation: slideIn 0.3s forwards;
 }
 
 @keyframes slideIn {
@@ -34,9 +32,8 @@
     }
 }
 
-/* Класс для скрытия уведомления */
 .notification.hide {
-    animation: slideOut 0.3s forwards; /* Анимация исчезновения */
+    animation: slideOut 0.3s forwards;
 }
 
 @keyframes slideOut {
@@ -51,12 +48,12 @@
 }
 
 .notification.success {
-    background-color: #28a745;
+    background-color: #7abf26;
 }
 
 
 .notification.error {
-    background-color: #dc3545;
+    background-color: rgb(214, 0, 28);
 }
 
 .close-btn-notification {

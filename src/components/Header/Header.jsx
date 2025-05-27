@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import miigaikLogo from "../../assets/logo.png";
-import miigaik245 from "../../assets/miigaik245.png";
 import './Header.css';
 import MenuDropdown from "../MenuDropdown/MenuDropdown";
 import MenuLogin from "../MenuLogin/MenuLogin";
@@ -11,9 +10,9 @@ import Notification from "../Notification/Notification";
 
 function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isMenuOpen, setIsMenuOpen] = useState(false); // Состояние для открытия меню
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [notification, setNotification] = useState({ message: "", type: "" }); // Состояние для уведомлений
+  const [notification, setNotification] = useState({ message: "", type: "" });
 
   useEffect(() => {
     const token = localStorage.getItem("access_token");
@@ -22,14 +21,14 @@ function Header() {
     }
 
     const handleScroll = () => {
-      if (!isMenuOpen) { // Обновляем isScrolled только если меню закрыто
+      if (!isMenuOpen) {
         setIsScrolled(window.scrollY > 50);
       }
     };
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [isMenuOpen]); // Зависимость от isMenuOpen
+  }, [isMenuOpen]);
 
 const handleLogin = async (userData) => {
   try {

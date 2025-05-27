@@ -2,10 +2,11 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import "./Timeline.css";
 import parse from 'html-react-parser';
+import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner"
 
-function Timeline({ data }) {  // Убрали onImageClick из пропсов
+function Timeline({ data }) {
   if (!data || !data.events) {
-    return <div>Загрузка данных...</div>;
+    return <LoadingSpinner />
   }
 
   return (

@@ -1,51 +1,79 @@
 import { useState, useEffect } from "react";
 import { getAllPosts } from "../../services/apiPost";
 import Timeline from "../../components/Timeline/Timeline";
+import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner"
 import "./TimelinePage.css";
 
 function TimelinePage() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [filters] = useState({
-    dateFilterType: 'historical',
-    tagsFilter: [],
-    startDate: '',
-    endDate: ''
-  });
+
+  const [selectedRange, setSelectedRange] = useState(null);
+
+  const generateRanges = () => {
+    const ranges = [];
+    let startYear = 1779;
+    const currentYear = new Date().getFullYear();
+
+    let endYear = 1800;
+    if (endYear > currentYear) endYear = currentYear;
+
+    ranges.push({
+      label: `${startYear}-${endYear}`,
+      startDate: `${startYear}-01-01`,
+      endDate: `${endYear}-12-31`
+    });
+
+    startYear = endYear + 1;
+
+    while (startYear < currentYear) {
+      endYear = startYear + 19;
+      if (endYear > currentYear) {
+        endYear = currentYear;
+      }
+      ranges.push({
+        label: `${startYear}-${endYear}`,
+        startDate: `${startYear}-01-01`,
+        endDate: `${endYear}-12-31`
+      });
+      startYear = endYear + 1;
+    }
+
+    return ranges;
+  };
+
+  const ranges = generateRanges();
 
   useEffect(() => {
     const fetchPosts = async () => {
+      setLoading(true);
       try {
         const data = await getAllPosts({
-          dateFilterType: 'historical',
+          dateFilterType: "historical",
           tagsFilter: [],
-          startDate: '',
-          endDate: ''
+          startDate: selectedRange?.startDate || "",
+          endDate: selectedRange?.endDate || ""
         });
         setPosts(data);
-        setLoading(false);
       } catch (error) {
         console.error("Ошибка при получении постов:", error);
+      } finally {
         setLoading(false);
       }
     };
-
     fetchPosts();
-  }, [filters]);
+  }, [selectedRange]);
 
   const parseDate = (dateString) => {
     if (!dateString) return null;
     
     const [day, month, year] = dateString.split(".");
     
-    const formattedDay = day.padStart(2, '0');
-    const formattedMonth = month.padStart(2, '0');
-    
     return {
       year: parseInt(year, 10),
-      month: parseInt(month, 10), 
-      day: parseInt(day, 10),    
-      formatted: `${formattedDay}.${formattedMonth}.${year}` 
+      month: parseInt(month, 10),
+      day: parseInt(day, 10),
+      formatted: `${day.padStart(2, '0')}.${month.padStart(2, '0')}.${year}`
     };
   };
 
@@ -54,8 +82,6 @@ function TimelinePage() {
       const startDate = parseDate(post.date_range?.start_date);
       if (!startDate) return null;
 
-      const postText = post.lead
-
       return {
         id: post.id,
         address: post.address,
@@ -63,29 +89,39 @@ function TimelinePage() {
         end_date: parseDate(post.date_range?.end_date) || null,
         text: {
           headline: post.header || "Без заголовка",
-          text: postText.substring(0, 200) + "..."
+          text: (post.lead || "").substring(0, 200) + "..."
         },
         media: {
           url: post.main_image ? `http://localhost:5000/api/file/${post.main_image}` : "",
           caption: post.author || "Автор неизвестен"
         },
-        // Добавляем отформатированные даты для отображения
         formattedStartDate: startDate.formatted,
         formattedEndDate: post.date_range?.end_date ? parseDate(post.date_range.end_date).formatted : null
       };
     }).filter(Boolean);
   };
 
-  if (loading) {
-    return <div className="loading-message">Загрузка...</div>;
-  }
-
   return (
     <div className="timeline-page">
       <h1>Историческая лента</h1>
-      <Timeline 
-        data={{ events: formatTimelineData(posts) }} 
-      />
+
+      <div className="date-range-filter">
+        {ranges.map(range => (
+          <button
+            key={range.label}
+            className={selectedRange?.startDate === range.startDate ? "active" : ""}
+            onClick={() => setSelectedRange(range)}
+          >
+            {range.label}
+          </button>
+        ))}
+      </div>
+
+      {loading ? (
+        <LoadingSpinner />
+      ) : (
+        <Timeline data={{ events: formatTimelineData(posts) }} />
+      )}
     </div>
   );
 }

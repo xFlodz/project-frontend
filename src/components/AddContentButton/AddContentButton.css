@@ -1,17 +1,17 @@
-.add-content-button {
-    position: relative;
-    display: inline-block;
+  .add-content-button {
+      position: relative;
+      display: inline-block;
   }
   
   .dropdown-content {
     position: absolute;
-    background-color: #ffffff; /* Белый фон */
+    background-color: #ffffff;
     min-width: 160px;
     box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
     z-index: 1;
     border-radius: 8px;
     overflow: hidden;
-    border: 1px solid #ccc; /* Добавляем границу */
+    border: 1px solid #ccc;
   }
   
   .icon-button {
@@ -25,26 +25,25 @@
     align-items: center;
     gap: 8px;
     font-size: 14px;
-    color: #333; /* Темный цвет текста */
+    color: #333c56;
   }
   
   .icon-button:hover {
-    background-color: #f1f1f1; /* Светлый фон при наведении */
+    background-color: #f1f1f1;
   }
   
-  /* Стили для кнопки "Добавить контент" */
-  .add-button {
+  .add-button-content {
     margin-top: 12px;
     padding: 8px 18px;
     border-radius: 8px;
     cursor: pointer;
     font-size: 16px;
     font-weight: 600;
-    background-color: #28a745; /* Зеленый цвет */
-    color: white; /* Белый текст */
+    background-color: #008779;
+    color: white;
     border: none;
   }
   
-  .add-button:hover {
-    background-color: #218838; /* Темно-зеленый при наведении */
+  .add-button-content:hover {
+    background-color: #00c3cb;
   }

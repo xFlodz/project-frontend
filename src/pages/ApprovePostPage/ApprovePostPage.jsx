@@ -3,7 +3,8 @@ import { getAllNotApprovedPosts } from "../../services/apiPost";
 import PostCard from "../../components/PostCard/PostCard";
 import Filter from "../../components/Filter/Filter";
 import Pagination from "../../components/Pagination/Pagination";
-import { useNavigate } from "react-router-dom";  // Используем useNavigate
+import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner"
+import { useNavigate } from "react-router-dom";
 import "./ApprovePostPage.css";
 
 function ApprovePostPage() {
@@ -17,14 +18,12 @@ function ApprovePostPage() {
     startDate: "",
     endDate: "",
   });
-
-  const navigate = useNavigate();  // Используем navigate
+  const navigate = useNavigate();
   const role = localStorage.getItem("role");
 
-  // Переадресация, если пользователь не админ или не создатель постов
   useEffect(() => {
     if (role !== "admin" && role !== "poster") {
-      navigate("/"); // Перенаправляем на главную страницу
+      navigate("/");
     }
   }, [role, navigate]);
 
@@ -49,7 +48,7 @@ function ApprovePostPage() {
   );
 
   if (loading) {
-    return <div>Загрузка...</div>;
+    return <LoadingSpinner />;
   }
 
   return (

@@ -12,7 +12,7 @@ const FileInput = ({ id, onChange, buttonText, accept }) => {
         type="file"
         accept={accept}
         onChange={onChange}
-        style={{ display: "none" }} // Скрываем стандартный инпут
+        style={{ display: "none" }}
       />
     </div>
   );

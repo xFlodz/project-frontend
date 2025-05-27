@@ -1,6 +1,7 @@
 .profile-container {
   max-width: 600px;
   margin: 40px auto;
+  margin-top: 120px;
   padding: 20px;
   border-radius: 12px;
   background-color: #f9f9f9;
@@ -43,20 +44,32 @@
   border-radius: 8px;
   border: none;
   cursor: pointer;
-  background-color: #4caf50;
+  background-color: #008779;
   color: white;
   transition: background-color 0.3s;
 }
 
 .profile-button:hover {
-  background-color: #45a049;
+  background-color: #00c3cb;
 }
 
 .profile-button.secondary {
-  background-color: #2196f3;
+  background-color: rgb(0, 26, 114);
   margin-left: 10px;
 }
 
 .profile-button.secondary:hover {
-  background-color: #1e88e5;
+  background-color: #0056b3;
 }
+
+.button-group {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.button-group .profile-button {
+  flex: 1;
+  min-width: 120px;
+}
+

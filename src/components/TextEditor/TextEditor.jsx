@@ -4,17 +4,15 @@ import 'react-quill/dist/quill.snow.css';
 import './TextEditor.css';
 
 const TextEditor = ({ value, onChange, className = '' }) => {
-  // Модули для панели инструментов (только bold и italic)
   const modules = {
     toolbar: [
       ['bold', 'italic'],
     ],
     clipboard: {
-      matchVisual: false, // Отключаем автоматическое форматирование при вставке
+      matchVisual: false,
     }
   };
 
-  // Поддерживаемые форматы
   const formats = ['bold', 'italic'];
 
   return (

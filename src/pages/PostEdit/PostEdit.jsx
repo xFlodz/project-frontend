@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import ReactDatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
 import FileInput from "../../components/FileInput/FileInput";
 import ModalTags from "../../components/ModalTags/ModalTags";
 import { getPostByAddress, updatePost } from "../../services/apiPost";
+import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner"
 import TextEditor from "../../components/TextEditor/TextEditor";
 import "./PostEdit.css";
 import AddContentButton from "../../components/AddContentButton/AddContentButton";
@@ -29,47 +28,54 @@ function PostEdit({setNotification}) {
   const BASE_URL = "http://localhost:5000/api/file/";
 
   useEffect(() => {
-    const fetchPost = async () => {
-      try {
-        const data = await getPostByAddress(address);
-        console.log("Данные с сервера:", data);
+  const initializePage = async () => {
+    const role = localStorage.getItem("role");
+    if (role !== "poster") {
+      navigate("/");
+      return;
+    }
 
-        const startDate = parseDate(data.date_range?.start_date);
-        const endDate = parseDate(data.date_range?.end_date);
+    try {
+      const data = await getPostByAddress(address);
+      console.log("Данные с сервера:", data);
 
-        const mainImageBase64 = await urlToBase64(`${BASE_URL}${data.main_image}`);
+      const startDate = parseDate(data.date_range?.start_date);
+      const endDate = parseDate(data.date_range?.end_date);
 
-        const updatedContent = await Promise.all(
-          data.structure.map(async (item) => {
-            if (item.type === "image" && item.src) {
-              const srcBase64 = await urlToBase64(`${BASE_URL}${item.src}`);
-              return { ...item, src: srcBase64};
-            }
-            return item;
-          })
-        );
+      const mainImageBase64 = await urlToBase64(`${BASE_URL}${data.main_image}`);
 
-        const formattedTags = data.tags.map(tag => ({
-          id: tag.tag_id,
-          name: tag.tag_name,
-        }));
+      const updatedContent = await Promise.all(
+        data.structure.map(async (item) => {
+          if (item.type === "image" && item.src) {
+            const srcBase64 = await urlToBase64(`${BASE_URL}${item.src}`);
+            return { ...item, src: srcBase64 };
+          }
+          return item;
+        })
+      );
 
-        setHeader(data.header);
-        setMainImage(mainImageBase64);
-        setContent(updatedContent);
-        setTags(formattedTags);
-        setLeftDate(startDate);
-        setRightDate(endDate);
-        setLead(data.lead);
-      } catch (err) {
-        setError("Ошибка загрузки поста.");
-      } finally {
-        setLoading(false);
-      }
-    };
+      const formattedTags = data.tags.map(tag => ({
+        id: tag.tag_id,
+        name: tag.tag_name,
+      }));
 
-    fetchPost();
-  }, [address]);
+      setHeader(data.header);
+      setMainImage(mainImageBase64);
+      setContent(updatedContent);
+      setTags(formattedTags);
+      setLeftDate(startDate);
+      setRightDate(endDate);
+      setLead(data.lead);
+    } catch (err) {
+      setError("Ошибка загрузки поста.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+    initializePage();
+  }, [address, navigate]);
+
 
   const urlToBase64 = async (url) => {
     try {
@@ -87,7 +93,6 @@ function PostEdit({setNotification}) {
     }
   };
 
-  // Обработчики событий (аналогичные PostCreate)
   const handleMainImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -118,6 +123,13 @@ function PostEdit({setNotification}) {
       ...prevErrors,
       contentImages: "",
     }));
+  };
+
+
+  const formatDateForInput = (date) => {
+  if (!date) return "";
+    const d = new Date(date);
+  return d.toISOString().split("T")[0];
   };
 
   const handleVideoChange = (index, e) => {
@@ -207,7 +219,7 @@ function PostEdit({setNotification}) {
     if (Array.isArray(selectedTags)) {
       setTags(selectedTags);
     } else {
-      console.error("Selected tags is not an array:", selectedTags);
+      console.error("Выбранные теги не являются списком:", selectedTags);
     }
     setIsModalOpen(false);
   };
@@ -265,8 +277,9 @@ function PostEdit({setNotification}) {
       header,
       lead,
       main_image: mainImage,
-      left_date: leftDate ? leftDate.toLocaleDateString("ru-RU") : "",
-      right_date: rightDate ? rightDate.toLocaleDateString("ru-RU") : "",
+      date_range: {
+        start_date: leftDate ? new Date(leftDate).toLocaleDateString("ru-RU") : "",
+        end_date: rightDate ? new Date(rightDate).toLocaleDateString("ru-RU") : ""},
       content: content.map(item => {
         if (item.type === "text") {
           return { type: "text", value: item.text };
@@ -277,7 +290,7 @@ function PostEdit({setNotification}) {
         }
         return item;
       }),
-      tags: tagIds, // Отправляем только идентификаторы тегов
+      tags: tagIds,
     };
   
     console.log("Данные для обновления:", postData);
@@ -292,14 +305,13 @@ function PostEdit({setNotification}) {
     }
   };
 
-  if (loading) return <div className="loading">Загрузка...</div>;
+  if (loading) return <LoadingSpinner />;;
   if (error) return <div className="error">{error}</div>;
 
   return (
     <div className="create-post-page">
       <h1>Редактирование поста</h1>
       <form onSubmit={handleSubmit}>
-        {/* Заголовок */}
         <div className="form-group">
           <label htmlFor="header">Заголовок</label>
           <input
@@ -343,7 +355,6 @@ function PostEdit({setNotification}) {
           {errors.header && <p className="error-message">{errors.lead}</p>}
         </div>
   
-        {/* Основное изображение */}
         <div className="form-group-image">
           <label htmlFor="main-image">Основное изображение</label>
           <div className="file-input">
@@ -362,7 +373,6 @@ function PostEdit({setNotification}) {
           {errors.mainImage && <p className="error-message">{errors.mainImage}</p>}
         </div>
   
-        {/* Контент поста */}
         <div className="form-group">
           <label>Контент поста</label>
           {content.map((item, index) => (
@@ -446,36 +456,29 @@ function PostEdit({setNotification}) {
           <AddContentButton onAddText={addText} onAddImage={addImage} onAddVideo={addVideo} />
         </div>
   
-        {/* Диапазон дат */}
         <div className="form-group">
           <label>Диапазон дат</label>
           <div className="date-picker-container">
-            <ReactDatePicker
-              selected={leftDate}
-              onChange={(date) => setLeftDate(date)}
-              placeholderText="Начальная дата"
-              dateFormat="dd/MM/yyyy"
-              selectsStart
-              startDate={leftDate}
-              endDate={rightDate}
+            <input
+              type="date"
+              value={formatDateForInput(leftDate)}
+              min={'1779-01-01'} 
+              max={new Date().toISOString().split('T')[0]}
+              onChange={(e) => setLeftDate(e.target.value)}
               required
             />
             <span>—</span>
-            <ReactDatePicker
-              selected={rightDate}
-              onChange={(date) => setRightDate(date)}
-              placeholderText="Конечная дата"
-              dateFormat="dd/MM/yyyy"
-              selectsEnd
-              startDate={leftDate}
-              endDate={rightDate}
-              minDate={leftDate}
+            <input
+              type="date"
+              value={formatDateForInput(rightDate)}
+              min={formatDateForInput(leftDate)}
+              max={new Date().toISOString().split('T')[0]}
+              onChange={(e) => setRightDate(e.target.value)}
               required
             />
           </div>
         </div>
   
-        {/* Теги */}
         <div className="form-group">
           <div className="tags-container">
             {tags.map((tag, index) => (
@@ -492,13 +495,11 @@ function PostEdit({setNotification}) {
           </button>
         </div>
   
-        {/* Кнопка отправки */}
         <button type="submit" className="submit-button">
           Сохранить изменения
         </button>
       </form>
   
-      {/* Модальное окно для выбора тегов */}
       <ModalTags
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
