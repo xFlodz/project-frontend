@@ -18,11 +18,10 @@ function App() {
   const [notification, setNotification] = useState(null);
 
   useEffect(() => {
-    // Проверка sessionStorage при загрузке
     const saved = sessionStorage.getItem("notification");
     if (saved) {
       setNotification(JSON.parse(saved));
-      sessionStorage.removeItem("notification"); // удаляем, чтобы не было дубликатов
+      sessionStorage.removeItem("notification");
     }
   }, []);
   const handleNotificationClose = () => {

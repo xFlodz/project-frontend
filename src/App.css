@@ -1,11 +1,12 @@
 .app-container {
-  width: 100%; /* Контейнер занимает всю ширину */
+  width: 100%;
   height: auto;
   min-height: 100vh;
   flex-direction: column;
-  margin: 0 auto; /* Центрирование контейнера */
+  margin: 0 auto;
   padding-top: 40px;
   overflow: hidden;
+  font-family: 'Arial', sans-serif;
 }
 
 .form-group label {

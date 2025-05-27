@@ -1,5 +1,4 @@
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
@@ -39,18 +38,16 @@ button {
 }
 
 
-/* Для #root */
 #root {
   display: flex;
-  justify-content: flex-start; /* Применим выравнивание к левому краю */
-  align-items: flex-start;  /* Оставляем выравнивание сверху */
-  min-height: 100vh;  /* Занимает всю высоту экрана */
-  width: 100%;  /* Занимает всю ширину экрана */
+  justify-content: flex-start;
+  align-items: flex-start;
+  min-height: 100vh;
+  width: 100%;
   margin: 0;
   padding: 0;
 }
 
-/* Для body */
 body {
   margin: 0;
   font-family: Arial, sans-serif;
