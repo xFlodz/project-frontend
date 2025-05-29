@@ -317,6 +317,79 @@ button.submit-button:hover {
     width: 48%;
 }
 
+.date-range-container {
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+  width: 100%;
+}
+
+.date-field {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+/* Стили для контейнера input */
+.input-container {
+  height: 46px; /* Фиксированная высота */
+  display: flex;
+  align-items: center;
+}
+
+.date-input {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-sizing: border-box;
+  text-align: left;
+  height: 46px; /* Фиксированная высота */
+  line-height: 1.5;
+}
+
+/* Группа радиокнопок */
+.radio-group {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 8px;
+  width: 100%;
+}
+
+.radio-option {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #555;
+  white-space: nowrap;
+}
+
+.radio-option input[type="radio"] {
+  margin: 0;
+}
+
+/* Разделитель между датами */
+.date-separator {
+  font-size: 18px;
+  color: #555;
+  padding: 5px;
+  padding-top: 0px;
+  padding-bottom: 50px;
+  align-self: center;
+}
+
+/* Placeholder для поля года */
+input::placeholder {
+  color: #999;
+  opacity: 1;
+}
+
+
 @media (max-width: 768px) {
     .create-post-page {
         width: 90%;

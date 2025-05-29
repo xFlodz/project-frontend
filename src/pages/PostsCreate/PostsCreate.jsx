@@ -18,8 +18,12 @@ function CreatePost() {
   const [mainImage, setMainImage] = useState(null);
   const [content, setContent] = useState([]);
   const [tags, setTags] = useState([]);
-  const [leftDate, setLeftDate] = useState(null);
-  const [rightDate, setRightDate] = useState(null);
+  const [leftDate, setLeftDate] = useState('');
+  const [rightDate, setRightDate] = useState('');
+  const [leftYear, setLeftYear] = useState('');
+  const [rightYear, setRightYear] = useState('');
+  const [leftDateFormat, setLeftDateFormat] = useState('full');
+  const [rightDateFormat, setRightDateFormat] = useState('full');
   const [errors, setErrors] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [lead, setLead] = useState("");
@@ -153,7 +157,7 @@ function CreatePost() {
     setTags(updatedTags);
   };
 
-  const handleSubmit = async (e) => {
+const handleSubmit = async (e) => {
     e.preventDefault();
     let validationErrors = {};
 
@@ -170,17 +174,40 @@ function CreatePost() {
     );
     if (!allContentLoaded) validationErrors.contentImages = "Все изображения и видео должны быть загружены.";
 
+    if (leftDateFormat === 'year' && rightDateFormat === 'year' && rightYear && leftYear && rightYear < leftYear) {
+      validationErrors.dateRange = "Год окончания не может быть раньше года начала";
+    }
+
+    if (leftDateFormat === 'full' && rightDateFormat === 'full' && rightDate && leftDate && new Date(rightDate) < new Date(leftDate)) {
+      validationErrors.dateRange = "Дата окончания не может быть раньше даты начала";
+    }
+
+    if (leftDateFormat === 'year' && rightDateFormat === 'full' && rightDate && leftYear && new Date(rightDate).getFullYear() < parseInt(leftYear)) {
+      validationErrors.dateRange = "Дата окончания не может быть раньше года начала";
+    }
+
+    if (leftDateFormat === 'full' && rightDateFormat === 'year' && rightYear && leftDate && parseInt(rightYear) < new Date(leftDate).getFullYear()) {
+      validationErrors.dateRange = "Год окончания не может быть раньше даты начала";
+    }
+
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
       return;
     }
 
+    const formatDate = (date, year, format) => {
+      if (format === 'year') {
+        return year || "";
+      }
+      return date || "";
+    };
+
     const tagIds = tags.map(tag => tag.id);
     const postData = {
       header,
       main_image: mainImage,
-      left_date: leftDate ? new Date(leftDate).toLocaleDateString() : "",
-      right_date: rightDate ? new Date(rightDate).toLocaleDateString() : "",
+      left_date: formatDate(leftDate, leftYear, leftDateFormat),
+      right_date: rightDate || rightYear ? formatDate(rightDate, rightYear, rightDateFormat) : "",
       content,
       tags: tagIds,
       lead
@@ -206,6 +233,24 @@ function CreatePost() {
     } finally {
       setIsLoading(false);
       setShowImageEnhanceHint(false);
+    }
+  };
+
+  const handleLeftYearChange = (e) => {
+    const value = e.target.value;
+    setLeftYear(value);
+    if (rightDateFormat === 'year' && rightYear && value && rightYear < value) {
+      setRightYear(value);
+    }
+  };
+
+  const handleRightYearChange = (e) => {
+    const value = e.target.value;
+    if (leftDateFormat === 'year' && leftYear && value && value < leftYear) {
+      setErrors((prev) => ({...prev, dateRange: "Год окончания не может быть раньше года начала"}));
+    } else {
+      setErrors((prev) => ({...prev, dateRange: ""}));
+      setRightYear(value);
     }
   };
 
@@ -360,24 +405,78 @@ function CreatePost() {
   
         <div className="form-group">
           <label>Диапазон дат</label>
-          <div className="date-picker-container">
-            <input
-              type="date"
-              value={leftDate}
-              min={'1779-01-01'} 
-              max={new Date().toISOString().split('T')[0]}
-              onChange={(e) => setLeftDate(e.target.value)}
-              required
-            />
-            <span>—</span>
-            <input
-              type="date"
-              value={rightDate}
-              min={leftDate}
-              max={new Date().toISOString().split('T')[0]}
-              onChange={(e) => setRightDate(e.target.value)}
-              required
-            />
+          {errors.dateRange && <p className="error-message">{errors.dateRange}</p>}
+          <div className="date-range-container">
+            <div className="date-field">
+              <div className="input-container">
+                <input
+                  type={leftDateFormat === 'full' ? "date" : "number"}
+                  value={leftDateFormat === 'full' ? leftDate : leftYear}
+                  min={leftDateFormat === 'full' ? '1779-01-01' : '1779'}
+                  max={leftDateFormat === 'full' ? new Date().toISOString().split('T')[0] : new Date().getFullYear()}
+                  onChange={(e) => leftDateFormat === 'full' ? setLeftDate(e.target.value) : handleLeftYearChange(e)}
+                  required
+                  className="date-input"
+                  placeholder={leftDateFormat === 'year' ? "Год" : ""}
+                />
+              </div>
+              <div className="radio-group">
+                <label className="radio-option">
+                  <input
+                    type="radio"
+                    name="leftDateFormat"
+                    checked={leftDateFormat === 'full'}
+                    onChange={() => setLeftDateFormat('full')}
+                  />
+                  <span>Полная дата</span>
+                </label>
+                <label className="radio-option">
+                  <input
+                    type="radio"
+                    name="leftDateFormat"
+                    checked={leftDateFormat === 'year'}
+                    onChange={() => setLeftDateFormat('year')}
+                  />
+                  <span>Только год</span>
+                </label>
+              </div>
+            </div>
+            
+            <span className="date-separator">—</span>
+            
+            <div className="date-field">
+              <div className="input-container">
+                <input
+                  type={rightDateFormat === 'full' ? "date" : "number"}
+                  value={rightDateFormat === 'full' ? rightDate : rightYear}
+                  min={rightDateFormat === 'full' ? leftDate || '1779-01-01' : leftYear || '1779'}
+                  max={rightDateFormat === 'full' ? new Date().toISOString().split('T')[0] : new Date().getFullYear()}
+                  onChange={(e) => rightDateFormat === 'full' ? setRightDate(e.target.value) : handleRightYearChange(e)}
+                  className="date-input"
+                  placeholder={rightDateFormat === 'year' ? "Год" : ""}
+                />
+              </div>
+              <div className="radio-group">
+                <label className="radio-option">
+                  <input
+                    type="radio"
+                    name="rightDateFormat"
+                    checked={rightDateFormat === 'full'}
+                    onChange={() => setRightDateFormat('full')}
+                  />
+                  <span>Полная дата</span>
+                </label>
+                <label className="radio-option">
+                  <input
+                    type="radio"
+                    name="rightDateFormat"
+                    checked={rightDateFormat === 'year'}
+                    onChange={() => setRightDateFormat('year')}
+                  />
+                  <span>Только год</span>
+                </label>
+              </div>
+            </div>
           </div>
         </div>
   

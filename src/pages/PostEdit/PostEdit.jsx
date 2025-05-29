@@ -16,8 +16,12 @@ function PostEdit({setNotification}) {
   const [mainImage, setMainImage] = useState(null);
   const [content, setContent] = useState([]);
   const [tags, setTags] = useState([]);
-  const [leftDate, setLeftDate] = useState(null);
-  const [rightDate, setRightDate] = useState(null);
+  const [leftDate, setLeftDate] = useState('');
+  const [rightDate, setRightDate] = useState('');
+  const [leftYear, setLeftYear] = useState('');
+  const [rightYear, setRightYear] = useState('');
+  const [leftDateFormat, setLeftDateFormat] = useState('full');
+  const [rightDateFormat, setRightDateFormat] = useState('full');
   const [errors, setErrors] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -28,54 +32,73 @@ function PostEdit({setNotification}) {
   const BASE_URL = "http://localhost:5000/api/file/";
 
   useEffect(() => {
-  const initializePage = async () => {
-    const role = localStorage.getItem("role");
-    if (role !== "poster") {
-      navigate("/");
-      return;
-    }
+    const initializePage = async () => {
+      const role = localStorage.getItem("role");
+      if (role !== "poster") {
+        navigate("/");
+        return;
+      }
 
-    try {
-      const data = await getPostByAddress(address);
-      console.log("Данные с сервера:", data);
+      try {
+        const data = await getPostByAddress(address);
+        console.log("Данные с сервера:", data);
 
-      const startDate = parseDate(data.date_range?.start_date);
-      const endDate = parseDate(data.date_range?.end_date);
-
-      const mainImageBase64 = await urlToBase64(`${BASE_URL}${data.main_image}`);
-
-      const updatedContent = await Promise.all(
-        data.structure.map(async (item) => {
-          if (item.type === "image" && item.src) {
-            const srcBase64 = await urlToBase64(`${BASE_URL}${item.src}`);
-            return { ...item, src: srcBase64 };
+        const startDate = parseDate(data.date_range?.start_date);
+        const endDate = parseDate(data.date_range?.end_date);
+        
+        if (data.date_range?.start_date) {
+          const isYearOnly = /^\d{4}$/.test(data.date_range.start_date);
+          if (isYearOnly) {
+            setLeftDateFormat('year');
+            setLeftYear(data.date_range.start_date);
+          } else {
+            setLeftDateFormat('full');
+            setLeftDate(startDate ? startDate.toISOString().split('T')[0] : '');
           }
-          return item;
-        })
-      );
+        }
 
-      const formattedTags = data.tags.map(tag => ({
-        id: tag.tag_id,
-        name: tag.tag_name,
-      }));
+        if (data.date_range?.end_date) {
+          const isYearOnly = /^\d{4}$/.test(data.date_range.end_date);
+          if (isYearOnly) {
+            setRightDateFormat('year');
+            setRightYear(data.date_range.end_date);
+          } else {
+            setRightDateFormat('full');
+            setRightDate(endDate ? endDate.toISOString().split('T')[0] : '');
+          }
+        }
 
-      setHeader(data.header);
-      setMainImage(mainImageBase64);
-      setContent(updatedContent);
-      setTags(formattedTags);
-      setLeftDate(startDate);
-      setRightDate(endDate);
-      setLead(data.lead);
-    } catch (err) {
-      setError("Ошибка загрузки поста.");
-    } finally {
-      setLoading(false);
-    }
-  };
+        const mainImageBase64 = await urlToBase64(`${BASE_URL}${data.main_image}`);
+
+        const updatedContent = await Promise.all(
+          data.structure.map(async (item) => {
+            if (item.type === "image" && item.src) {
+              const srcBase64 = await urlToBase64(`${BASE_URL}${item.src}`);
+              return { ...item, src: srcBase64 };
+            }
+            return item;
+          })
+        );
+
+        const formattedTags = data.tags.map(tag => ({
+          id: tag.tag_id,
+          name: tag.tag_name,
+        }));
+
+        setHeader(data.header);
+        setMainImage(mainImageBase64);
+        setContent(updatedContent);
+        setTags(formattedTags);
+        setLead(data.lead);
+      } catch (err) {
+        setError("Ошибка загрузки поста.");
+      } finally {
+        setLoading(false);
+      }
+    };
 
     initializePage();
   }, [address, navigate]);
-
 
   const urlToBase64 = async (url) => {
     try {
@@ -235,6 +258,24 @@ function PostEdit({setNotification}) {
     return new Date(`${year}-${month}-${day}`);
   };
 
+  const handleLeftYearChange = (e) => {
+    const value = e.target.value;
+    setLeftYear(value);
+    if (rightDateFormat === 'year' && rightYear && value && rightYear < value) {
+      setRightYear(value);
+    }
+  };
+
+  const handleRightYearChange = (e) => {
+    const value = e.target.value;
+    if (leftDateFormat === 'year' && leftYear && value && value < leftYear) {
+      setErrors((prev) => ({...prev, dateRange: "Год окончания не может быть раньше года начала"}));
+    } else {
+      setErrors((prev) => ({...prev, dateRange: ""}));
+      setRightYear(value);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     let validationErrors = {};
@@ -263,13 +304,35 @@ function PostEdit({setNotification}) {
       validationErrors.contentImages = "Все изображения и видео должны быть загружены.";
     }
   
+    if (leftDateFormat === 'year' && rightDateFormat === 'year' && rightYear && leftYear && rightYear < leftYear) {
+      validationErrors.dateRange = "Год окончания не может быть раньше года начала";
+    }
+
+    if (leftDateFormat === 'full' && rightDateFormat === 'full' && rightDate && leftDate && new Date(rightDate) < new Date(leftDate)) {
+      validationErrors.dateRange = "Дата окончания не может быть раньше даты начала";
+    }
+
+    if (leftDateFormat === 'year' && rightDateFormat === 'full' && rightDate && leftYear && new Date(rightDate).getFullYear() < parseInt(leftYear)) {
+      validationErrors.dateRange = "Дата окончания не может быть раньше года начала";
+    }
+
+    if (leftDateFormat === 'full' && rightDateFormat === 'year' && rightYear && leftDate && parseInt(rightYear) < new Date(leftDate).getFullYear()) {
+      validationErrors.dateRange = "Год окончания не может быть раньше даты начала";
+    }
+
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
-      
       setNotification({ message: "Исправьте все ошибки", type: "error" });
-      setNotification(null)
+      setNotification(null);
       return;
     }
+
+    const formatDate = (date, year, format) => {
+      if (format === 'year') {
+        return year || "";
+      }
+      return date || "";
+    };
   
     const tagIds = tags.map(tag => tag.id);
   
@@ -278,8 +341,9 @@ function PostEdit({setNotification}) {
       lead,
       main_image: mainImage,
       date_range: {
-        start_date: leftDate ? new Date(leftDate).toLocaleDateString("ru-RU") : "",
-        end_date: rightDate ? new Date(rightDate).toLocaleDateString("ru-RU") : ""},
+        start_date: formatDate(leftDate, leftYear, leftDateFormat),
+        end_date: rightDate || rightYear ? formatDate(rightDate, rightYear, rightDateFormat) : ""
+      },
       content: content.map(item => {
         if (item.type === "text") {
           return { type: "text", value: item.text };
@@ -305,7 +369,7 @@ function PostEdit({setNotification}) {
     }
   };
 
-  if (loading) return <LoadingSpinner />;;
+  if (loading) return <LoadingSpinner />;
   if (error) return <div className="error">{error}</div>;
 
   return (
@@ -458,24 +522,78 @@ function PostEdit({setNotification}) {
   
         <div className="form-group">
           <label>Диапазон дат</label>
-          <div className="date-picker-container">
-            <input
-              type="date"
-              value={formatDateForInput(leftDate)}
-              min={'1779-01-01'} 
-              max={new Date().toISOString().split('T')[0]}
-              onChange={(e) => setLeftDate(e.target.value)}
-              required
-            />
-            <span>—</span>
-            <input
-              type="date"
-              value={formatDateForInput(rightDate)}
-              min={formatDateForInput(leftDate)}
-              max={new Date().toISOString().split('T')[0]}
-              onChange={(e) => setRightDate(e.target.value)}
-              required
-            />
+          {errors.dateRange && <p className="error-message">{errors.dateRange}</p>}
+          <div className="date-range-container">
+            <div className="date-field">
+              <div className="input-container">
+                <input
+                  type={leftDateFormat === 'full' ? "date" : "number"}
+                  value={leftDateFormat === 'full' ? leftDate : leftYear}
+                  min={leftDateFormat === 'full' ? '1779-01-01' : '1779'}
+                  max={leftDateFormat === 'full' ? new Date().toISOString().split('T')[0] : new Date().getFullYear()}
+                  onChange={(e) => leftDateFormat === 'full' ? setLeftDate(e.target.value) : handleLeftYearChange(e)}
+                  required
+                  className="date-input"
+                  placeholder={leftDateFormat === 'year' ? "Год" : ""}
+                />
+              </div>
+              <div className="radio-group">
+                <label className="radio-option">
+                  <input
+                    type="radio"
+                    name="leftDateFormat"
+                    checked={leftDateFormat === 'full'}
+                    onChange={() => setLeftDateFormat('full')}
+                  />
+                  <span>Полная дата</span>
+                </label>
+                <label className="radio-option">
+                  <input
+                    type="radio"
+                    name="leftDateFormat"
+                    checked={leftDateFormat === 'year'}
+                    onChange={() => setLeftDateFormat('year')}
+                  />
+                  <span>Только год</span>
+                </label>
+              </div>
+            </div>
+            
+            <span className="date-separator">—</span>
+            
+            <div className="date-field">
+              <div className="input-container">
+                <input
+                  type={rightDateFormat === 'full' ? "date" : "number"}
+                  value={rightDateFormat === 'full' ? rightDate : rightYear}
+                  min={rightDateFormat === 'full' ? leftDate || '1779-01-01' : leftYear || '1779'}
+                  max={rightDateFormat === 'full' ? new Date().toISOString().split('T')[0] : new Date().getFullYear()}
+                  onChange={(e) => rightDateFormat === 'full' ? setRightDate(e.target.value) : handleRightYearChange(e)}
+                  className="date-input"
+                  placeholder={rightDateFormat === 'year' ? "Год" : ""}
+                />
+              </div>
+              <div className="radio-group">
+                <label className="radio-option">
+                  <input
+                    type="radio"
+                    name="rightDateFormat"
+                    checked={rightDateFormat === 'full'}
+                    onChange={() => setRightDateFormat('full')}
+                  />
+                  <span>Полная дата</span>
+                </label>
+                <label className="radio-option">
+                  <input
+                    type="radio"
+                    name="rightDateFormat"
+                    checked={rightDateFormat === 'year'}
+                    onChange={() => setRightDateFormat('year')}
+                  />
+                  <span>Только год</span>
+                </label>
+              </div>
+            </div>
           </div>
         </div>
   
