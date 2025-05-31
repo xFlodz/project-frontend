@@ -27,7 +27,12 @@ function PostEdit({setNotification}) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [lead, setLead] = useState("");
+  const [reviewer, setReviewer] = useState("");
   const navigate = useNavigate();
+  const [dirtyFields, setDirtyFields] = useState({
+    leftYear: false,
+    rightYear: false
+  });
 
   const BASE_URL = "http://localhost:5000/api/file/";
 
@@ -90,6 +95,7 @@ function PostEdit({setNotification}) {
         setContent(updatedContent);
         setTags(formattedTags);
         setLead(data.lead);
+        setReviewer(data.reviewer || "");
       } catch (err) {
         setError("Ошибка загрузки поста.");
       } finally {
@@ -261,24 +267,39 @@ function PostEdit({setNotification}) {
   const handleLeftYearChange = (e) => {
     const value = e.target.value;
     setLeftYear(value);
-    if (rightDateFormat === 'year' && rightYear && value && rightYear < value) {
-      setRightYear(value);
-    }
+    setDirtyFields({...dirtyFields, leftYear: false});
   };
 
   const handleRightYearChange = (e) => {
     const value = e.target.value;
-    if (leftDateFormat === 'year' && leftYear && value && value < leftYear) {
-      setErrors((prev) => ({...prev, dateRange: "Год окончания не может быть раньше года начала"}));
-    } else {
-      setErrors((prev) => ({...prev, dateRange: ""}));
-      setRightYear(value);
+    setRightYear(value);
+    setDirtyFields({...dirtyFields, rightYear: false});
+  };
+
+  const validateYears = () => {
+    if (leftDateFormat === 'year' && rightDateFormat === 'year' && 
+        leftYear && rightYear && parseInt(rightYear) < parseInt(leftYear)) {
+      setErrors(prev => ({...prev, dateRange: "Год окончания не может быть раньше года начала"}));
+      return false;
     }
+    setErrors(prev => ({...prev, dateRange: ""}));
+    return true;
+  };
+
+  const handleYearBlur = (field) => {
+    setDirtyFields({...dirtyFields, [field]: true});
+    validateYears();
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     let validationErrors = {};
+
+    if (!validateYears()) {
+      setNotification({ message: "Исправьте все ошибки", type: "error" });
+      setNotification(null);
+      return;
+    }
   
     if (!header.trim()) {
       validationErrors.header = "Заголовок обязателен.";
@@ -355,6 +376,7 @@ function PostEdit({setNotification}) {
         return item;
       }),
       tags: tagIds,
+      reviewer: reviewer.trim()
     };
   
     console.log("Данные для обновления:", postData);
@@ -532,6 +554,7 @@ function PostEdit({setNotification}) {
                   min={leftDateFormat === 'full' ? '1779-01-01' : '1779'}
                   max={leftDateFormat === 'full' ? new Date().toISOString().split('T')[0] : new Date().getFullYear()}
                   onChange={(e) => leftDateFormat === 'full' ? setLeftDate(e.target.value) : handleLeftYearChange(e)}
+                  onBlur={() => leftDateFormat === 'year' && handleYearBlur('leftYear')}
                   required
                   className="date-input"
                   placeholder={leftDateFormat === 'year' ? "Год" : ""}
@@ -569,6 +592,7 @@ function PostEdit({setNotification}) {
                   min={rightDateFormat === 'full' ? leftDate || '1779-01-01' : leftYear || '1779'}
                   max={rightDateFormat === 'full' ? new Date().toISOString().split('T')[0] : new Date().getFullYear()}
                   onChange={(e) => rightDateFormat === 'full' ? setRightDate(e.target.value) : handleRightYearChange(e)}
+                  onBlur={() => rightDateFormat === 'year' && handleYearBlur('rightYear')}
                   className="date-input"
                   placeholder={rightDateFormat === 'year' ? "Год" : ""}
                 />
@@ -597,7 +621,8 @@ function PostEdit({setNotification}) {
           </div>
         </div>
   
-        <div className="form-group">
+        <div className="form-group tags-reviewer-container">
+        <div className="tags-section">
           <div className="tags-container">
             {tags.map((tag, index) => (
               <div key={index} className="tag">
@@ -612,6 +637,19 @@ function PostEdit({setNotification}) {
             Добавить теги
           </button>
         </div>
+        
+        <div className="reviewer-section">
+          <label htmlFor="reviewer">Рецензисты</label>
+          <input
+            type="text"
+            id="reviewer"
+            value={reviewer}
+            placeholder="Введите имя рецензиста"
+            onChange={(e) => setReviewer(e.target.value)}
+            className="reviewer-input"
+          />
+        </div>
+      </div>
   
         <button type="submit" className="submit-button">
           Сохранить изменения

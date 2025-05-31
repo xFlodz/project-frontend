@@ -9,7 +9,8 @@ import "./Posts.css";
 function Posts() {
   const postsPerPage = 8;
   const [currentPage, setCurrentPage] = useState(1);
-  const [postsData, setPostsData] = useState([]);
+  const [allPosts, setAllPosts] = useState([]);
+  const [filteredPosts, setFilteredPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState({
     dateFilterType: 'creation',
@@ -18,13 +19,18 @@ function Posts() {
     endDate: ''
   });
 
+  const handleSearchResults = (results) => {
+    setFilteredPosts(results);
+    setCurrentPage(1);
+  };
+
   useEffect(() => {
     const fetchPosts = async () => {
       try {
         const data = await getAllPosts(filters);
-        setPostsData(data);
+        setAllPosts(data);
+        setFilteredPosts(data);
         setLoading(false);
-        console.log(data)
       } catch (error) {
         console.error("Ошибка при получении постов:", error);
         setLoading(false);
@@ -34,8 +40,8 @@ function Posts() {
     fetchPosts();
   }, [filters]);
 
-  const totalPages = Math.ceil(postsData.length / postsPerPage);
-  const currentPosts = postsData.slice((currentPage - 1) * postsPerPage, currentPage * postsPerPage);
+  const totalPages = Math.ceil(filteredPosts.length / postsPerPage);
+  const currentPosts = filteredPosts.slice((currentPage - 1) * postsPerPage, currentPage * postsPerPage);
 
   if (loading) {
     return <LoadingSpinner />;
@@ -47,6 +53,7 @@ function Posts() {
         <Filter
           filters={filters}
           setFilters={setFilters}
+          onSearchResults={handleSearchResults} 
         />
       </div>
 

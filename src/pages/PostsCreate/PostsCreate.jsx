@@ -27,6 +27,11 @@ function CreatePost() {
   const [errors, setErrors] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [lead, setLead] = useState("");
+  const [reviewer, setReviewer] = useState('');
+  const [dirtyFields, setDirtyFields] = useState({
+    leftYear: false,
+    rightYear: false
+  });
 
   const handleMainImageChange = (e) => {
     const file = e.target.files[0];
@@ -161,6 +166,11 @@ const handleSubmit = async (e) => {
     e.preventDefault();
     let validationErrors = {};
 
+    setDirtyFields({leftYear: true, rightYear: true});
+    if (!validateYears()) {
+      return;
+    }
+
     if (!header.trim()) validationErrors.header = "Заголовок обязателен.";
     if (!lead.trim()) validationErrors.lead = "Лид обязателен.";
 
@@ -210,7 +220,8 @@ const handleSubmit = async (e) => {
       right_date: rightDate || rightYear ? formatDate(rightDate, rightYear, rightDateFormat) : "",
       content,
       tags: tagIds,
-      lead
+      lead,
+      reviewer: reviewer.trim()
     };
 
     console.log("Данные для отправки:", postData);
@@ -239,19 +250,28 @@ const handleSubmit = async (e) => {
   const handleLeftYearChange = (e) => {
     const value = e.target.value;
     setLeftYear(value);
-    if (rightDateFormat === 'year' && rightYear && value && rightYear < value) {
-      setRightYear(value);
-    }
+    setDirtyFields({...dirtyFields, leftYear: false});
   };
 
   const handleRightYearChange = (e) => {
     const value = e.target.value;
-    if (leftDateFormat === 'year' && leftYear && value && value < leftYear) {
-      setErrors((prev) => ({...prev, dateRange: "Год окончания не может быть раньше года начала"}));
-    } else {
-      setErrors((prev) => ({...prev, dateRange: ""}));
-      setRightYear(value);
+    setRightYear(value);
+    setDirtyFields({...dirtyFields, rightYear: false});
+  };
+
+  const validateYears = () => {
+    if (leftDateFormat === 'year' && rightDateFormat === 'year' && 
+        leftYear && rightYear && parseInt(rightYear) < parseInt(leftYear)) {
+      setErrors(prev => ({...prev, dateRange: "Год окончания не может быть раньше года начала"}));
+      return false;
     }
+    setErrors(prev => ({...prev, dateRange: ""}));
+    return true;
+  };
+
+  const handleYearBlur = (field) => {
+    setDirtyFields({...dirtyFields, [field]: true});
+    validateYears();
   };
 
   return (
@@ -415,6 +435,7 @@ const handleSubmit = async (e) => {
                   min={leftDateFormat === 'full' ? '1779-01-01' : '1779'}
                   max={leftDateFormat === 'full' ? new Date().toISOString().split('T')[0] : new Date().getFullYear()}
                   onChange={(e) => leftDateFormat === 'full' ? setLeftDate(e.target.value) : handleLeftYearChange(e)}
+                  onBlur={() => leftDateFormat === 'year' && handleYearBlur('leftYear')}
                   required
                   className="date-input"
                   placeholder={leftDateFormat === 'year' ? "Год" : ""}
@@ -452,6 +473,7 @@ const handleSubmit = async (e) => {
                   min={rightDateFormat === 'full' ? leftDate || '1779-01-01' : leftYear || '1779'}
                   max={rightDateFormat === 'full' ? new Date().toISOString().split('T')[0] : new Date().getFullYear()}
                   onChange={(e) => rightDateFormat === 'full' ? setRightDate(e.target.value) : handleRightYearChange(e)}
+                  onBlur={() => rightDateFormat === 'year' && handleYearBlur('rightYear')}
                   className="date-input"
                   placeholder={rightDateFormat === 'year' ? "Год" : ""}
                 />
@@ -480,28 +502,35 @@ const handleSubmit = async (e) => {
           </div>
         </div>
   
-        <div className="form-group">
-          <div className="tags-container">
-            {tags.map((tag, index) => (
-              <div key={index} className="tag">
-                {typeof tag === 'object' ? tag.name : tag}
-                <button type="button" onClick={() => removeTag(index)} className="delete-tag-button">
-                  ×
-                </button>
-              </div>
-            ))}
+        <div className="form-group tags-reviewer-container">
+          <div className="tags-section">
+            <div className="tags-container">
+              {tags.map((tag, index) => (
+                <div key={index} className="tag">
+                  {typeof tag === 'object' ? tag.name : tag}
+                  <button type="button" onClick={() => removeTag(index)} className="delete-tag-button">
+                    ×
+                  </button>
+                </div>
+              ))}
+            </div>
+            <button type="button" onClick={() => setIsModalOpen(true)} className="add-button">
+              Добавить теги
+            </button>
           </div>
-          <button type="button" onClick={() => setIsModalOpen(true)} className="add-button">
-            Добавить теги
-          </button>
+          
+          <div className="reviewer-section">
+            <label htmlFor="reviewer">Рецензисты</label>
+            <input
+              type="text"
+              id="reviewer"
+              value={reviewer}
+              placeholder="Введите имя рецензиста"
+              onChange={(e) => setReviewer(e.target.value)}
+              className="reviewer-input"
+            />
+          </div>
         </div>
-        {isLoading && (
-          <p className="loading-message">Создание поста...</p>
-        )}
-
-        {showImageEnhanceHint && (
-          <p className="hint-message">Изображение слишком маленькое, повышение качества...</p>
-        )}
   
         <button type="submit" className="submit-button">
           Создать пост

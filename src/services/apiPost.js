@@ -39,6 +39,26 @@ export const getAllPosts = async ({ dateFilterType, tagsFilter, startDate, endDa
   }
 };
 
+export const searchPosts = async ({ query, dateFilterType, tagsFilter, startDate, endDate }) => {
+  try {
+    const response = await axiosInstance.post('/search', { 
+      query,
+      dateFilterType,
+      tagsFilter,
+      startDate,
+      endDate
+    }, {
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('refresh_token')}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Ошибка при поиске постов:', error.response?.data || error.message);
+    throw error.response?.data || error.message;
+  }
+};
+
 export const getPostByAddress = async (postAddress) => {
   try {
     const response = await axiosInstance.get(`/get_post/${postAddress}`, {
@@ -67,7 +87,6 @@ export const updatePost = async (postId, updatedData) => {
   }
 };
 
-// Функция удаления поста
 export const deletePost = async (postAddress) => {
   try {
     await axiosInstance.delete(`/delete/${postAddress}`, {
@@ -109,7 +128,7 @@ export const getAllNotApprovedPosts = async ({ dateFilterType, tagsFilter, start
       endDate,
     }, {
       headers: {
-        'Authorization': `Bearer ${localStorage.getItem('refresh_token')}`,  // Добавьте токен в заголовок
+        'Authorization': `Bearer ${localStorage.getItem('refresh_token')}`,
       },
     });
     return response.data;
@@ -139,21 +158,37 @@ export const downloadQrCode = async (postAddress) => {
       headers: {
         'Authorization': `Bearer ${localStorage.getItem('refresh_token')}`,
       },
-      responseType: 'blob', // Ожидаем бинарные данные (файл Word)
+      responseType: 'blob',
     });
 
-    // Создаем URL для блоба и инициируем скачивание
     const url = window.URL.createObjectURL(new Blob([response.data]));
     const link = document.createElement('a');
     link.href = url;
-    link.setAttribute('download', `qr_code_${postAddress}.docx`); // Указываем имя файла с расширением .docx
+    link.setAttribute('download', `qr_code_${postAddress}.docx`);
     document.body.appendChild(link);
     link.click();
 
-    // Убираем ссылку после скачивания
     document.body.removeChild(link);
   } catch (error) {
     console.error('Ошибка при загрузке QR кода:', error.response?.data || error.message);
+    throw error.response?.data || error.message;
+  }
+};
+
+export const getSearchSuggestions = async (query, limit = 5) => {
+  try {
+    const response = await axiosInstance.get('/search/suggest', {
+      params: {
+        query,
+        limit
+      },
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('refresh_token')}`,
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Ошибка при получении подсказок:', error.response?.data || error.message);
     throw error.response?.data || error.message;
   }
 };

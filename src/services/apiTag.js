@@ -1,8 +1,7 @@
 import axios from 'axios';
 
-const API_URL = 'http://127.0.0.1:5002/api/tag';  // Убедитесь, что у вас правильный URL Flask API для тегов
+const API_URL = 'http://127.0.0.1:5002/api/tag';
 
-// Создаем экземпляр axios для удобства настройки
 const axiosInstance = axios.create({
   baseURL: API_URL,
   headers: {
@@ -11,12 +10,11 @@ const axiosInstance = axios.create({
   withCredentials: true,
 });
 
-// Функция для создания тега
 export const createTag = async (tagData) => {
   try {
     const response = await axiosInstance.post('/create', tagData, {
       headers: {
-        'Authorization': `Bearer ${localStorage.getItem('refresh_token')}`,  // Если необходимо отправлять токен
+        'Authorization': `Bearer ${localStorage.getItem('refresh_token')}`,
       },
     });
     return response.data;
@@ -26,12 +24,11 @@ export const createTag = async (tagData) => {
   }
 };
 
-// Функция для удаления тега
 export const deleteTag = async (tagId) => {
   try {
     const response = await axiosInstance.delete(`/delete/${tagId}`, {
       headers: {
-        'Authorization': `Bearer ${localStorage.getItem('refresh_token')}`,  // Если необходимо отправлять токен
+        'Authorization': `Bearer ${localStorage.getItem('refresh_token')}`,
       },
     });
     return response.data;
@@ -41,12 +38,11 @@ export const deleteTag = async (tagId) => {
   }
 };
 
-// Функция для получения всех тегов
 export const getAllTags = async () => {
   try {
     const response = await axiosInstance.get('/get_all_tags', {
       headers: {
-        'Authorization': `Bearer ${localStorage.getItem('refresh_token')}`,  // Если необходимо отправлять токен
+        'Authorization': `Bearer ${localStorage.getItem('refresh_token')}`, 
       },
     });
     return response.data;

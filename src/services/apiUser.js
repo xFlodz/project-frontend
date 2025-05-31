@@ -1,8 +1,7 @@
 import axios from 'axios';
 
-const API_URL = 'http://127.0.0.1:5001/api/user';  // Убедитесь, что у вас правильный URL Flask API
+const API_URL = 'http://127.0.0.1:5001/api/user';
 
-// Создаем экземпляр axios для удобства настройки
 const axiosInstance = axios.create({
   baseURL: API_URL,
   headers: {
@@ -11,7 +10,6 @@ const axiosInstance = axios.create({
   withCredentials: true,
 });
 
-// Функция для регистрации пользователя
 export const registerUser = async (userData) => {
   try {
     const response = await axiosInstance.post('/register', userData);
@@ -22,7 +20,6 @@ export const registerUser = async (userData) => {
   }
 };
 
-// Функция для логина пользователя
 export const loginUser = async (userData) => {
   try {
     const response = await axiosInstance.post('/login', userData);
@@ -41,7 +38,6 @@ export const loginUser = async (userData) => {
   }
 };
 
-// Функция для обновления токена
 export const refreshAuthToken = async () => {
   try {
     const response = await axiosInstance.post('/refresh', null, {
@@ -61,7 +57,6 @@ export const refreshAuthToken = async () => {
   }
 };
 
-// Функция для выхода пользователя
 export const logoutUser = async () => {
   localStorage.removeItem('access_token');
   localStorage.removeItem('refresh_token');
@@ -69,7 +64,6 @@ export const logoutUser = async () => {
   localStorage.removeItem('id')
 };
 
-// Функция для получения всех редакторов
 export const getAllEditors = async () => {
   try {
     const response = await axiosInstance.get('/get_editors', {
@@ -85,7 +79,6 @@ export const getAllEditors = async () => {
   }
 };
 
-// Функция для добавления нового редактора
 export const createEditor = async (editorEmail) => {
   try {
     const response = await axiosInstance.post('/add_editor', { email: editorEmail }, {
@@ -146,7 +139,6 @@ export const changePassword = async (passwordData) => {
   }
 };
 
-// Функция для обновления профиля
 export const updateProfile = async (profileData) => {
   try {
     const response = await axiosInstance.post('/update_profile', profileData, {

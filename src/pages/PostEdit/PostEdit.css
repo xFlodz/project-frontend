@@ -340,6 +340,34 @@ input::placeholder {
   opacity: 1;
 }
 
+.tags-reviewer-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 20px;
+}
+
+.tags-section {
+  flex: 1;
+}
+
+.reviewer-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.reviewer-section label {
+  margin-bottom: 5px;
+}
+
+.reviewer-input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
 @media (max-width: 768px) {
     .post-edit-page {
         width: 90%;
@@ -394,6 +422,14 @@ input::placeholder {
     }
 
     .react-datepicker-wrapper {
+        width: 100%;
+    }
+
+    .tags-reviewer-container {
+        gap: 10px;
+    }
+    
+    .reviewer-section {
         width: 100%;
     }
 }

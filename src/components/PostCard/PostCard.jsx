@@ -7,7 +7,7 @@ function PostCard({ post }) {
   const [isHovered, setIsHovered] = useState(false);
   const createdAt = new Date(post.created_at);
 
-  const postText = post.lead
+  const postText = post.lead;
 
   return (
     <Link
@@ -34,12 +34,8 @@ function PostCard({ post }) {
           <p className="post-card-warning">Пост не подтвержден</p>
         )}
 
-        <p className="post-card-date">
-          Дата создания: {createdAt.toLocaleDateString()}
-        </p>
-
-        <p className="post-card-author">
-          Автор: <span className="author-name">{post.author}</span>
+        <p className={`post-card-lead`}>
+          {parse(postText)}
         </p>
 
         <div className="post-card-image-wrapper">
@@ -49,10 +45,14 @@ function PostCard({ post }) {
             className={`post-card-image ${isHovered ? "post-card-image-visible" : ""}`}
           />
         </div>
-
-        <p className={`post-card-text ${isHovered ? "post-card-text-visible" : ""}`}>
-          {parse(postText.length > 100 ? postText.substring(0, 100) + "..." : postText)}
-        </p>
+        <div className="post-card-footer">
+          <p className="post-card-date">
+            Дата создания: {createdAt.toLocaleDateString()}
+          </p>
+          <p className="post-card-author">
+            Автор: <span className="author-name">{post.author}</span>
+          </p>
+        </div>
       </div>
     </Link>
   );

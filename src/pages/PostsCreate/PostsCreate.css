@@ -331,9 +331,8 @@ button.submit-button:hover {
   min-width: 0;
 }
 
-/* Стили для контейнера input */
 .input-container {
-  height: 46px; /* Фиксированная высота */
+  height: 46px;
   display: flex;
   align-items: center;
 }
@@ -346,11 +345,10 @@ button.submit-button:hover {
   border-radius: 8px;
   box-sizing: border-box;
   text-align: left;
-  height: 46px; /* Фиксированная высота */
+  height: 46px;
   line-height: 1.5;
 }
 
-/* Группа радиокнопок */
 .radio-group {
   display: flex;
   justify-content: center;
@@ -373,7 +371,6 @@ button.submit-button:hover {
   margin: 0;
 }
 
-/* Разделитель между датами */
 .date-separator {
   font-size: 18px;
   color: #555;
@@ -383,10 +380,37 @@ button.submit-button:hover {
   align-self: center;
 }
 
-/* Placeholder для поля года */
 input::placeholder {
   color: #999;
   opacity: 1;
+}
+
+.tags-reviewer-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 20px;
+}
+
+.tags-section {
+  flex: 1;
+}
+
+.reviewer-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.reviewer-section label {
+  margin-bottom: 5px;
+}
+
+.reviewer-input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
 }
 
 
@@ -422,5 +446,13 @@ input::placeholder {
 
     .text-editor-container .ql-editor {
         min-height: 120px;
+    }
+
+    .tags-reviewer-container {
+        gap: 10px;
+    }
+    
+    .reviewer-section {
+        width: 100%;
     }
 }
