@@ -29,6 +29,7 @@
   flex-wrap: wrap;
   gap: 8px;
   justify-content: center;
+  margin-right: 12px;
 }
 
 .date-range-filter button {

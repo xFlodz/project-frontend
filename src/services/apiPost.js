@@ -157,9 +157,15 @@ export const downloadQrCode = async (postAddress) => {
     const response = await axiosInstance.get(`/get_qr_code/${postAddress}`, {
       headers: {
         'Authorization': `Bearer ${localStorage.getItem('refresh_token')}`,
+        'Accept': 'application/octet-stream'
       },
       responseType: 'blob',
     });
+
+    const contentDisposition = response.headers['content-disposition'];
+    const filename = contentDisposition 
+      ? contentDisposition.split('filename=')[1].replace(/"/g, '')
+      : `qr_code_${postAddress}.docx`;
 
     const url = window.URL.createObjectURL(new Blob([response.data]));
     const link = document.createElement('a');
@@ -169,6 +175,7 @@ export const downloadQrCode = async (postAddress) => {
     link.click();
 
     document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
   } catch (error) {
     console.error('Ошибка при загрузке QR кода:', error.response?.data || error.message);
     throw error.response?.data || error.message;
