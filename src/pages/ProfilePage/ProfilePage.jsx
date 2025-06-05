@@ -258,10 +258,15 @@ function ProfilePage() {
         <div className="profile-info">
           <p><b>Роль:</b> {getRoleDisplay(userData.role)}</p>
 
-          <RenderField label="Имя" name="name" required {...sharedProps} />
-          <RenderField label="Фамилия" name="surname" required {...sharedProps} />
-          <RenderField label="Отчество" name="thirdname" {...sharedProps} />
-
+          {(isOwner) ? (
+            <>
+              <RenderField label="Имя" name="name" required {...sharedProps} />
+              <RenderField label="Фамилия" name="surname" required {...sharedProps} />
+              <RenderField label="Отчество" name="thirdname" {...sharedProps} />
+            </>
+          ) : (
+            <p><b>ФИО:</b> {`${userData.surname} ${userData.name}${userData.thirdname ? ' ' + userData.thirdname : ''}`}</p>
+          )}
           {(isOwner) && (
             <>
               <RenderField label="Email" name="email" type="email" required {...sharedProps} />
