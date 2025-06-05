@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getAllPosts } from "../../services/apiPost"; 
+import { getAllPosts, searchPosts } from "../../services/apiPost"; 
 import PostCard from "../../components/PostCard/PostCard";
 import Filter from "../../components/Filter/Filter";
 import Pagination from "../../components/Pagination/Pagination";
@@ -12,6 +12,7 @@ function Posts() {
   const [allPosts, setAllPosts] = useState([]);
   const [filteredPosts, setFilteredPosts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
   const [filters, setFilters] = useState({
     dateFilterType: 'creation',
     tagsFilter: [],
@@ -19,29 +20,55 @@ function Posts() {
     endDate: ''
   });
 
+  const handleFilterChange = (newFilters) => {
+    setFilters(newFilters);
+  };
+
+  const handleSearchQueryChange = (query) => {
+    setSearchQuery(query);
+  };
+
   const handleSearchResults = (results) => {
     setFilteredPosts(results);
     setCurrentPage(1);
   };
 
-  useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        const data = await getAllPosts(filters);
-        setAllPosts(data);
-        setFilteredPosts(data);
-        setLoading(false);
-      } catch (error) {
-        console.error("Ошибка при получении постов:", error);
-        setLoading(false);
+  const handleApplyFilters = async (filters, searchQuery) => {
+    try {
+      let data;
+      if (searchQuery && searchQuery.trim() !== "") {
+        data = await searchPosts({
+          query: searchQuery,
+          dateFilterType: filters.dateFilterType,
+          tagsFilter: filters.tagsFilter,
+          startDate: filters.startDate,
+          endDate: filters.endDate,
+        });
+      } else {
+        data = await getAllPosts({
+          dateFilterType: filters.dateFilterType,
+          tagsFilter: filters.tagsFilter,
+          startDate: filters.startDate,
+          endDate: filters.endDate,
+        });
       }
-    };
 
-    fetchPosts();
-  }, [filters]);
+      setFilteredPosts(data);
+      setCurrentPage(1);
+    } catch (error) {
+      console.error("Ошибка при получении постов:", error);
+    }
+  };
 
-  const totalPages = Math.ceil(filteredPosts.length / postsPerPage);
-  const currentPosts = filteredPosts.slice((currentPage - 1) * postsPerPage, currentPage * postsPerPage);
+    useEffect(() => {
+      setLoading(true);
+      handleApplyFilters(filters, "").finally(() => setLoading(false));
+    }, [filters]);
+
+  const totalPages = Math.ceil(filteredPosts?.length / postsPerPage);
+  const currentPosts = Array.isArray(filteredPosts)
+  ? filteredPosts.slice((currentPage - 1) * postsPerPage, currentPage * postsPerPage)
+  : [];
 
   if (loading) {
     return <LoadingSpinner />;
@@ -52,8 +79,10 @@ function Posts() {
       <div className="filters-container">
         <Filter
           filters={filters}
-          setFilters={setFilters}
-          onSearchResults={handleSearchResults} 
+          setFilters={handleFilterChange}
+          searchQuery={searchQuery}
+          setSearchQuery={handleSearchQueryChange}
+          onApplyFilters={handleApplyFilters}
         />
       </div>
 
@@ -67,9 +96,13 @@ function Posts() {
         </div>
 
         <div className="posts-grid">
-          {currentPosts.map((post) => (
-            <PostCard key={post.id} post={post} />
-          ))}
+          {Array.isArray(currentPosts) && currentPosts.length > 0 ? (
+            currentPosts.map((post) => (
+              <PostCard key={post.id} post={post} />
+            ))
+          ) : (
+            <p></p>
+          )}
         </div>
       </div>
     </div>

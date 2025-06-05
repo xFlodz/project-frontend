@@ -3,25 +3,20 @@ import "./Filter.css";
 import { getAllTags } from "../../services/apiTag";
 import { getAllPosts, searchPosts, getSearchSuggestions } from "../../services/apiPost";
 
-function Filter({ filters, setFilters, onSearchResults  }) {
+function Filter({ filters, setFilters, searchQuery, setSearchQuery, onApplyFilters }) {
   const { dateFilterType, tagsFilter, startDate, endDate } = filters;
   const [tags, setTags] = useState([]);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const [isFilterVisible, setIsFilterVisible] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const searchRef = useRef(null);
   const [lastSelectedSuggestion, setLastSelectedSuggestion] = useState(null);
   const [lastSelectionTime, setLastSelectionTime] = useState(0);
   const timerRef = useRef(null);
+  const [searchInput, setSearchInput] = useState("");
+  const [localFilters, setLocalFilters] = useState(filters);
 
-  const [localFilters, setLocalFilters] = useState({
-    dateFilterType,
-    tagsFilter,
-    startDate,
-    endDate,
-  });
 
   useEffect(() => {
     const fetchTags = async () => {
@@ -89,33 +84,6 @@ function Filter({ filters, setFilters, onSearchResults  }) {
     }));
   };
 
-  const handleApplyFilters = async () => {
-    setShowSuggestions(false);
-    
-    try {
-      let response;
-      if (searchQuery) {
-        response = await searchPosts({
-          query: searchQuery,
-          dateFilterType: localFilters.dateFilterType,
-          tagsFilter: localFilters.tagsFilter,
-          startDate: localFilters.startDate,
-          endDate: localFilters.endDate,
-        });
-        if (typeof onSearchResults === 'function') {
-          onSearchResults(response);
-        }
-      } else {
-        if (typeof onSearchResults === 'function') {
-          onSearchResults(null);
-        }
-      }
-      
-      setFilters(localFilters);
-    } catch (error) {
-      console.error("Ошибка при получении постов:", error);
-    }
-  };
 
   const handleSuggestionClick = (suggestion, e) => {
     e.stopPropagation();
@@ -132,6 +100,12 @@ function Filter({ filters, setFilters, onSearchResults  }) {
     }
   };
 
+  const applyFiltersLocally = () => {
+    setShowSuggestions(false);
+    onApplyFilters(localFilters, searchQuery);
+    setFilters(localFilters);
+  };
+
   const handleInputFocus = () => {
     const isSameAsLastSelected = searchQuery === lastSelectedSuggestion;
     const isTooSoon = Date.now() - lastSelectionTime < 1000;
@@ -141,21 +115,37 @@ function Filter({ filters, setFilters, onSearchResults  }) {
     }
   };
 
+  function stripHtmlTags(str) {
+    return str.replace(/<[^>]*>?/gm, '');
+  }
 
-const handleKeyDown = (e) => {
-  if (e.key === 'Enter') {
-    setShowSuggestions(false);
-    handleApplyFilters();
-  } else if (e.key === 'Escape') {
-    setShowSuggestions(false);
-    if (searchRef.current) {
-      const input = searchRef.current.querySelector('input');
-      if (input) {
-        input.blur();
+  function trimSuggestion(text) {
+    const cleanText = stripHtmlTags(text);
+    return cleanText.length > 20 ? cleanText.slice(0, 20) : cleanText;
+  }
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      setShowSuggestions(false);
+      handleApplyFilters();
+    } else if (e.key === 'Escape') {
+      setShowSuggestions(false);
+      if (searchRef.current) {
+        const input = searchRef.current.querySelector('input');
+        if (input) {
+          input.blur();
+        }
       }
     }
-  }
-};
+  };
+
+  const handleInputChange = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
+  const handleApplyClick = () => {
+    onApplyFilters(filters, searchQuery);
+  };
 
   return (
     <div className="filter-container">
@@ -173,18 +163,15 @@ const handleKeyDown = (e) => {
             type="text"
             placeholder="Поиск по статьям..."
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={handleInputChange}
             onKeyDown={handleKeyDown}
             onFocus={handleInputFocus}
           />
           {showSuggestions && suggestions.length > 0 && (
             <ul className="suggestions-dropdown">
               {suggestions.map((suggestion, index) => (
-                <li 
-                  key={index}
-                  onClick={(e) => handleSuggestionClick(suggestion, e)}
-                >
-                  {suggestion}
+                <li key={index} onClick={(e) => handleSuggestionClick(trimSuggestion(suggestion), e)}>
+                  {trimSuggestion(suggestion)}
                 </li>
               ))}
             </ul>
@@ -228,7 +215,7 @@ const handleKeyDown = (e) => {
             </label>
           ))}
         </div>
-        <button onClick={handleApplyFilters}>Найти</button>
+        <button onClick={applyFiltersLocally}>Найти</button>
       </div>
     </div>
   );

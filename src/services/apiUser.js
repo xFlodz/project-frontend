@@ -4,9 +4,6 @@ const API_URL = 'http://127.0.0.1:5001/api/user';
 
 const axiosInstance = axios.create({
   baseURL: API_URL,
-  headers: {
-    'Content-Type': 'application/json',
-  },
   withCredentials: true,
 });
 
@@ -79,6 +76,21 @@ export const getAllEditors = async () => {
   }
 };
 
+export const approveUser = async (userID) => {
+  try {
+    const response = await axiosInstance.post('/approve_user', { user_id: userID }, {
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('refresh_token')}`,
+      },
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error('Ошибка при одобрении пользователя:', error.response?.data || error.message);
+    throw error.response?.data || error.message;
+  }
+};
+
 export const createEditor = async (editorEmail) => {
   try {
     const response = await axiosInstance.post('/add_editor', { email: editorEmail }, {
@@ -93,22 +105,6 @@ export const createEditor = async (editorEmail) => {
     throw error.response?.data || error.message;
   }
 };
-
-export const deleteEditor = async (editorEmail) => {
-  try {
-    const response = await axiosInstance.post('/delete_editor', { email: editorEmail }, {
-      headers: {
-        'Authorization': `Bearer ${localStorage.getItem('refresh_token')}`,
-      },
-    });
-
-    return response.data;
-  } catch (error) {
-    console.error('Ошибка при удалении редактора:', error.response?.data || error.message);
-    throw error.response?.data || error.message;
-  }
-};
-
 
 export const getUserById = async (id) => {
   try {
@@ -145,10 +141,41 @@ export const updateProfile = async (profileData) => {
       headers: {
         'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
       },
+      withCredentials: true,
     });
     return response.data;
   } catch (error) {
     console.error('Ошибка при обновлении профиля:', error.response?.data || error.message);
+    throw error.response?.data || error.message;
+  }
+};
+
+export const changeRole = async (userId, newRole) => {
+  try {
+    const response = await axiosInstance.post('/change_role', { userId, newRole }, {
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('refresh_token')}`,
+      },
+      withCredentials: true,
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Ошибка при обновлении профиля:', error.response?.data || error.message);
+    throw error.response?.data || error.message;
+  }
+};
+
+export const deleteUser = async (userId) => {
+  try {
+    const response = await axiosInstance.post('/delete_user', { userId: userId }, {
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('refresh_token')}`,
+      },
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error('Ошибка при удалении редактора:', error.response?.data || error.message);
     throw error.response?.data || error.message;
   }
 };

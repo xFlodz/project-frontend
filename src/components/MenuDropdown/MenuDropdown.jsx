@@ -32,8 +32,8 @@ function MenuDropdown({ role, id, setIsMenuOpen }) {
         <>
           <li><a href="/">Все посты</a></li>
           <li><a href="/timeline">Таймлайн</a></li>
+          <li><a href="/authors">Наши авторы</a></li>
           <li><a href="/create_new_tag">Добавить теги</a></li>
-          <li><a href="/create_new_editor">Добавить редакторов</a></li>
           <li><a href="/create_post">Добавить пост</a></li>
           <li><a href="/my_posts">Мои посты</a></li>
           <li><a href="/approve_posts">Одобрение постов</a></li>
@@ -46,6 +46,7 @@ function MenuDropdown({ role, id, setIsMenuOpen }) {
         <>
           <li><a href="/">Все посты</a></li>
           <li><a href="/timeline">Таймлайн</a></li>
+          <li><a href="/authors">Наши авторы</a></li>
           <li><a href="/create_post">Добавить пост</a></li>
           <li><a href="/my_posts">Мои посты</a></li>
           <li><a href="/approve_posts">Одобрение постов</a></li>
@@ -58,6 +59,7 @@ function MenuDropdown({ role, id, setIsMenuOpen }) {
         <>
           <li><a href="/">Все посты</a></li>
           <li><a href="/timeline">Таймлайн</a></li>
+          <li><a href="/authors">Наши авторы</a></li>
           <li><a href="/create_post">Добавить пост</a></li>
           <li><a href="/my_posts">Мои посты</a></li>
           <li><a href={`/user/${id}`}>Мой профиль</a></li>
@@ -68,6 +70,7 @@ function MenuDropdown({ role, id, setIsMenuOpen }) {
       <>
         <li><a href="/">Все посты</a></li>
         <li><a href="/timeline">Таймлайн</a></li>
+        <li><a href="/authors">Наши авторы</a></li>
       </>
     );
   };

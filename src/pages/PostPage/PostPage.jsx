@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
-import { getPostByAddress, deletePost, approvePost, downloadQrCode } from "../../services/apiPost";
+import { getPostByAddress, deletePost, approvePost } from "../../services/apiPost";
 import ImageModal from "../../components/ImageModal/ImageModal";
 import ConfirmModal from "../../components/ConfirmModal/ConfirmModal";
 import Notification from "../../components/Notification/Notification";
@@ -79,14 +79,6 @@ const PostPage = () => {
             setNotification({ message: "Ошибка при одобрении поста.", type: "error" });
         }
     };
-
-    const handleDownloadQRCode = async () => {
-        try {
-          await downloadQrCode(post.address); 
-        } catch (err) {
-          setNotification({ message: "Ошибка при загрузке QR кода", type: "error" });
-        }
-      };
 
     if (loading) return <LoadingSpinner />;;
     if (error) return <div className="error">{error}</div>;
@@ -167,6 +159,7 @@ const PostPage = () => {
                 <div className="date-right">
                     <p><strong>Дата создания:</strong> {new Date(post.created_at).toLocaleString()}</p>
                     <p><strong>Автор:</strong> {post.author || "Аноним"}</p>
+                    <p><strong>Рецезент:</strong> {post.reviewer || "Аноним"}</p>
                 </div>
             </div>
 
@@ -177,9 +170,6 @@ const PostPage = () => {
                         <button className="approve-post-button" onClick={handleApproveClick}>Одобрить</button>
                     )}
                     <button className="delete-post-button" onClick={handleDeleteClick}>Удалить</button>
-                    <button className="qr-code-button" onClick={handleDownloadQRCode}>
-                        Скачать QR-код
-                    </button>
                 </div>
             )}
 

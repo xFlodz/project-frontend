@@ -5,13 +5,13 @@ import Notification from "./components/Notification/Notification";
 import Posts from "./pages/Posts/Posts";
 import CreatePost from "./pages/PostsCreate/PostsCreate";
 import PostPage from "./pages/PostPage/PostPage";
-import EditorCreate from "./pages/EditorCreate/EditorCreate";
 import TagCreate from "./pages/TagCreate/TagCreate";
 import PostEdit from "./pages/PostEdit/PostEdit";
 import UserPostsPage from "./pages/UserPostsPage/UserPostsPage";
 import ApprovePostPage from "./pages/ApprovePostPage/ApprovePostPage";
 import TimelinePage from "./pages/TimelinePage/TimelinePage";
 import ProfilePage from "./pages/ProfilePage/ProfilePage";
+import AuthorsPage from "./pages/AuthorsPage/AuthorsPage";
 import './App.css';
 
 function App() {
@@ -36,13 +36,13 @@ function App() {
                 <Route path="/" element={<Posts />} />
                 <Route path="/create_post" element={<CreatePost />} />
                 <Route path="/post/:address" element={<PostPage />} />
-                <Route path="/create_new_editor" element={<EditorCreate />} />
                 <Route path="/create_new_tag" element={<TagCreate />} />
                 <Route path="/post/edit/:address" element={<PostEdit setNotification={setNotification}/>} />
                 <Route path="/my_posts" element={<UserPostsPage />} />
                 <Route path="/approve_posts" element={<ApprovePostPage />} />
                 <Route path="/timeline" element={<TimelinePage />} />
                 <Route path="/user/:id" element={<ProfilePage />} />
+                <Route path="/authors" element={<AuthorsPage />} />
             </Routes>
         </div>
     );

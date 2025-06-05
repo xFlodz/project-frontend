@@ -32,7 +32,7 @@ export const getAllPosts = async ({ dateFilterType, tagsFilter, startDate, endDa
       startDate,
       endDate,
     });
-    return response.data;
+    return Array.isArray(response.data) ? response.data : [];
   } catch (error) {
     console.error('Ошибка при получении всех постов:', error.response?.data || error.message);
     throw error.response?.data || error.message;
@@ -52,7 +52,7 @@ export const searchPosts = async ({ query, dateFilterType, tagsFilter, startDate
         'Authorization': `Bearer ${localStorage.getItem('refresh_token')}`,
       },
     });
-    return response.data;
+    return Array.isArray(response.data) ? response.data : [];
   } catch (error) {
     console.error('Ошибка при поиске постов:', error.response?.data || error.message);
     throw error.response?.data || error.message;
@@ -152,36 +152,6 @@ export const approvePost = async (postAddress) => {
   }
 };
 
-export const downloadQrCode = async (postAddress) => {
-  try {
-    const response = await axiosInstance.get(`/get_qr_code/${postAddress}`, {
-      headers: {
-        'Authorization': `Bearer ${localStorage.getItem('refresh_token')}`,
-        'Accept': 'application/octet-stream'
-      },
-      responseType: 'blob',
-    });
-
-    const contentDisposition = response.headers['content-disposition'];
-    const filename = contentDisposition 
-      ? contentDisposition.split('filename=')[1].replace(/"/g, '')
-      : `qr_code_${postAddress}.docx`;
-
-    const url = window.URL.createObjectURL(new Blob([response.data]));
-    const link = document.createElement('a');
-    link.href = url;
-    link.setAttribute('download', `qr_code_${postAddress}.docx`);
-    document.body.appendChild(link);
-    link.click();
-
-    document.body.removeChild(link);
-    window.URL.revokeObjectURL(url);
-  } catch (error) {
-    console.error('Ошибка при загрузке QR кода:', error.response?.data || error.message);
-    throw error.response?.data || error.message;
-  }
-};
-
 export const getSearchSuggestions = async (query, limit = 5) => {
   try {
     const response = await axiosInstance.get('/search/suggest', {
@@ -196,6 +166,21 @@ export const getSearchSuggestions = async (query, limit = 5) => {
     return response.data;
   } catch (error) {
     console.error('Ошибка при получении подсказок:', error.response?.data || error.message);
+    throw error.response?.data || error.message;
+  }
+};
+
+export const getUserPosts = async (userId) => {
+  try {
+    const response = await axiosInstance.get(`/get_user_posts`, {
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('refresh_token')}`,
+      },
+      params: {userId}
+    });
+    return Array.isArray(response.data) ? response.data : [];
+  } catch (error) {
+    console.error('Ошибка при получении постов пользователя:', error.response?.data || error.message);
     throw error.response?.data || error.message;
   }
 };

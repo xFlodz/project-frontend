@@ -37,9 +37,12 @@ const handleLogin = async (userData) => {
     if (response.access_token) {
       setIsLoggedIn(true);
       return { success: true };
-    } else {
-      return { success: false, message: "Неверный логин или пароль" };
+    } 
+    if (response.error === "Ваш профиль еще не подтвержден") {
+      return { success: false, message: "Ваш профиль еще не подтвержден" };
     }
+
+    return { success: false, message: "Неверный логин или пароль" };
   } catch (error) {
     return { success: false, message: error.message || "Ошибка входа" };
   }

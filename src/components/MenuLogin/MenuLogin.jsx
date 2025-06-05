@@ -81,7 +81,7 @@ function MenuLogin({ setIsMenuOpen, handleLogin, setNotification }) {
           {isRegistering ? (
             <MenuRegister
               setIsRegistering={setIsRegistering}
-              setIsMenuOpen={setIsMenuOpen}
+              closeMenu={closeMenu}
               handleLogin={handleLogin}
             />
           ) : (

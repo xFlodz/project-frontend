@@ -9,12 +9,71 @@
   font-family: Arial, sans-serif;
 }
 
+.profile-page-wrapper {
+  max-width: 1200px;
+  margin: 120px auto 40px;
+  padding: 0 20px;
+}
+
 .profile-container h2 {
   text-align: center;
   margin-bottom: 20px;
 }
 
+.profile-main {
+  display: flex;
+  gap: 20px;
+}
+
+.profile-image-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.profile-image {
+  width: 300px;
+  height: 300px;
+  border-radius: 15%;
+  overflow: hidden;
+  background-color: #ddd;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.profile-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.change-image-button {
+  margin-top: 10px;
+  padding: 8px 16px;
+  font-size: 14px;
+  border: none;
+  border-radius: 20px;
+  background-color: rgb(0, 26, 114);
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.change-image-button:hover {
+  background-color: #0056b3;
+}
+
+.placeholder-image {
+  font-size: 14px;
+  color: #888;
+  text-align: center;
+}
+
 .profile-info {
+  flex-grow: 1;
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -71,5 +130,188 @@
 .button-group .profile-button {
   flex: 1;
   min-width: 120px;
+}
+
+.user-posts-section {
+  max-width: 70%;
+  margin: 40px auto 0;
+  padding: 30px 0;
+}
+
+.user-posts-section h3 {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #333c56;
+  font-size: 1.8rem;
+  position: relative;
+  padding-bottom: 15px;
+}
+
+.user-posts-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.user-post-card {
+  display: block;
+  background-color: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  text-decoration: none;
+  color: inherit;
+}
+
+.user-post-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.12);
+}
+
+.post-info h4 {
+  margin: 0 0 10px 0;
+  color: #333c56;
+  font-size: 1.2rem;
+}
+
+.post-description {
+  color: #555;
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 10px;
+  font-style: italic;
+}
+
+.post-date {
+  color: #7f8c8d;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.horizontal-buttons {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+}
+
+.horizontal-buttons button {
+  flex: 1;
+  min-width: 0; 
+}
+
+.delete-user-button {
+  width: 100%;
+  max-width: 100%;
+  text-align: center;
+  font-weight: bold;
+  font-size: 0.9rem;
+  padding: 10px 16px;
+  margin: 5px 0;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  background-color: rgb(214, 0, 28);
+  color: white;
+}
+
+.delete-user-button:hover {
+  background-color: rgb(214, 0, 28);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.role-button-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.role-buttons {
+  margin: 20px 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.make-poster-button, .make-user-button {
+  width: 100%;
+  max-width: 100%;
+  text-align: center;
+  font-weight: bold;
+  font-size: 0.9rem;
+  padding: 10px 16px;
+  margin: 5px 0;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.make-poster-button {
+  background-color: #008779;
+  color: white;
+}
+
+.make-poster-button:hover {
+  background-color: #00c3cb;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.make-user-button {
+  background-color: rgb(214, 0, 28);
+  color: white;
+}
+
+.make-user-button:hover {
+  background-color: rgb(214, 0, 28);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+@media (max-width: 768px) {
+  .make-poster-button, .make-user-button {
+    max-width: 100%;
+    padding: 12px 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .profile-page-wrapper {
+    margin-top: 90px;
+    padding: 0 15px;
+  }
+  
+  .profile-container {
+    max-width: 100%;
+  }
+  
+  .user-posts-section {
+    padding: 20px;
+  }
+  
+  .user-posts-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .user-posts-section h3 {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 500px) {
+  .horizontal-buttons {
+    flex-direction: column;
+  }
+}
+
+.user-posts-section > p {
+  text-align: center;
+  color: #7f8c8d;
+  font-style: italic;
+  padding: 20px 0;
 }
 

@@ -176,12 +176,18 @@
   list-style: none;
   padding: 0;
   margin: 0;
+  max-width: 100%;
+  word-wrap: break-word;
 }
 
 .suggestions-dropdown li {
   padding: 8px 12px;
   cursor: pointer;
   border-bottom: 1px solid #eee;
+  white-space: normal;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  overflow: hidden;
 }
 
 .suggestions-dropdown li:hover {
