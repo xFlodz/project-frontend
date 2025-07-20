@@ -171,7 +171,7 @@ function Filter({ filters, setFilters, searchQuery, setSearchQuery, onApplyFilte
             <ul className="suggestions-dropdown">
               {suggestions.map((suggestion, index) => (
                 <li key={index} onClick={(e) => handleSuggestionClick(trimSuggestion(suggestion), e)}>
-                  {trimSuggestion(suggestion)}
+                  {trimSuggestion(suggestion) + "..."}
                 </li>
               ))}
             </ul>

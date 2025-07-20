@@ -18,12 +18,12 @@
 
 .left-components,
 .right-components {
-  width: 170px;
+  flex: 1 1 120px;
+  min-width: 80px;
+  max-width: 170px;
   display: flex;
   align-items: center;
   gap: 10px;
-  flex-shrink: 0;
-  min-width: 100px; 
 }
 
 .middle-components {
@@ -31,7 +31,7 @@
   align-items: center;
   justify-content: center;
   flex-grow: 1;
-  margin: 0 20px;
+  margin: 0 0px;
   box-sizing: border-box;
 }
 
@@ -62,8 +62,24 @@ button:hover {
     background-color: #0056b3;
 }
 
+@media (max-width: 680px) {
+  .left-components
+  .right-components {
+    width: auto;
+  }
+  
+  .middle-components img {
+    height: 80px;
+  }
+}
 
-@media (max-width: 425px) {
+@media (max-width: 600px) {
+  .middle-components img {
+    height: 70px;
+  }
+}
+
+@media (max-width: 540px) {
   .header-container {
     padding: 8px 10px;
   }
@@ -79,18 +95,45 @@ button:hover {
   .left-components {
     order: 3;
     margin-right: 0;
+    width: auto;
   }
 
   .right-components {
     order: 2;
-    margin-left: 40px;
+    margin-left: 120px;
+    width: auto;
   }
 
   .middle-components img {
     height: 70px;
-    margin: 0;
+    margin-left: 40;
   }
 }
+
+@media (max-width: 500px) {
+  .right-components {
+    margin-left: 80px;
+    width: auto;
+  }
+
+@media (max-width: 450px) {
+  .right-components {
+    margin-left: 40px;
+    width: auto;
+  }
+
+
+@media (max-width: 420px) {
+  .right-components {
+    margin-left: 20px;
+    width: auto;
+  }
+
+@media (max-width: 400px) {
+  .right-components {
+    margin-left: 20px;
+    width: auto;
+  }
 
 @media (max-width: 375px) {
   .middle-components img {
@@ -101,6 +144,7 @@ button:hover {
   .right-components {
     gap: 5px;
     margin-left: 20px;
+    width: auto;
   }
 }
 
@@ -113,11 +157,13 @@ button:hover {
   .menu-button {
     padding: 8px 10px;
     font-size: 12px;
+    width: auto;
   }
   
   .left-components,
   .right-components {
     gap: 5px;
     margin-left: 30px;
+    width: auto;
   }
 }

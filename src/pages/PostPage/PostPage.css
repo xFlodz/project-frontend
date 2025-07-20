@@ -186,6 +186,11 @@
     color: white;
 }
 
+.timeline-post-button {
+    background-color: #008779;
+    color: white;
+}
+
 .edit-post-button:hover {
     background-color: #0056b3;
 }

@@ -228,6 +228,7 @@ const PostPage = () => {
 
             {userRole === "poster" && (
                 <div className="post-actions-container">
+                    <button className="timeline-post-button" onClick={handleEditClick}>Добавить в таймлайн</button>
                     <button className="edit-post-button" onClick={handleEditClick}>Изменить</button>
                     {post.is_approved === false && (
                         <button className="approve-post-button" onClick={handleApproveClick}>Одобрить</button>
