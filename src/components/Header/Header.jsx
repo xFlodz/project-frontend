@@ -7,6 +7,7 @@ import MenuLogin from "../MenuLogin/MenuLogin";
 import LogoutButton from "../LogoutButton/LogoutButton";
 import { loginUser } from "../../services/apiUser";
 import Notification from "../Notification/Notification";
+import FingerprintJS from '@fingerprintjs/fingerprintjs';
 
 function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -19,6 +20,19 @@ function Header() {
     if (token) {
       setIsLoggedIn(true);
     }
+
+    const ensureFingerprint = async () => {
+      if (!localStorage.getItem("fingerprint")) {
+        const fp = await FingerprintJS.load();
+        const result = await fp.get();
+        const fingerprint = result.visitorId + localStorage.getItem("id");
+
+
+        localStorage.setItem("fingerprint", fingerprint);
+      }
+    };
+
+    ensureFingerprint();
 
     const handleScroll = () => {
       if (!isMenuOpen) {

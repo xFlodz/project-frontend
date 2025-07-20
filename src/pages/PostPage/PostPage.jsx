@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
-import { getPostByAddress, deletePost, approvePost } from "../../services/apiPost";
+import { getPostByAddress, deletePost, approvePost, LikePost } from "../../services/apiPost";
 import ImageModal from "../../components/ImageModal/ImageModal";
 import ConfirmModal from "../../components/ConfirmModal/ConfirmModal";
 import Notification from "../../components/Notification/Notification";
@@ -21,12 +21,18 @@ const PostPage = () => {
     const [isConfirmOpen, setIsConfirmOpen] = useState(false);
     const [notification, setNotification] = useState({ message: "", type: "" });
     const userRole = localStorage.getItem("role");
+    const [liked, setLiked] = useState(false);
+    const captchaRef = useRef(null);
+    const [captchaVisible, setCaptchaVisible] = useState(false);
+    const [captchaPassed, setCaptchaPassed] = useState(false);
 
     useEffect(() => {
         const fetchPost = async () => {
             try {
-                const data = await getPostByAddress(address);
+                const fingerprint = localStorage.getItem('fingerprint')
+                const data = await getPostByAddress(address, fingerprint);
                 setPost(data);
+                setLiked(data.is_liked);
             } catch (err) {
                 setError("Ошибка загрузки поста.");
             } finally {
@@ -36,6 +42,20 @@ const PostPage = () => {
 
         fetchPost();
     }, [address]);
+
+    useEffect(() => {
+    if (captchaVisible && window.turnstile && captchaRef.current) {
+        captchaRef.current.innerHTML = "";
+
+        window.turnstile.render(captchaRef.current, {
+            sitekey: "1x00000000000000000000AA",
+            callback: (token) => {
+                handleCaptchaSuccess(token);
+            },
+            theme: "light",
+        });
+    }
+}, [captchaVisible]);
 
     const handleImageClick = (src, description) => {
         setModalImage(src);
@@ -68,6 +88,41 @@ const PostPage = () => {
 
     const handleEditClick = () => {
         navigate(`/post/edit/${address}`);
+    };
+
+    const handleCaptchaSuccess = (token) => {
+        localStorage.setItem("likeCaptchaPassed", "true");
+        setCaptchaVisible(false);
+        setCaptchaPassed(true);
+        proceedLike();
+    };
+
+    const proceedLike = async () => {
+        setLiked(prev => {
+            const newLiked = !prev;
+            setPost(prevPost => ({
+                ...prevPost,
+                likes: prevPost.likes + (newLiked ? 1 : -1)
+            }));
+            return newLiked;
+        });
+
+        try {
+            await LikePost(address, localStorage.getItem('fingerprint'));
+        } catch (err) {
+            console.error('Ошибка при отправке лайка:', err);
+        }
+    };
+
+    const handleLikeClick = () => {
+        const passed = localStorage.getItem("likeCaptchaPassed") === "true";
+
+        if (!passed && !captchaPassed) {
+            setCaptchaVisible(true);
+            return;
+        }
+
+        proceedLike();
     };
 
     const handleApproveClick = async () => {
@@ -160,7 +215,15 @@ const PostPage = () => {
                     <p><strong>Дата создания:</strong> {new Date(post.created_at).toLocaleString()}</p>
                     <p><strong>Автор:</strong> {post.author || "Аноним"}</p>
                     <p><strong>Рецезент:</strong> {post.reviewer || "Аноним"}</p>
+                    <p><strong>Просмотры:</strong> {post.views || "Неизвестно"}</p>
+                    <p><strong>Отметок понравилось:</strong> {post.likes || "0"}</p>
                 </div>
+            </div>
+
+            <div className="like-button-container">
+                <button className={`like-button ${liked ? "liked" : ""}`} onClick={handleLikeClick}>
+                    ❤️ Понравилось
+                </button>
             </div>
 
             {userRole === "poster" && (
@@ -192,6 +255,15 @@ const PostPage = () => {
                     description={modalDescription}
                     onClose={handleModalClose}
                 />
+            )}
+
+            {captchaVisible && (
+                <div className="captcha-container">
+                    <div
+                        ref={captchaRef}
+                        className="cf-turnstile"
+                    ></div>
+                </div>
             )}
         </div>
     );

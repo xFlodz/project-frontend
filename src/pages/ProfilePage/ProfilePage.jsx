@@ -333,6 +333,8 @@ function ProfilePage() {
 
       <div className="user-posts-section">
           <h3>Посты пользователя</h3>
+          <h5> Среднее число просмотров: 4</h5>
+          <h5> Среднее число оценок: 2</h5>
           
           {postsLoading ? (
             <LoadingSpinner />

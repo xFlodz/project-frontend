@@ -213,6 +213,34 @@
 .approve-post-button:hover {
     background-color: #00c3cb;
 }
+.like-button-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+.like-button {
+    padding: 12px 24px;
+    color: #444;
+    background-color: white;
+    border: 2px solid black;
+    border-radius: 25px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.like-button:hover {
+    transform: scale(1.05);
+    color: black;
+    background-color: #c4c3c3
+}
+
+
+.like-button.liked {
+    background-color: rgb(214, 0, 28);
+    color: black;
+}
 
 
 @media (max-width: 768px) {

@@ -59,9 +59,10 @@ export const searchPosts = async ({ query, dateFilterType, tagsFilter, startDate
   }
 };
 
-export const getPostByAddress = async (postAddress) => {
+export const getPostByAddress = async (postAddress, fingerprint) => {
   try {
     const response = await axiosInstance.get(`/get_post/${postAddress}`, {
+      params: { fingerprint },
       headers: {
         'Authorization': `Bearer ${localStorage.getItem('refresh_token')}`,
       },
@@ -181,6 +182,21 @@ export const getUserPosts = async (userId) => {
     return Array.isArray(response.data) ? response.data : [];
   } catch (error) {
     console.error('Ошибка при получении постов пользователя:', error.response?.data || error.message);
+    throw error.response?.data || error.message;
+  }
+};
+
+export const LikePost = async (postAddress, fingerprint) => {
+  try {
+    const response = await axiosInstance.get(`/add_like_to_post/${postAddress}`, {
+      params: { fingerprint },
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('refresh_token')}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Ошибка при получении поста по адресу:', error.response?.data || error.message);
     throw error.response?.data || error.message;
   }
 };

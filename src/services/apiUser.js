@@ -1,4 +1,5 @@
 import axios from 'axios';
+import FingerprintJS from '@fingerprintjs/fingerprintjs';
 
 const API_URL = 'http://127.0.0.1:5001/api/user';
 
@@ -26,6 +27,13 @@ export const loginUser = async (userData) => {
       localStorage.setItem('refresh_token', response.data.refresh_token);
       localStorage.setItem('role', response.data.role);
       localStorage.setItem('id', response.data.id)
+
+      const fp = await FingerprintJS.load();
+      const result = await fp.get();
+      const fingerprint = result.visitorId + localStorage.getItem("id");
+
+
+      localStorage.setItem("fingerprint", fingerprint);
     }
 
     return response.data;
@@ -59,6 +67,7 @@ export const logoutUser = async () => {
   localStorage.removeItem('refresh_token');
   localStorage.removeItem('role');
   localStorage.removeItem('id')
+  localStorage.removeItem('fingerprint')
 };
 
 export const getAllEditors = async () => {
